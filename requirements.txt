@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+langchain
+langgraph
+langchain-google-genai  # Gemini用のライブラリ
+pydantic
+python-dotenv
+pytest
