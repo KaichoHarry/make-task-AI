@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   app:
     build: .
@@ -8,3 +7,5 @@ services:
       - .env
     ports:
       - "8000:8000"
+    tty: true  # ← これを追加：コンテナを「対話モード」で維持します
+    stdin_open: true # ← これも追加
