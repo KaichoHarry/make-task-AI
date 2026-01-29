@@ -1,8 +1,9 @@
 fastapi
 uvicorn
 langchain
+langchain-openai
 langgraph
-langchain-google-genai  # Gemini用のライブラリ
+openai
 pydantic
 python-dotenv
 pytest
