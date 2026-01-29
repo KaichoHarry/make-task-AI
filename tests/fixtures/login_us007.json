@@ -1,0 +1,35 @@
+[
+    {
+        "domain": "invoice-issuance",
+        "persona": "accounting-staff",
+        "action": "I want to accurately issue invoices based on confirmed deals or contract information",
+        "reason": "Because I need to prevent troubles caused by billing errors or tax miscalculations and standardize the collection process",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users with 'Accounting' or 'Admin' roles to execute invoice issuance.",
+            "The system must require either a valid 'Deal ID' or 'Contract ID' as the source for the invoice creation.",
+            "The system shall fail the issuance process if the linked Deal or Contract is logically deleted.",
+            "The system must validate that the linked Customer ID exists and that essential billing details (Name, Address, Contact, Billing Email) are present.",
+            "The system shall automatically generate a globally unique Invoice Number (e.g., INV-YYYYMM-Seq) using database-level locking to prevent duplicates.",
+            "The system must automatically record the issuance timestamp (ISO-8601) and the issuer's User ID.",
+            "The system shall validate that the Payment Due Date is present and is not earlier than the Issue Date.",
+            "The system must restrict the Currency field to a defined set of valid ISO codes (e.g., JPY, VND, USD).",
+            "The system shall require at least one line item containing Item Name, Quantity, Unit Price, Tax Category, and Subtotal.",
+            "The system must calculate Line Item Subtotals and the Total Amount on the server side, disregarding client-provided calculation values.",
+            "The system shall calculate Tax Amounts based on Tax Categories and Rates, applying the company-configured rounding rule (floor/round/ceil).",
+            "The system must validate that Quantity is greater than zero and Unit Price is non-negative.",
+            "The system shall use parameterized queries for all database interactions to prevent SQL injection and sanitize text inputs (e.g., Remarks) against XSS.",
+            "The system must execute the issuance process within a single database transaction to ensure atomicity.",
+            "The system shall support a configurable constraint to prevent creating duplicate invoices for the same source ID within a specific period.",
+            "The system must initialize the invoice status as 'Draft' and support transitions to 'Issued', 'Sent', 'Paid', and 'Cancelled'.",
+            "The system shall generate a PDF invoice asynchronously upon transition to 'Issued' status and store it in encrypted storage.",
+            "The system must calculate and store a hash value for the generated PDF to ensure data integrity.",
+            "The system shall enforce strict access control for PDF downloads and prohibit direct public link access (e.g., via signed URLs).",
+            "The system must process email transmission asynchronously via a queue, using templates and logging the result (invoice_id, recipient, outcome).",
+            "The system shall require a valid Payment Date when updating the status to 'Paid' and restrict this action to authorized roles.",
+            "The system must require a mandatory, sanitized cancellation reason when transitioning to 'Cancelled', keeping the record logically deleted.",
+            "The system shall maintain a full update history and store immutable audit logs (User ID, IP, Action) in tamper-evident storage.",
+            "The system must expose a RESTful API with version control, returning appropriate HTTP status codes (400, 403, 404, 409, 429) for errors.",
+            "The system shall target an API response time of under 500ms for issuance requests by offloading PDF generation."
+        ]
+    }
+]

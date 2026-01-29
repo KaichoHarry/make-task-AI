@@ -1,0 +1,33 @@
+[
+    {
+        "domain": "data-export-management",
+        "persona": "corporate-representative",
+        "action": "I want to securely export business data in CSV or Excel format",
+        "reason": "Because I need to utilize the data for external documentation, analysis, and backup purposes",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to execute data export operations.",
+            "The system must enforce role-based access control to determine export privileges.",
+            "The system shall enforce row-level security to prevent users from exporting data beyond their authorized viewing scope.",
+            "The system must filter the export dataset based on the user's current search conditions.",
+            "The system shall enforce a configurable maximum record limit (e.g., 50,000 rows) and handle requests exceeding this limit via error or pagination.",
+            "The system must support both CSV and XLSX output formats, ensuring UTF-8 encoding for all files.",
+            "The system shall strictly adhere to RFC standards for CSV generation, correctly escaping commas, newlines, and double quotes.",
+            "The system must format numeric fields as raw numbers and date fields in ISO-8601 format, handling NULL values with a defined placeholder.",
+            "The system shall allow administrators to configure the definition and order of output columns.",
+            "The system must automatically exclude sensitive credentials (e.g., passwords) and apply masking to Personally Identifiable Information (PII).",
+            "The system shall use parameterized queries for all database retrieval operations to prevent SQL injection.",
+            "The system must process large export requests asynchronously via a background job queue to maintain system responsiveness.",
+            "The system shall provide a mechanism to check the progress status of asynchronous export jobs.",
+            "The system must publish a notification event upon the completion of the export job.",
+            "The system shall store generated files in temporary storage with a configurable retention period before automatic deletion.",
+            "The system must provide access to exported files via time-limited, signed URLs over HTTPS only.",
+            "The system shall restrict file download access exclusively to the user who initiated the export request.",
+            "The system must log immutable audit records for both export initiation and file download events, capturing User ID, data type, count, and timestamp.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must enforce concurrency limits and throttling on export processes to prevent system overload.",
+            "The system shall implement timeout controls for export jobs and record specific error states upon failure.",
+            "The system must support a retry mechanism for failed export jobs.",
+            "The export API must adhere to REST principles, support versioning, and not expose internal error details in responses."
+        ]
+    }
+]

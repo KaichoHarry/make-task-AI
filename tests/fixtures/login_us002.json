@@ -1,0 +1,35 @@
+[
+    {
+        "domain": "customer-registration",
+        "persona": "sales-representative",
+        "action": "I want to register new customer information securely into the system",
+        "reason": "Because I need to centralize customer data for sales efficiency and data leakage prevention",
+        "acceptance_criteria": [
+            "The system must allow only authenticated users to access the registration function.",
+            "The system shall restrict registration privileges to users with the 'Sales' role or higher permissions.",
+            "The system must automatically generate a globally unique Customer ID for each new record.",
+            "The system must validate that the Customer Name is present, does not exceed 100 characters, and is sanitized against XSS attacks.",
+            "The system shall validate the email address format and ensure it is unique within the customer database.",
+            "The system must validate phone numbers as numeric values and support international formats including country codes.",
+            "The system shall store addresses in structured fields (Country, State, City, Street) rather than a single text block.",
+            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system must execute the registration process within a single database transaction to ensure atomicity.",
+            "The system shall return an HTTP 400 Bad Request error if required fields are missing or data types are invalid.",
+            "The system must enforce UTF-8 encoding for all input data.",
+            "The system must encrypt Personally Identifiable Information (PII) at rest using AES-256 or equivalent standards.",
+            "The system shall enforce HTTPS (TLS 1.2+) for all data transmission.",
+            "The system must not expose internal database details or stack traces in API error responses.",
+            "The system shall enforce rate limiting (e.g., 100 requests per minute) to prevent abuse.",
+            "The system must implement optimistic locking to detect and prevent concurrent registration conflicts.",
+            "The system shall maintain a data change history log, storing both pre-modification and post-modification values.",
+            "The system must generate an immutable audit log for every registration attempt (success/failure) including User ID, timestamp, and outcome.",
+            "The system shall separate user-facing error messages from detailed internal logs to prevent information leakage.",
+            "The system must support logical deletion of customer records, restricted to 'Admin' role users only.",
+            "The system must publish a notification event to an asynchronous queue upon successful customer registration.",
+            "The registration API must adhere to REST principles and support versioning.",
+            "The system shall aim for an API response time of under 300ms for successful registrations.",
+            "The system must support CSV bulk import, applying the same validation logic as single registration.",
+            "The system shall skip invalid rows during CSV import, log specific errors for those rows, and process valid rows (or roll back based on configuration)."
+        ]
+    }
+]
