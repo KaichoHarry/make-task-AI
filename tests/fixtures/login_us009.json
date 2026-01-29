@@ -1,0 +1,36 @@
+[
+    {
+        "domain": "approval-workflow",
+        "persona": "corporate-manager",
+        "action": "I want to approve applications such as expenses and contracts through a multi-stage process",
+        "reason": "Because I need to prevent processing errors and fraudulent applications to maintain internal control",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to access the workflow functions.",
+            "The system must restrict application creation to users with the appropriate 'Applicant' role.",
+            "The system must restrict approval actions to users with the designated 'Approver' role.",
+            "The system shall automatically generate a globally unique Application ID for each new record.",
+            "The system must validate that the application type is selected from a predefined list (e.g., Expense, Contract).",
+            "The system shall automatically associate the creation timestamp and the Applicant's User ID with the application.",
+            "The system must manage application statuses including Draft, Submitted, Approved, Rejected, and Cancelled.",
+            "The system shall allow modification of the application content only when the status is 'Draft'.",
+            "The system must support configurable multi-stage approval workflows (e.g., Manager -> Director -> Final).",
+            "The system shall enforce sequential processing, ensuring a stage cannot be approved until the previous stage is complete.",
+            "The system must validate that the acting user matches the assigned approver or group for the current stage.",
+            "The system shall require a mandatory rejection reason (max 300 characters) when the status is set to 'Rejected'.",
+            "The system must sanitize all text inputs, including rejection reasons, to prevent XSS attacks.",
+            "The system shall support returning a rejected application to 'Draft' status for correction.",
+            "The system must maintain a comprehensive approval history log including stage, action, user, timestamp, and comments.",
+            "The system shall support flexible data payloads (e.g., JSON) to handle varying fields for different application types.",
+            "The system must support dynamic workflow routing, such as automatically adding approval stages if the amount exceeds a configured threshold.",
+            "The system shall use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system must execute approval operations within a single database transaction to ensure atomicity.",
+            "The system shall implement optimistic locking to detect and prevent concurrent approval conflicts.",
+            "The system must publish a notification event to an asynchronous queue upon the final completion of the workflow.",
+            "The system shall generate an immutable audit log for every operation, capturing User ID, IP, Action, and timestamp.",
+            "The system must store audit logs in tamper-evident storage to prevent modification.",
+            "The system shall expose a RESTful API with version control and enforce rate limiting.",
+            "The system must return appropriate HTTP status codes (e.g., 409 Conflict) and must not expose internal error details.",
+            "The system shall enforce row-level security to restrict application viewing to authorized departments and roles."
+        ]
+    }
+]

@@ -1,0 +1,23 @@
+[
+    {
+        "domain": "file-upload-management",
+        "persona": "employee",
+        "action": "I want to securely upload contracts and document files",
+        "reason": "Because I need to centralize business file management and enable information sharing",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to access the file upload function.",
+            "The system must enforce a configurable maximum file size limit to prevent storage exhaustion.",
+            "The system shall validate file extensions against a strict allowlist and reject prohibited types.",
+            "The system must execute a virus scan on all uploaded files before they are stored.",
+            "The system shall sanitize original filenames and generate a unique system filename for storage to prevent overwriting.",
+            "The system must store file content in an encrypted storage container at rest.",
+            "The system shall enforce HTTPS (TLS 1.2+) for all file transfer operations.",
+            "The system must store file metadata in the database using parameterized queries to prevent SQL injection.",
+            "The system shall log every successful upload including User ID, original filename, and timestamp.",
+            "The system must enforce access control checks for file downloads and prevent direct access via public URLs.",
+            "The system shall support logical deletion of files and generate an immutable audit log upon deletion.",
+            "The system must enforce rate limiting on the upload API to prevent abuse.",
+            "The upload API must adhere to REST architectural principles."
+        ]
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "domain": "customer-search-filter",
+        "persona": "sales-representative",
+        "action": "I want to search for and filter registered customers using specific conditions",
+        "reason": "Because I need to quickly access necessary customer information to improve sales efficiency",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users with valid read permissions to execute customer searches.",
+            "The system must deny access to the customer list for users without the appropriate role.",
+            "The system shall support partial match search functionality for the Customer Name field.",
+            "The system must support searching by Email Address and Phone Number.",
+            "The system shall allow filtering of results by geographic fields such as Country and State/Province.",
+            "The system must allow filtering by Customer Status (e.g., Active, Dormant, Suspended).",
+            "The system shall support the combination of multiple search criteria using logical AND operators.",
+            "The system must implement pagination for search results, allowing the client to define the number of items per page (default: 20).",
+            "The system must use parameterized queries for all database search operations to prevent SQL injection.",
+            "The system shall sanitize all input values to protect against Cross-Site Scripting (XSS) attacks.",
+            "The system shall target an API response time of under 500ms for standard search queries.",
+            "The system must apply masking rules to sensitive Personally Identifiable Information (PII) in the search results based on configuration.",
+            "The system shall dynamically control visible response fields based on the user's role and permissions.",
+            "The system must log every search execution, capturing the User ID, search criteria, and timestamp.",
+            "The system shall enforce rate limiting on the search API to prevent resource exhaustion.",
+            "The search API must adhere to REST architectural principles.",
+            "The system must store audit logs in tamper-evident storage to prevent modification."
+        ]
+    }
+]
