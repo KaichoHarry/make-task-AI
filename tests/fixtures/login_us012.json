@@ -1,0 +1,34 @@
+[
+    {
+        "domain": "secure-file-upload",
+        "persona": "corporate-employee",
+        "action": "I want to securely upload business documents such as contracts and invoices to the system",
+        "reason": "Because I need to centralize data management linked to business entities and streamline information sharing and audit compliance",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to access the file upload function.",
+            "The system must validate that a valid target Entity ID (e.g., Customer, Deal) is provided and exists.",
+            "The system shall restrict allowed file types based on the user's role configuration.",
+            "The system must enforce a configurable maximum file size limit (default: 20MB) and reject files exceeding this limit.",
+            "The system shall validate file extensions and MIME types, strictly rejecting executable formats (e.g., exe, sh).",
+            "The system must execute a virus scan on all uploaded files and block storage if a threat is detected.",
+            "The system shall sanitize original filenames to prevent XSS and prevent path traversal attacks.",
+            "The system must store files using a UUID-based naming convention while retaining the original filename in metadata.",
+            "The system shall calculate and store the SHA-256 hash of files to detect duplicates and verify integrity.",
+            "The system must store physical files in an access-controlled storage environment separate from the application server.",
+            "The system shall enforce HTTPS (TLS 1.2+) for all file transfer operations.",
+            "The system must prohibit direct link access to files and require a valid authorization check for every download request.",
+            "The system shall generate time-limited signed URLs for secure file access.",
+            "The system must support asynchronous processing for uploads and provide an API to check progress.",
+            "The system shall support file versioning, retaining previous versions upon update.",
+            "The system must implement logical deletion for files and schedule physical deletion based on a retention policy.",
+            "The system shall generate immutable audit logs for upload, download, and deletion events, capturing User ID, IP, and timestamp.",
+            "The system must store audit logs in tamper-evident storage to prevent modification.",
+            "The system shall enforce rate limiting on file operations to prevent Denial of Service (DoS) attacks.",
+            "The system must use parameterized queries for all database metadata operations to prevent SQL injection.",
+            "The system shall support metadata search and tagging functionality manageable via the administration interface.",
+            "The system must encrypt files containing sensitive personal information at rest.",
+            "The system shall target an API response time of under 500ms for the initial upload request.",
+            "The upload API must adhere to REST architectural principles and support versioning."
+        ]
+    }
+]

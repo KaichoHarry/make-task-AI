@@ -1,0 +1,32 @@
+[
+    {
+        "domain": "executive-dashboard-kpi",
+        "persona": "corporate-manager",
+        "action": "I want to visualize key KPIs such as sales, progress, and customer status in real-time",
+        "reason": "Because I need to make quick, data-driven decisions based on accurate evidence",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to access the dashboard data.",
+            "The system must restrict KPI viewing privileges based on the user's assigned role.",
+            "The system shall enforce row-level security to limit displayed data to the user's authorized scope.",
+            "The system must support data aggregation by variable time periods (daily, weekly, monthly, yearly) for Sales KPIs.",
+            "The system shall provide progress rate KPIs aggregated on a per-project basis.",
+            "The system must provide structured data capable of supporting line, bar, and pie chart visualizations.",
+            "The system shall ensure data consistency by retrieving numerical and graphical data from a unified source.",
+            "The system must support data updates via periodic batch processes or real-time API ingestion.",
+            "The system shall target an API response time of under 1 second for dashboard data retrieval.",
+            "The system must implement a configurable caching mechanism to optimize performance.",
+            "The system shall execute heavy aggregation queries asynchronously to prevent database overload.",
+            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system shall sanitize all input filter values to prevent Cross-Site Scripting (XSS) attacks.",
+            "The system must return an error for invalid date range specifications and return zero values for periods with no data.",
+            "The system shall respect user-specific time zone settings for all data aggregation.",
+            "The system must log all dashboard access events for auditing purposes.",
+            "The system shall support exporting dashboard data to CSV and PDF formats after verifying permissions.",
+            "The system must enforce rate limiting on dashboard APIs to prevent resource exhaustion.",
+            "The system shall store user-specific layout preferences and widget visibility settings in the database.",
+            "The system must log any changes to data source configurations or dashboard settings in an immutable audit log.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must enforce HTTPS (TLS 1.2+) for all data transmission."
+        ]
+    }
+]

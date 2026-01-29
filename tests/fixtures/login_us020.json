@@ -1,0 +1,30 @@
+[
+    {
+        "domain": "external-system-integration-api",
+        "persona": "system-administrator",
+        "action": "I want to securely integrate data with external systems such as accounting, inventory, and CRM",
+        "reason": "Because I need to automate business data synchronization to prevent manual input errors and operational delays",
+        "acceptance_criteria": [
+            "The system shall allow API access only to authenticated clients utilizing valid API keys or OAuth credentials.",
+            "The system must store API keys using a secure hashing algorithm and provide a mechanism for immediate revocation.",
+            "The system shall log all API usage details and support IP address allowlisting for access control.",
+            "The system must enforce HTTPS (TLS 1.2+) for all data transmission and validate the Content-Type as JSON.",
+            "The system shall return an HTTP 400 Bad Request status for requests with invalid formats or data types.",
+            "The system must enforce a configurable request size limit and apply rate limiting to prevent Denial of Service (DoS) attacks.",
+            "The system shall enforce endpoint-level authorization checks based on the client's assigned role.",
+            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system shall sanitize all input values to protect against Cross-Site Scripting (XSS) and injection attacks.",
+            "The system must validate all incoming data for mandatory fields and type consistency before database persistence.",
+            "The system shall execute write operations within a single database transaction to ensure atomicity.",
+            "The system must implement duplicate detection logic and optimistic locking to manage concurrent updates.",
+            "The system shall generate immutable audit logs for every success and failure event, capturing the External System ID and timestamp.",
+            "The system must store audit logs in tamper-evident storage to prevent modification.",
+            "The system shall support asynchronous processing via queues for high-volume batch integration tasks.",
+            "The system must verify cryptographic signatures for all incoming Webhook requests to ensure authenticity.",
+            "The system shall manage API versioning to maintain backward compatibility and provide OpenAPI specifications.",
+            "The system must encrypt sensitive data at rest and support data masking functionality.",
+            "The system shall target an API response time of under 1 second and trigger alerts upon detecting abnormal access patterns.",
+            "The system must return standard HTTP status codes and shall not expose internal error details in 500 responses."
+        ]
+    }
+]
