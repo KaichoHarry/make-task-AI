@@ -1,8 +1,8 @@
 import os
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
-from app.prompts.agent_prompts import CLASSIFIER_PROMPT, ISSUE_DETECTOR_PROMPT, SUGGESTION_PROMPT
-from app.schemas.ai_response import ClassificationResult, IssueResult
+from prompts.agent_prompts import CLASSIFIER_PROMPT, ISSUE_DETECTOR_PROMPT, SUGGESTION_PROMPT
+from schemas.ai_response import ClassificationResult, IssueResult
 
 # モデルの初期化
 # ※ Dockerコンテナ内で実行する場合、環境変数 OPENAI_API_KEY が設定されている必要があります
