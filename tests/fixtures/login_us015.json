@@ -1,0 +1,39 @@
+[
+    {
+        "domain": "voucher-file-management",
+        "persona": "corporate-employee",
+        "action": "I want to securely upload and manage business-related files such as contracts, invoices, and certificates in the system",
+        "reason": "Because I need to prevent loss risks associated with paper or local storage and centralize business audit trails",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to execute file uploads.",
+            "The system must restrict upload operations to users with the specific 'Uploader' role.",
+            "The system shall require files to be linked to specific business data (e.g., Customer, Contract) and validate the existence of the target ID.",
+            "The system must automatically generate a globally unique File ID for each upload.",
+            "The system shall validate file extensions against a strict allowlist (e.g., pdf, jpg, docx) and reject unauthorized types.",
+            "The system must verify the MIME type of the file to prevent extension spoofing.",
+            "The system shall enforce a configurable maximum file size (default: 20MB) and reject files exceeding this limit.",
+            "The system must execute an asynchronous virus scan, marking files as 'Scanning' until the process completes.",
+            "The system shall automatically quarantine and disable access to files where a virus is detected.",
+            "The system must sanitize filenames to prevent Cross-Site Scripting (XSS) and directory traversal attacks.",
+            "The system shall not expose internal storage paths in any API response.",
+            "The system must store files in an encrypted storage container at rest.",
+            "The system shall enforce HTTPS (TLS 1.2+) for all data transmission.",
+            "The system must provide access to files exclusively via time-limited signed URLs.",
+            "The system shall log every download operation including User ID and timestamp for auditing.",
+            "The system must generate a log for every successful upload, recording the User ID and timestamp.",
+            "The system shall log upload failures including error details for debugging.",
+            "The system must support logical deletion of files, restricted to authorized users only.",
+            "The system shall generate an immutable audit log upon file deletion.",
+            "The system must manage files using unique internal IDs even if filenames are identical.",
+            "The system shall use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system must enforce rate limiting and a maximum concurrent upload limit to prevent resource exhaustion.",
+            "The system shall process file uploads via an asynchronous queue and implement a retry mechanism for failures.",
+            "The system must enforce row-level security to prevent unauthorized users from accessing private files of others.",
+            "The system shall support file versioning, maintaining a history of previous versions and metadata changes.",
+            "The upload API must adhere to REST principles and support versioning.",
+            "The system must store audit logs in tamper-evident storage to prevent modification.",
+            "The system shall target an API response time of under 500ms for the initial upload request.",
+            "The system must not expose internal error details to the client."
+        ]
+    }
+]

@@ -1,0 +1,28 @@
+[
+    {
+        "domain": "inventory-management-system",
+        "persona": "logistics-manager",
+        "action": "I want to accurately register and update product inventory levels",
+        "reason": "Because I need to prevent inventory discrepancies and shipping errors while maintaining optimal stock levels",
+        "acceptance_criteria": [
+            "The system shall restrict inventory operations exclusively to authenticated users with 'Logistics' or 'Administrator' roles.",
+            "The system must validate that the provided Product ID and Warehouse ID exist in their respective master data tables.",
+            "The system shall manage inventory quantities as integers and prohibit negative stock balances (rejecting 'OUT' transactions if insufficient stock).",
+            "The system must require a mandatory Transaction Type (IN, OUT, ADJUST) and reject any invalid values.",
+            "The system shall implement concurrency control (optimistic locking or row-level locking) to prevent race conditions during simultaneous updates.",
+            "The system must execute inventory updates within a single atomic database transaction, ensuring automatic rollback upon any failure.",
+            "The system shall maintain a complete transaction history record for every update, capturing Pre-Update Quantity, Post-Update Quantity, User ID, and Timestamp.",
+            "The system must support bulk updates via CSV, validating each row individually, skipping invalid rows, and generating an error log for skipped entries.",
+            "The system shall sanitize all input values to prevent Cross-Site Scripting (XSS) and use parameterized queries to prevent SQL injection.",
+            "The system must enforce HTTPS (TLS 1.2+) and rate limiting for all API interactions.",
+            "The system shall implement idempotency checks to safely handle retries and timeouts without duplicating transactions.",
+            "The system must publish a notification event to an asynchronous queue when inventory levels fall below defined thresholds.",
+            "The system shall support Webhook notifications to integrate real-time inventory changes with external shipping systems.",
+            "The system must execute nightly batch processes to verify data consistency and alert administrators of any detected discrepancies.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must target an API response time of under 400ms and adhere to REST architectural principles.",
+            "The system shall perform all authorization checks on the backend and return an HTTP 403 Forbidden status for unauthorized attempts.",
+            "The system must include inventory data in regular backup schedules and define clear recovery procedures for system failures."
+        ]
+    }
+]

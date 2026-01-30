@@ -1,0 +1,33 @@
+[
+    {
+        "domain": "attendance-clock-in-system",
+        "persona": "corporate-employee",
+        "action": "I want to record my clock-in and clock-out times accurately and without fraud",
+        "reason": "Because I need to ensure proper management of working hours, accuracy of payroll calculations, and compliance with labor regulations",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users with the 'Employee' role to use the clock-in function.",
+            "The system must support distinct clocking types: 'Clock-In' and 'Clock-Out'.",
+            "The system shall enforce the sequence of 'Clock-In' followed by 'Clock-Out', preventing consecutive Clock-Ins or Clock-Out without a preceding Clock-In.",
+            "The system must return an error if a user attempts to 'Clock-In' while the current status is already 'Clocked-In'.",
+            "The system shall use the server timestamp for all records, disregarding client-side time, and respect the configured corporate time zone.",
+            "The system must record User ID, Timestamp, Type, Device Info, and IP Address for every clocking transaction.",
+            "The system shall store clocking data as immutable logs to prevent tampering.",
+            "The system must restrict data modification capabilities exclusively to 'Administrator' roles, prohibiting general users from editing records.",
+            "The system shall maintain a comprehensive modification history, including the original data, modified values, reason for change, and the modifier.",
+            "The system must automatically calculate daily working hours and trigger alerts if statutory limits are exceeded.",
+            "The system shall log a warning if continuous working hours exceed a pre-configured threshold.",
+            "The system must support configurable automatic break deduction rules as well as manual 'Break-Start' and 'Break-End' clocking.",
+            "The system shall support clocking via both Web and Mobile interfaces, with the ability to record GPS location data for mobile requests.",
+            "The system must flag clocking attempts made from outside permitted geographical areas (geofencing) as warnings.",
+            "The system shall detect and alert on suspicious patterns, such as extremely short intervals (e.g., < 1 minute) between clock-in and clock-out.",
+            "The system must limit concurrent login sessions and reject simultaneous clocking attempts from multiple locations for the same account.",
+            "The system shall enforce rate limiting, HTTPS (TLS 1.2+), and CSRF protection for all clocking APIs.",
+            "The system must utilize an ORM or parameterized queries to prevent SQL injection and sanitize all inputs to prevent Cross-Site Scripting (XSS).",
+            "The system shall restrict users to viewing only their own attendance history, while allowing Administrators to access history for all employees.",
+            "The system must support data integration with payroll systems and enable CSV export functionality.",
+            "The system shall implement logical deletion for data and adhere to configurable data retention policies.",
+            "The system must target an API response time of under 300ms and follow REST architectural principles.",
+            "The system shall store audit logs in tamper-evident storage to ensure data integrity."
+        ]
+    }
+]

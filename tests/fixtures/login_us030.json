@@ -1,0 +1,33 @@
+[
+    {
+        "domain": "contract-document-upload",
+        "persona": "legal-representative",
+        "action": "I want to securely and accurately upload contract files to the system",
+        "reason": "Because I need to centralize contract information and prevent risks of data loss or tampering",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to execute file uploads.",
+            "The system must restrict upload operations to users with the 'Contract Management' role.",
+            "The system shall validate that a mandatory Contract ID is provided and exists in the database.",
+            "The system must reject the request if no file is selected for upload.",
+            "The system shall restrict allowed file extensions strictly to PDF and DOCX formats.",
+            "The system must verify the MIME type to prevent extension spoofing and explicitly reject executable formats.",
+            "The system shall enforce a maximum file size limit of 10MB and reject files exceeding this limit.",
+            "The system must sanitize filenames to prevent Cross-Site Scripting (XSS) and path traversal attacks.",
+            "The system shall execute a virus scan on the uploaded file and prevent storage if a threat is detected.",
+            "The system must store files in an encrypted storage environment separate from the application server.",
+            "The system shall generate randomized and unpredictable storage paths or object keys.",
+            "The system must store metadata including Contract ID, Uploader ID, Timestamp, and Version Number in the database.",
+            "The system shall automatically increment the version number for re-uploads to the same contract, retaining previous versions as history.",
+            "The system must log every upload attempt including User ID, IP address, and User-Agent.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system shall enforce HTTPS (TLS 1.2+) and rate limiting for all API operations.",
+            "The system must restrict file downloads to authorized users and provide access via time-limited signed URLs.",
+            "The system shall ensure atomicity between file storage and metadata persistence using transaction control.",
+            "The system must publish a notification event to an asynchronous queue upon successful upload.",
+            "The system shall target an API response time of under 500ms for handling the upload request.",
+            "The upload API must adhere to REST architectural principles and support versioning.",
+            "The system must not expose internal storage paths or detailed error stacks in API responses."
+        ]
+    }
+]

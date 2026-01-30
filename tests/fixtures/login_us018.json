@@ -1,0 +1,32 @@
+[
+    {
+        "domain": "document-management-system",
+        "persona": "corporate-employee",
+        "action": "I want to securely store, search, and share business documents such as contracts and reports",
+        "reason": "Because I need to centralize information management, prevent data leakage, and improve operational efficiency",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to upload files.",
+            "The system must restrict upload privileges based on user roles.",
+            "The system must automatically generate a globally unique File ID for each document.",
+            "The system shall validate that filenames do not exceed 255 characters and sanitize them against XSS attacks.",
+            "The system must restrict file extensions based on administrative configuration and explicitly reject dangerous types (e.g., .exe, .js).",
+            "The system shall enforce a configurable maximum file size limit.",
+            "The system must execute a virus scan on all uploaded files and store them only if they pass the check.",
+            "The system shall store files in an encrypted storage container at rest and not expose internal paths to clients.",
+            "The system must perform strict authorization checks before allowing file downloads or previews.",
+            "The system shall generate time-limited signed URLs for file access and deny access once expired.",
+            "The system must support granular access control lists (Read/Edit/Delete) for each file and record owner information.",
+            "The system shall support hierarchical folder structures and validate that folders are empty before deletion.",
+            "The system must support search functionality by filename, tags, and creator using a full-text search engine.",
+            "The system shall implement version control for file updates, retaining history and allowing restoration.",
+            "The system must support logical deletion of files, restricted to authorized users, and generate an immutable audit log.",
+            "The system shall implement optimistic locking to prevent concurrent update conflicts.",
+            "The system must log every file download event, capturing User ID and timestamp.",
+            "The system shall support chunked uploads for large files and allow resuming interrupted uploads.",
+            "The system must enforce HTTPS (TLS 1.2+), CSRF protection, and use parameterized queries to prevent SQL injection.",
+            "The system shall enforce rate limiting on API endpoints to prevent abuse.",
+            "The system must store audit logs in tamper-evident storage to prevent modification.",
+            "The API must adhere to REST principles, support versioning, and target a metadata processing response time of under 500ms."
+        ]
+    }
+]

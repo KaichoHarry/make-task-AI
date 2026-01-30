@@ -1,0 +1,30 @@
+[
+    {
+        "domain": "document-management-system",
+        "persona": "corporate-employee",
+        "action": "I want to securely store, search, and share business documents such as contracts, specifications, and internal materials",
+        "reason": "Because I need to prevent document loss and accidental mis-sharing while achieving both operational efficiency and information security",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to upload documents.",
+            "The system must restrict document viewing privileges based on user roles and folder-level permissions.",
+            "The system shall automatically generate a globally unique Document ID for each file.",
+            "The system must restrict uploadable file formats to a specific allowlist (e.g., PDF, DOCX, XLSX) and enforce a configurable file size limit.",
+            "The system shall execute a virus scan on every uploaded file, rejecting infected files, and store valid files in an encrypted storage container.",
+            "The system must enforce HTTPS (TLS 1.2+) for all data transmission.",
+            "The system shall automatically record metadata including Creator, Creation Date, and Update Date.",
+            "The system must implement document version control, archiving previous versions and recording the updater's identity and timestamp for every change.",
+            "The system shall provide search functionality allowing filtering by Filename, Tags, Creator, and Date Range.",
+            "The system must use parameterized queries and input sanitization to prevent SQL injection and Cross-Site Scripting (XSS).",
+            "The system shall generate time-limited, signed tokens for shared links, invalidate them upon expiration, and support read-only access configurations.",
+            "The system must maintain a download history log capturing User ID, Document ID, and Timestamp.",
+            "The system shall support logical deletion of documents and record the operation in the audit log.",
+            "The system must process file operations asynchronously via a queue, implementing automatic retries (up to 3 times) for failures before logging an error.",
+            "The system shall generate specific logs for both successful uploads and failures.",
+            "The system must trigger alert notifications when document processing times violate defined Service Level Agreements (SLA).",
+            "The system shall provide document template management capabilities and retain a history of template modifications.",
+            "The system must store audit logs in tamper-evident storage to prevent modification.",
+            "The system shall include document data in regular backup schedules and log any backup failures.",
+            "The API must adhere to REST principles, support versioning, enforce rate limiting, and must not expose internal storage paths in responses."
+        ]
+    }
+]

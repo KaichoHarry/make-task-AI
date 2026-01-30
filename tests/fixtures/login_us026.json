@@ -1,0 +1,35 @@
+[
+    {
+        "domain": "contract-management",
+        "persona": "legal-representative",
+        "action": "I want to securely and centrally manage contracts with business partners",
+        "reason": "Because I need to prevent legal risks caused by missed checks on contract details or expirations",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to access the contract registration function.",
+            "The system must restrict registration, update, and deletion privileges to users with the 'Contract Management' role.",
+            "The system must automatically generate a globally unique Contract ID for each new record.",
+            "The system shall require the Contract Title and a valid Business Partner ID as mandatory fields.",
+            "The system must validate that the Contract Type is selected from a predefined list (e.g., Service Agreement, NDA, Sales Contract).",
+            "The system shall validate that the Start Date and End Date are valid and that the End Date is not earlier than the Start Date.",
+            "The system must support the uploading of contract documents (PDF/Word) while strictly enforcing an extension allowlist.",
+            "The system shall execute a virus scan on all uploaded files before storing them in an encrypted storage container.",
+            "The system must control file access exclusively via time-limited signed URLs.",
+            "The system shall store all text metadata in UTF-8 encoding and use parameterized queries to prevent SQL injection.",
+            "The system must sanitize all input values to protect against Cross-Site Scripting (XSS) attacks.",
+            "The system shall automatically increment the version number upon updates and retain the history of previous versions.",
+            "The system must implement logical deletion for contracts, restricted to 'Administrator' roles, and generate an audit log.",
+            "The system shall record an access log for every document view, capturing User ID, Timestamp, and IP address.",
+            "The system must automatically generate an alert notification 30 days prior to the contract expiration date via an asynchronous queue.",
+            "The system shall automatically update the contract status to 'Expired' upon the termination date.",
+            "The system must enforce strict status transitions, allowing only valid states such as 'Active', 'Expired', or 'Terminated'.",
+            "The system shall support full-text search for contracts, filtering results based on the user's access permissions.",
+            "The system must enforce rate limiting and HTTPS (TLS 1.2+) for all API interactions.",
+            "The system shall execute registration and updates within a single database transaction, using optimistic locking for concurrency control.",
+            "The system must maintain a change history log, recording values before and after modifications.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must execute periodic encrypted backups of contract data.",
+            "The system shall enforce permission checks and apply data masking rules during CSV or PDF export operations.",
+            "The API must adhere to REST principles, support versioning, and must not expose internal error details."
+        ]
+    }
+]

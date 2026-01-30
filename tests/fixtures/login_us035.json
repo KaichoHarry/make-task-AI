@@ -1,0 +1,32 @@
+[
+    {
+        "domain": "dashboard-analytics",
+        "persona": "corporate-manager",
+        "action": "I want to confirm a dashboard that visualizes business status, KPIs, and progress indicators in real-time",
+        "reason": "Because I need to make rapid decisions and improve operations based on numerical evidence",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to view the dashboard.",
+            "The system must restrict displayed data based on the user's role and permissions (Row-Level Security).",
+            "The system shall allow users to configure and arrange multiple KPI widgets via a drag-and-drop interface.",
+            "The system must require the specification of a display period (Daily, Weekly, Monthly, or Custom) and return an error if missing.",
+            "The system shall aggregate data automatically from the database while guaranteeing transactional consistency.",
+            "The system must exclude logically deleted records from the aggregation scope.",
+            "The system shall support real-time data updates via WebSocket or polling, strictly validating authentication tokens.",
+            "The system must implement a caching mechanism to reduce database load, automatically invalidating cache upon data updates.",
+            "The system shall allow users to toggle between different graph visualization formats (Bar, Line, Pie).",
+            "The system must support exporting dashboard data to CSV and Excel formats.",
+            "The system shall sanitize CSV output specifically to prevent formula injection (CSV Injection).",
+            "The system must save dashboard layout configurations on a per-user basis and maintain a history of setting changes.",
+            "The system shall use parameterized queries to prevent SQL injection and sanitize output data against Cross-Site Scripting (XSS).",
+            "The system must enforce HTTPS (TLS 1.2+) and rate limiting for all API interactions.",
+            "The API must adhere to REST architectural principles, support versioning, and must not expose internal system details in responses.",
+            "The system shall display user-friendly error messages while logging detailed error stacks internally.",
+            "The system must generate an access log for every dashboard view, capturing User ID, Timestamp, and Dashboard ID.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must integrate with the alert notification system when monitored KPIs violate defined Service Level Agreements (SLA).",
+            "The system shall allow administration of dashboard templates and retain a history of template modifications.",
+            "The system must be designed to support horizontal scaling (scale-out) to handle increased concurrent access.",
+            "The system shall target an API response time of under 500ms for data retrieval (excluding heavy aggregation tasks)."
+        ]
+    }
+]

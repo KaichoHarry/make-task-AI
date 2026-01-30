@@ -1,0 +1,30 @@
+[
+    {
+        "domain": "backup-disaster-recovery",
+        "persona": "system-administrator",
+        "action": "I want to enable rapid restoration of business data in the event of system failure or disaster",
+        "reason": "Because I need to prevent business interruption and reputational damage caused by system downtime or data loss",
+        "acceptance_criteria": [
+            "The system shall restrict access to backup configuration and restoration functions exclusively to users with 'Administrator' privileges.",
+            "The system must allow the definition of backup targets, including databases, files, and configuration settings.",
+            "The system shall support automated backup scheduling with configurable intervals (daily, weekly, monthly) and allow manual execution.",
+            "The system must encrypt backup data at rest and enforce HTTPS (TLS 1.2+) for all data transfer to ensure security.",
+            "The system shall support storing backup data in a geographically separate storage region for disaster recovery purposes.",
+            "The system must perform integrity checks on backup data and automatically detect and alert on corruption.",
+            "The system shall enforce a configurable retention policy and automatically delete obsolete backups.",
+            "The system must ensure that backup operations are performed without stopping system services (online backup) and with minimal impact on performance.",
+            "The system shall support Point-in-Time Recovery (PITR) functionality, allowing restoration to a specific timestamp.",
+            "The system must guarantee transactional consistency during the restoration process and verify data integrity post-restoration.",
+            "The system shall require a confirmation step before executing a restore operation to prevent accidental data overwrites.",
+            "The system must support failover mechanisms to switch operations to a standby environment in case of primary failure.",
+            "The system shall send notifications to administrators via email or system integration in the event of a backup failure.",
+            "The system must generate immutable audit logs for all backup executions, configuration changes, restoration attempts, and failover operations.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must restrict direct access to backup storage and enforce a least-privilege access policy.",
+            "The system shall support periodic restore testing and record the results for compliance.",
+            "The system must implement tamper detection mechanisms for stored backup data.",
+            "The backup API must require authentication, enforce rate limiting, and strictly hide internal system details in responses.",
+            "The system shall target defined RPO (Recovery Point Objective) and RTO (Recovery Time Objective) metrics for recovery operations."
+        ]
+    }
+]

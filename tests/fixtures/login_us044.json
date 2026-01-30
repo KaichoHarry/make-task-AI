@@ -1,0 +1,33 @@
+[
+    {
+        "domain": "project-creation-management",
+        "persona": "project-manager",
+        "action": "I want to create new projects and centrally manage members, budgets, and progress",
+        "reason": "Because I need to visualize project status and prevent delivery delays and cost overruns",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users with 'Project Manager' role or higher to create projects.",
+            "The system must automatically generate a globally unique Project ID.",
+            "The system shall require a mandatory Project Name with a maximum length of 150 characters.",
+            "The system must limit the Project Description to 1000 characters and sanitize the input to prevent Cross-Site Scripting (XSS).",
+            "The system shall validate that the End Date is not earlier than the Start Date.",
+            "The system must strictly manage project statuses (Planning, Active, OnHold, Completed, Cancelled) and reject invalid values.",
+            "The system shall enforce that the Budget Amount is a non-negative number and adheres to the master currency configuration.",
+            "The system must require a valid User ID for the Project Owner.",
+            "The system shall support multiple member assignments with role-based checks, strictly prohibiting duplicate assignments of the same user.",
+            "The system must maintain a history of member additions and removals.",
+            "The system shall allow configuring specific roles for members within the project context.",
+            "The system must validate that the Progress Rate is between 0% and 100% and record a history of all updates.",
+            "The system shall automatically calculate budget usage and trigger a warning flag if the budget is exceeded.",
+            "The system must support logical deletion only, restricted to the Project Owner or Administrator, and record the action in the audit log.",
+            "The system shall implement optimistic locking to detect and prevent concurrent update conflicts (version check).",
+            "The system must support bulk project creation via CSV import, applying the same strict validation logic as single creation.",
+            "The system shall utilize parameterized queries to prevent SQL injection and enforce CSRF protection.",
+            "The system must enforce HTTPS (TLS 1.2+) and rate limiting for all API interactions.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must publish a notification event to an asynchronous queue upon project completion.",
+            "The system shall provide an archiving function that makes the project read-only and prevents further editing.",
+            "The system must target an API response time of under 500ms and adhere to REST architectural principles.",
+            "The system shall ensure all data processing uses UTF-8 encoding."
+        ]
+    }
+]

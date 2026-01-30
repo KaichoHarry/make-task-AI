@@ -1,0 +1,34 @@
+[
+    {
+        "domain": "approval-workflow-management",
+        "persona": "corporate-employee",
+        "action": "I want to submit applications such as expenses and contracts through a formal approval flow and visualize the status",
+        "reason": "Because I need to maintain internal controls, ensure process compliance, and prevent fraud or approval omissions",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users with specific role-based permissions to create applications.",
+            "The system must automatically generate a globally unique Application ID for each new record.",
+            "The system shall require the selection of an Application Type (e.g., Expense, Contract) and a Title for every submission.",
+            "The system must validate that the application content does not exceed 1000 characters.",
+            "The system shall validate that amount fields contain only numeric values for financial applications.",
+            "The system must allow file attachments while strictly enforcing a configurable file size limit and an extension allowlist.",
+            "The system shall execute a virus scan on all uploaded files and reject any file that poses a security threat.",
+            "The system must sanitize all input data to prevent Cross-Site Scripting (XSS) attacks.",
+            "The system shall use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system must automatically generate the approval workflow route based on administrator-defined configurations.",
+            "The system shall automatically route the application to a designated proxy approver if the primary approver is absent.",
+            "The system must support distinct workflow states including 'Approved', 'Returned', and 'Rejected'.",
+            "The system shall restrict approval actions exclusively to users with the appropriate approval authority.",
+            "The system must require mandatory comments when an application is 'Returned' or 'Rejected'.",
+            "The system shall implement optimistic locking to detect and prevent concurrent approval conflicts.",
+            "The system must publish notification events to an asynchronous queue when an application is returned or fully completed.",
+            "The system shall maintain a complete history of changes, recording both pre-modification and post-modification values.",
+            "The system must support logical deletion of applications, restricted to 'Administrator' users only.",
+            "The system shall strictly prohibit the deletion of applications that have already been approved.",
+            "The system must generate an immutable audit log for every operation, capturing Application ID, User ID, Action, and Timestamp.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must enforce HTTPS (TLS 1.2+) and rate limiting for all API operations.",
+            "The approval API must adhere to REST architectural principles and support versioning.",
+            "The system shall target an API response time of under 500ms for approval operations."
+        ]
+    }
+]

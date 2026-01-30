@@ -1,0 +1,34 @@
+[
+    {
+        "domain": "expense-application-processing",
+        "persona": "corporate-employee",
+        "action": "I want to accurately apply for reimbursement of business expenses such as transportation, lodging, and supplies, and receive a refund through an approval flow",
+        "reason": "Because I need to quickly recover personal funds advanced for business purposes and ensure accurate accounting processing",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users with the 'Expense Applicant' role to execute expense applications.",
+            "The system must automatically generate a globally unique Application ID for each record.",
+            "The system shall require the selection of an Expense Category (e.g., Transportation, Lodging, Entertainment, Supplies) from a predefined list.",
+            "The system must validate that the Payment Date is present and does not allow future dates.",
+            "The system shall enforce that the Amount is a positive number (>0) and supports up to two decimal places.",
+            "The system must support the uploading of receipt images (JPEG/PNG/PDF) with a configurable file size limit.",
+            "The system shall execute a virus scan on uploaded files and store them in encrypted storage only if they pass.",
+            "The system must implement OCR capabilities to automatically extract amounts from receipts while allowing manual user corrections.",
+            "The system shall detect duplicate receipts by comparing image hashes, transaction dates, and amounts to prevent fraud.",
+            "The system must allow associating expenses with specific Project Codes and Department Codes.",
+            "The system shall use parameterized queries and input sanitization to prevent SQL injection and Cross-Site Scripting (XSS).",
+            "The system must allow applications to be saved as 'Draft' and restrict editing once the status changes to 'Submitted' (unless remanded).",
+            "The system shall automatically trigger an approval request notification to the configured supervisor upon submission.",
+            "The system must support configurable multi-stage approval workflows (e.g., Manager -> Director -> Accounting) and strictly prohibit self-approval.",
+            "The system shall maintain a comprehensive log of approval, rejection, and remand actions, requiring a mandatory reason for rejection.",
+            "The system must send a notification to the applicant if the application is remanded (sent back).",
+            "The system shall publish an event to an asynchronous queue for accounting system integration upon final approval.",
+            "The system must utilize idempotency keys in API integrations to prevent duplicate data processing in the accounting system.",
+            "The system shall implement optimistic locking to prevent concurrent approval conflicts on the same application.",
+            "The system must maintain a chronological history of all data changes, recording both pre-modification and post-modification values.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must enforce HTTPS (TLS 1.2+) and rate limiting for all API interactions.",
+            "The API must adhere to REST architectural principles, support versioning, and must not expose internal accounting codes or error stacks in responses.",
+            "The system shall target an API response time of under 400ms for application submission."
+        ]
+    }
+]

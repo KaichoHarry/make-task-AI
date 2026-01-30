@@ -1,0 +1,30 @@
+[
+    {
+        "domain": "system-monitoring-alerting",
+        "persona": "operations-manager",
+        "action": "I want to immediately detect system anomalies and performance degradation",
+        "reason": "Because I need to prevent prolonged outages and minimize business disruption and customer impact",
+        "acceptance_criteria": [
+            "The system shall restrict access to monitoring configurations exclusively to authenticated users with 'Administrator' privileges.",
+            "The system must support the definition of monitoring targets including Servers, Databases, APIs, and Batch processes.",
+            "The system shall execute periodic health checks and trigger immediate alerts upon failure detection.",
+            "The system must monitor system resource metrics such as CPU usage, Memory usage, Disk space, and Network latency.",
+            "The system shall track application performance metrics including API response times, Database connection counts, and Error rates.",
+            "The system must allow administrators to configure specific alert thresholds for all monitored metrics.",
+            "The system shall implement alert deduplication mechanisms to prevent notification storms.",
+            "The system must support notification delivery via Email, Chat integration, and external monitoring systems, with automatic retries on failure.",
+            "The system shall store monitoring data as time-series records with a configurable retention period.",
+            "The system must provide a dashboard with graphing capabilities to visualize metrics and current system status.",
+            "The system shall maintain a comprehensive alert history and support 'Acknowledge' and 'Close' workflows with incident resolution logging.",
+            "The system must generate immutable audit logs for any modifications to monitoring configurations.",
+            "The system shall store audit logs and critical monitoring data in tamper-evident storage.",
+            "The system must enforce HTTPS (TLS 1.2+) and strict authentication for the monitoring API, applying rate limiting to prevent abuse.",
+            "The system shall be designed to operate with minimal performance overhead on the monitored environment.",
+            "The system must utilize a redundant architecture to ensure monitoring continuity even during server failures.",
+            "The system shall implement self-monitoring capabilities to detect failures within the monitoring service itself.",
+            "The system must support configurable escalation rules and notification schedules (e.g., night/holiday shifts).",
+            "The system shall generate automated reports when Service Level Agreement (SLA) violations are detected.",
+            "The system must target an API response time of under 1 second for retrieving monitoring data."
+        ]
+    }
+]

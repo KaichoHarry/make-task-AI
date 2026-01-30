@@ -1,0 +1,34 @@
+[
+    {
+        "domain": "file-upload-storage-management",
+        "persona": "corporate-employee",
+        "action": "I want to securely upload and manage business documents and files, ensuring access is restricted to authorized personnel",
+        "reason": "Because I need to prevent information leakage and unauthorized downloads while streamlining information sharing",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to execute file uploads.",
+            "The system must restrict upload capabilities based on role-based access control policies.",
+            "The system shall enforce a configurable maximum file size limit (e.g., 20MB) and a limit on concurrent uploads.",
+            "The system must validate file extensions against an allowlist (e.g., pdf, docx) and verify MIME types to prevent spoofing.",
+            "The system shall strictly prohibit the storage of executable files (e.g., .exe, .sh) and sanitize filenames to prevent path traversal.",
+            "The system must execute a virus scan on all uploaded files, blocking storage and logging the event if malware is detected.",
+            "The system shall store files in an object storage system using UUID-based paths, ensuring physical paths are never exposed.",
+            "The system must provide file access exclusively via time-limited signed URLs and deny direct link access.",
+            "The system shall prevent the direct rendering of HTML files to mitigate Cross-Site Scripting (XSS) risks.",
+            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system shall store file metadata including original filename, size, upload timestamp, and uploader User ID.",
+            "The system must support logical deletion of files while retaining metadata for audit compliance.",
+            "The system shall enforce user-specific storage quotas and reject uploads if the allocated limit is exceeded.",
+            "The system must enforce granular access control based on roles and department affiliation.",
+            "The system shall allow modification only by the uploader or administrators, while restricting unauthorized users from downloading.",
+            "The system must log every file access event, capturing User ID, File ID, and timestamp.",
+            "The system shall implement file versioning, retaining a history of updates and allowing rollback to previous versions.",
+            "The system must support chunked uploads for large files and process uploads asynchronously via a queue.",
+            "The system shall target an API response time of under 500ms for the initial upload request.",
+            "The system must implement retry logic for storage failures and execute periodic backups according to retention policies.",
+            "The system shall generate immutable audit logs for upload, download, and deletion events, stored in tamper-evident storage.",
+            "The system must trigger an alert upon detecting an abnormal volume of download requests.",
+            "The API must adhere to REST architectural principles, support versioning, and enforce rate limiting.",
+            "The system shall enforce HTTPS (TLS 1.2+) and must not expose internal storage paths in API error responses."
+        ]
+    }
+]

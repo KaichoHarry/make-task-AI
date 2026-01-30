@@ -1,0 +1,28 @@
+[
+    {
+        "domain": "contract-lifecycle-management",
+        "persona": "legal-staff",
+        "action": "I want to accurately manage contract details, expiration dates, and renewal conditions with business partners",
+        "reason": "Because I need to prevent contract lapses, missed automatic renewals, and legal risks",
+        "acceptance_criteria": [
+            "The system shall restrict contract operations exclusively to authenticated users with the 'Legal' role.",
+            "The system must automatically generate a globally unique Contract ID for each record.",
+            "The system shall validate that the provided Vendor ID exists in the vendor master database and reject invalid IDs.",
+            "The system must require mandatory Start and End Dates, ensuring the End Date is chronologically after the Start Date.",
+            "The system shall support file uploads (e.g., PDF) with strict validation for file size and type, storing them in encrypted storage.",
+            "The system must manage contract amounts as numeric values and associate them with a specific currency.",
+            "The system shall automatically transition the contract status to 'Expired' upon reaching the end date.",
+            "The system must generate a notification schedule if the Auto-Renewal flag is enabled.",
+            "The system shall publish a notification event to an asynchronous queue 30 days prior to the contract expiration date.",
+            "The system must implement optimistic locking to detect and prevent concurrent update conflicts.",
+            "The system shall maintain a comprehensive change history log, capturing pre-modification and post-modification values, User ID, and Timestamp.",
+            "The system must execute registration and updates within a single database transaction, ensuring rollback on failure.",
+            "The system shall allow logical deletion only by 'Administrator' roles and record the operation in the audit log.",
+            "The system must use parameterized queries and input sanitization to prevent SQL injection and Cross-Site Scripting (XSS).",
+            "The system shall provide search functionality filtering by Vendor, Date Range, and Status, with sorting capability by expiration date.",
+            "The system must support CSV export of contract data with configurable masking for personal information.",
+            "The system shall enforce HTTPS (TLS 1.2+), rate limiting, and target an API response time of under 300ms.",
+            "The system must store audit logs in tamper-evident storage to prevent modification."
+        ]
+    }
+]

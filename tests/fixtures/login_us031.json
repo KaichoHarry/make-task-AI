@@ -1,0 +1,35 @@
+[
+    {
+        "domain": "workflow-approval-management",
+        "persona": "corporate-employee",
+        "action": "I want to process applications such as expenses and purchases through a rule-based approval flow",
+        "reason": "Because I need to prevent fraudulent applications and approval omissions to maintain internal control",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to create applications.",
+            "The system must require a mandatory Application Type (e.g., Expense, Purchase, Leave) for every submission.",
+            "The system shall maintain specific approval workflow definitions for each application type, editable only by Administrators.",
+            "The system must support configurable multi-stage approval steps associated with specific roles.",
+            "The system shall automatically determine approvers based on roles and route to proxy approvers if the primary approver is absent.",
+            "The system must validate mandatory fields and ensure amount fields contain strictly numeric values upon saving.",
+            "The system shall execute a virus scan on all attachments and store them in an encrypted storage container.",
+            "The system must automatically generate a globally unique Application ID for each record.",
+            "The system shall strictly enforce status transitions restricted to 'Draft', 'Pending', 'Approved', and 'Rejected'.",
+            "The system must prevent applications from advancing to the next step without the required approval.",
+            "The system shall restrict approval operations exclusively to users with the appropriate authority.",
+            "The system must record an electronic signature log for every approval action.",
+            "The system shall allow optional comments for approvals but must require a mandatory reason for rejections.",
+            "The system must generate immutable audit logs for every approval or rejection, capturing User ID, Action, Timestamp, and IP.",
+            "The system shall restrict application editing to the 'Draft' state and prohibit modification once the status is 'Pending'.",
+            "The system must maintain a history of any changes to the workflow definition or application content.",
+            "The system shall implement optimistic locking to detect and prevent concurrent update conflicts.",
+            "The system must use parameterized queries and input sanitization to prevent SQL injection and XSS attacks.",
+            "The system shall enforce CSRF protection and require HTTPS (TLS 1.2+) for all communications.",
+            "The system must publish a notification event to an asynchronous queue upon workflow completion.",
+            "The system shall support searching and filtering of application history by type, date, and status.",
+            "The system must monitor approval latency and trigger alert notifications if Service Level Agreement (SLA) thresholds are exceeded.",
+            "The system shall provide a RESTful API with version control and must not expose internal database structures in responses.",
+            "The system must store audit logs in tamper-evident storage with configurable retention periods.",
+            "The system shall target an API response time of under 500ms for workflow operations."
+        ]
+    }
+]

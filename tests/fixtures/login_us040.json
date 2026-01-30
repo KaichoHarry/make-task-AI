@@ -1,0 +1,31 @@
+[
+    {
+        "domain": "leave-application-approval",
+        "persona": "corporate-employee",
+        "action": "I want to accurately apply for paid leave, special leave, and absences online",
+        "reason": "Because I need to prevent omissions and approval errors caused by paper or verbal requests and ensure appropriate labor management",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to submit leave applications.",
+            "The system must allow administrators to configure available leave types (e.g., Paid Leave, Half-Day, Special Leave, Absence).",
+            "The system shall require Start Date, End Date, Leave Type, and Reason as mandatory fields, utilizing ISO8601 date format.",
+            "The system must validate that the End Date is not earlier than the Start Date and allow configuration to restrict past-date applications.",
+            "The system shall reject applications that exceed the remaining paid leave balance, calculating the balance based on approved leave.",
+            "The system must implement optimistic locking to detect and handle concurrent balance updates during the application process.",
+            "The system shall execute the leave application process within a single database transaction to ensure data integrity.",
+            "The system must strictly manage application statuses (Pending, Approved, Rejected), initializing new applications as 'Pending'.",
+            "The system shall restrict approval operations to users with specific 'Approver' roles and record the Approver ID and Timestamp upon action.",
+            "The system must require a mandatory comment/reason when rejecting an application.",
+            "The system shall maintain a status change history log, including pre/post states, User ID, and timestamps.",
+            "The system must support multi-stage approval workflows, ensuring applications proceed to the next stage only after current stage approval.",
+            "The system shall reflect approved leave on the attendance calendar via an asynchronous queue processing mechanism.",
+            "The system must use parameterized queries and input sanitization to prevent SQL injection and Cross-Site Scripting (XSS).",
+            "The system shall enforce strict authorization checks, allowing employees to view only their own data and supervisors to view only their subordinates' data.",
+            "The system must allow cancellation of applications only while in the 'Pending' state, restricting cancellation of 'Approved' applications to Administrators.",
+            "The system shall integrate with the payroll system via authenticated APIs over HTTPS (TLS 1.2+).",
+            "The system must enforce rate limiting and target an API response time of under 300ms for application submission.",
+            "The system shall publish notification events to an asynchronous queue for Application Submission, Approval, and Rejection events.",
+            "The system must store audit logs in tamper-evident storage to prevent modification.",
+            "The API must adhere to REST architectural principles, support versioning, and must not expose internal error details in responses."
+        ]
+    }
+]

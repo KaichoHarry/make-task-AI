@@ -1,0 +1,32 @@
+[
+    {
+        "domain": "inventory-registration-update",
+        "persona": "logistics-manager",
+        "action": "I want to accurately register and update product inventory levels",
+        "reason": "Because incorrect inventory information leads to shipment delays and sales losses",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users with 'Inventory Management' privileges to execute inventory operations.",
+            "The system must validate that the provided Product ID exists in the Product Master table.",
+            "The system must validate that the provided Warehouse ID exists in the Warehouse Master table.",
+            "The system shall manage inventory records based on a unique combination of Product ID and Warehouse ID.",
+            "The system must enforce that Inventory Quantity is a non-negative integer.",
+            "The system shall implement optimistic locking to detect and prevent concurrent update conflicts.",
+            "The system must execute inventory updates within a single database transaction to ensure atomicity.",
+            "The system shall maintain a complete history of inventory changes, recording User ID, pre-update quantity, post-update quantity, and reason code.",
+            "The system must support CSV bulk updates, skipping invalid rows and logging specific errors for those rows.",
+            "The system shall apply consistent validation logic for both API requests and CSV imports.",
+            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system shall sanitize all input values to protect against Cross-Site Scripting (XSS) attacks.",
+            "The system must publish a notification event upon successful inventory updates.",
+            "The system shall target an API response time of under 500ms for update operations.",
+            "The system must enforce rate limiting on the API to prevent abuse.",
+            "The system shall return generic error messages and must not expose internal database structures in API responses.",
+            "The system must transmit all operation logs to the centralized audit log infrastructure.",
+            "The system shall include inventory data in the daily backup schedule.",
+            "The API must adhere to REST architectural principles and support versioning.",
+            "The system shall restrict update operations to PUT or PATCH HTTP methods.",
+            "The system must return an HTTP 403 Forbidden status for unauthorized access attempts.",
+            "The system shall support logical deletion only and restrict data restoration operations to users with 'Administrator' privileges."
+        ]
+    }
+]
