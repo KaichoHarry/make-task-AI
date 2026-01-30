@@ -1,23 +1,28 @@
-[
-    {
-        "domain": "file-upload-management",
-        "persona": "employee",
-        "action": "I want to securely upload contracts and document files",
-        "reason": "Because I need to centralize business file management and enable information sharing",
-        "acceptance_criteria": [
-            "The system shall allow only authenticated users to access the file upload function.",
-            "The system must enforce a configurable maximum file size limit to prevent storage exhaustion.",
-            "The system shall validate file extensions against a strict allowlist and reject prohibited types.",
-            "The system must execute a virus scan on all uploaded files before they are stored.",
-            "The system shall sanitize original filenames and generate a unique system filename for storage to prevent overwriting.",
-            "The system must store file content in an encrypted storage container at rest.",
-            "The system shall enforce HTTPS (TLS 1.2+) for all file transfer operations.",
-            "The system must store file metadata in the database using parameterized queries to prevent SQL injection.",
-            "The system shall log every successful upload including User ID, original filename, and timestamp.",
-            "The system must enforce access control checks for file downloads and prevent direct access via public URLs.",
-            "The system shall support logical deletion of files and generate an immutable audit log upon deletion.",
-            "The system must enforce rate limiting on the upload API to prevent abuse.",
-            "The upload API must adhere to REST architectural principles."
-        ]
-    }
-]
+{
+    "domain": "Employee Business System",
+    "persona": "Corporate Employee",
+    "action": "I want to safely upload contracts and reference files",
+    "reason": "To centrally manage business-related files and share information",
+    "acceptance_criteria": [
+        "Only authenticated users can upload files.",
+        "Users without permissions cannot upload files.",
+        "A maximum file size limit is strictly enforced.",
+        "Only allowed file extensions can be uploaded.",
+        "Virus scanning must be executed upon every upload.",
+        "File names must be sanitized to prevent malicious injections.",
+        "Files must be converted to unique file names (e.g., UUID) upon storage.",
+        "The storage system must be encrypted (Encryption at Rest).",
+        "HTTPS communication is mandatory for all file transfers.",
+        "Logs must be stored upon successful file upload.",
+        "Upload logs must include user_id, file name, and timestamp.",
+        "Permission checks must be performed during every download attempt.",
+        "Direct link access to stored files is strictly prohibited.",
+        "File deletion must be performed as a logical delete.",
+        "Audit logs must be stored upon every deletion event.",
+        "SQL injection countermeasures must be implemented for metadata handling.",
+        "XSS countermeasures must be applied to file metadata and displays.",
+        "Rate limiting is applied to the upload and download endpoints.",
+        "The file management API must be REST-compliant.",
+        "File metadata (size, type, owner, etc.) must be managed in the database."
+    ]
+}

@@ -1,26 +1,28 @@
-[
-    {
-        "domain": "user-permission-management",
-        "persona": "system-administrator",
-        "action": "I want to update user permissions in accordance with employee role changes",
-        "reason": "Because I need to prevent unauthorized access and enforce business process controls",
-        "acceptance_criteria": [
-            "The system shall restrict permission update operations exclusively to users with the 'Administrator' role.",
-            "The system must validate that the Target User ID is present and exists in the database.",
-            "The system shall accept only roles that are selected from a predefined list of valid roles.",
-            "The system must execute the role update within a database transaction to ensure atomicity and roll back on failure.",
-            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
-            "The system shall sanitize all input parameters to protect against injection attacks.",
-            "The system must enforce backend validation for all requests, regardless of client-side checks.",
-            "The system shall return an HTTP 403 Forbidden status for any requests originating from unauthorized users.",
-            "The system must maintain a history log of role changes, recording both the previous and new roles.",
-            "The system shall generate an immutable audit log for every change event, capturing Admin User ID, Target User ID, and timestamp.",
-            "The system must store audit logs in tamper-evident storage to prevent modification.",
-            "The system shall ensure that permission changes are reflected in the JWT token upon the user's next login.",
-            "The system must invalidate or update any associated permission caches immediately upon role modification.",
-            "The system shall enforce HTTPS (TLS 1.2+) for all API communications.",
-            "The system must enforce rate limiting on the API to prevent abuse.",
-            "The system shall target an API response time of under 300ms for successful updates."
-        ]
-    }
-]
+{
+    "domain": "Administrator Functions",
+    "persona": "System Administrator",
+    "action": "I want to update employee permissions according to their role changes",
+    "reason": "To prevent unauthorized access and control business operations",
+    "acceptance_criteria": [
+        "Permission changes only possible by the Administrator role.",
+        "Target User ID is mandatory.",
+        "Fails if a non-existent User ID is specified.",
+        "Roles can only be selected from a predefined list.",
+        "Permission change history must be maintained.",
+        "Record roles before and after the change in the history.",
+        "JWT reflects the new role at the next login.",
+        "SQL injection countermeasures must be implemented.",
+        "Input value sanitization must be performed.",
+        "Permission change operation logs must be stored.",
+        "Logs include admin_user_id, target_user_id, and timestamp.",
+        "HTTPS communication is mandatory.",
+        "Rate limiting is applied to the endpoint.",
+        "API must be REST-compliant.",
+        "Audit logs are stored in tamper-evident storage.",
+        "Permission changes must be rolled back if they fail.",
+        "Target response time for API is within 300ms.",
+        "Invalid requests return 403 Forbidden.",
+        "Verification must be performed on the backend, not just the frontend.",
+        "Permission cache is updated immediately upon change."
+    ]
+}

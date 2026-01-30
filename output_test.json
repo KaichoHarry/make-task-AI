@@ -1,0 +1,229 @@
+{
+  "tasks": [
+    {
+      "title": "[Auth] Verify Email and Password Against Stored Credentials",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 2.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Verify the provided email and password against stored credentials. If valid, return HTTP 200 OK and a signed JWT. If invalid, return HTTP 401 Unauthorized.</p><h3>Technical Approach</h3><ul><li>Implement in `app/api/auth.py`.</li><li>Use FastAPI's OAuth2PasswordBearer for authentication.</li><li>Query the database using SQLAlchemy ORM to retrieve user credentials.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Create and pass unit tests for valid and invalid credentials.</li><li>Verify edge cases such as non-existent users.</li></ul>"
+    },
+    {
+      "title": "[Auth] Implement Generic Error Responses for Authentication Failures",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Ensure error responses for authentication failures are generic to prevent username enumeration.</p><h3>Technical Approach</h3><ul><li>Modify error handling in `app/api/auth.py` to return a generic 'Invalid email or password' message.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Test with both valid and invalid emails to ensure the response is consistent.</li></ul>"
+    },
+    {
+      "title": "[Auth] Verify Password Using Bcrypt with Configurable Work Factor",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Verify the password using bcrypt hashing algorithm with a configurable work factor.</p><h3>Technical Approach</h3><ul><li>Use `passlib` library for bcrypt in `app/core/security.py`.</li><li>Ensure the work factor is configurable via environment variables.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for password verification with different work factors.</li></ul>"
+    },
+    {
+      "title": "[Auth] Implement Account Lockout After Consecutive Failed Attempts",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 3.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Implement account lockout after 5 consecutive failed attempts with a configurable lockout duration.</p><h3>Technical Approach</h3><ul><li>Use Redis to track failed attempts in `app/core/security.py`.</li><li>Implement lockout logic and duration configuration.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for lockout after failed attempts.</li><li>Verify lockout duration and reset after successful login.</li></ul>"
+    },
+    {
+      "title": "[Auth] Perform Constant-Time Password Comparison",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Perform password hash comparison using a constant-time comparison algorithm to prevent timing attacks.</p><h3>Technical Approach</h3><ul><li>Use `hmac.compare_digest` for constant-time comparison in `app/core/security.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests to ensure constant-time comparison is used.</li></ul>"
+    },
+    {
+      "title": "[Auth] Issue JWT with RS256 Upon Successful Login",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 2.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Issue a JSON Web Token (JWT) signed with RS256 upon successful login.</p><h3>Technical Approach</h3><ul><li>Use `pyjwt` library to generate JWT in `app/core/jwt.py`.</li><li>Include 'user_id', 'role', and 'exp' claims.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for JWT issuance and claim verification.</li></ul>"
+    },
+    {
+      "title": "[Auth] Set JWT Expiration Time to Configurable Value",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Set the JWT expiration time to a configurable value.</p><h3>Technical Approach</h3><ul><li>Configure expiration time via environment variables in `app/core/jwt.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for token expiration handling.</li></ul>"
+    },
+    {
+      "title": "[Infra] Enforce HTTPS for Login Endpoint",
+      "category": "Task",
+      "subcategory": "[Code][Infra]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Enforce HTTPS (TLS 1.2 or higher) for the login endpoint.</p><h3>Technical Approach</h3><ul><li>Configure Nginx to redirect HTTP to HTTPS.</li><li>Ensure TLS 1.2 or higher is used.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Test HTTP to HTTPS redirection.</li></ul>"
+    },
+    {
+      "title": "[Auth] Set Secure Attributes for Cookies",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>If cookies are used, set 'HttpOnly', 'Secure', and 'SameSite=Strict' attributes.</p><h3>Technical Approach</h3><ul><li>Configure cookie settings in `app/core/security.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Verify cookie attributes in browser developer tools.</li></ul>"
+    },
+    {
+      "title": "[Auth] Validate Email Format Against RFC 5322",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Validate the email format against standard RFC 5322 regex.</p><h3>Technical Approach</h3><ul><li>Implement email validation in `app/api/auth.py` using regex.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for valid and invalid email formats.</li></ul>"
+    },
+    {
+      "title": "[Auth] Restrict Login to Allowed Corporate Domains",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Restrict login to email addresses belonging to allowed corporate domains.</p><h3>Technical Approach</h3><ul><li>Check email domain against a configurable list in `app/api/auth.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for allowed and disallowed domains.</li></ul>"
+    },
+    {
+      "title": "[Auth] Apply Rate Limiting to Login Endpoint",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Apply rate limiting to the login endpoint.</p><h3>Technical Approach</h3><ul><li>Use `fastapi-limiter` with Redis to limit requests in `app/api/auth.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Test rate limiting with multiple requests.</li></ul>"
+    },
+    {
+      "title": "[Audit] Log All Login Attempts to Immutable Audit Log",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 2.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Log all successful and failed login attempts to an immutable audit log.</p><h3>Technical Approach</h3><ul><li>Implement logging in `app/core/audit.py`.</li><li>Include 'user_id', 'source_ip', 'user_agent', 'timestamp_utc', and 'status'.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Verify log entries for both successful and failed attempts.</li></ul>"
+    },
+    {
+      "title": "[Security] Ensure No Sensitive Information in Logs",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Ensure no sensitive information is written to application logs.</p><h3>Technical Approach</h3><ul><li>Review logging configuration in `app/core/logging.py`.</li><li>Mask credentials in request payload logging.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Verify logs do not contain sensitive information.</li></ul>"
+    },
+    {
+      "title": "[Performance] Ensure Login API Responds Within 200ms",
+      "category": "Task",
+      "subcategory": "[Test]",
+      "status": "Todo",
+      "estimated_hours": 2.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>The login API must respond within 200ms for 95% of requests under standard load conditions.</p><h3>Technical Approach</h3><ul><li>Use load testing tools to measure response times.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Performance tests showing compliance with the response time requirement.</li></ul>"
+    },
+    {
+      "title": "[Security] Use Parameterized Queries to Prevent SQL Injection",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Use parameterized queries or an ORM to execute database lookups, preventing SQL injection vulnerabilities.</p><h3>Technical Approach</h3><ul><li>Ensure all database queries in `app/api/auth.py` use SQLAlchemy ORM methods.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Code review to confirm no raw SQL queries are used.</li></ul>"
+    },
+    {
+      "title": "[Security] Sanitize Input Fields to Prevent XSS",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Sanitize all input fields to prevent Cross-Site Scripting (XSS).</p><h3>Technical Approach</h3><ul><li>Use input validation libraries in `app/api/auth.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for XSS payloads.</li></ul>"
+    },
+    {
+      "title": "[Auth] Handle Concurrent Login Attempts Correctly",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 2.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Handle concurrent login attempts for the same account correctly.</p><h3>Technical Approach</h3><ul><li>Use Redis to manage lockout status in `app/core/security.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Test concurrent login attempts to ensure lockout is respected.</li></ul>"
+    },
+    {
+      "title": "[Auth] Implement Logout Endpoint with Token Blacklist",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 2.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Implement a logout endpoint that invalidates the user's token by adding the JTI to a distributed blacklist.</p><h3>Technical Approach</h3><ul><li>Use Redis to store blacklisted JTIs in `app/api/auth.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for token invalidation.</li></ul>"
+    },
+    {
+      "title": "[Security] Include Security Headers in Response",
+      "category": "Task",
+      "subcategory": "[Code][Infra]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Include security headers in the response.</p><h3>Technical Approach</h3><ul><li>Configure Nginx to add security headers.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Verify headers in response using browser developer tools.</li></ul>"
+    },
+    {
+      "title": "[Audit] Retain Audit Logs for Configurable Period",
+      "category": "Task",
+      "subcategory": "[Code][DB]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Audit logs must be retained for a configurable period and stored in a tamper-evident storage system.</p><h3>Technical Approach</h3><ul><li>Configure log retention policy in `app/core/audit.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Verify logs are retained and accessible for the configured period.</li></ul>"
+    },
+    {
+      "title": "[Security] Enforce Maximum Password Length",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Enforce a maximum length for the password input before hashing.</p><h3>Technical Approach</h3><ul><li>Implement length check in `app/api/auth.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Unit tests for password length enforcement.</li></ul>"
+    },
+    {
+      "title": "[Auth] Update Last Login Timestamp Upon Successful Authentication",
+      "category": "Task",
+      "subcategory": "[Code][DB]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>Update the 'last_login_at' timestamp in the users table upon successful authentication.</p><h3>Technical Approach</h3><ul><li>Use SQLAlchemy ORM to update timestamp in `app/api/auth.py`.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Verify timestamp update in database after login.</li></ul>"
+    },
+    {
+      "title": "[Security] Trigger Brute Force Alert for Excessive Failed Attempts",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 2.0,
+      "priority": "High",
+      "description": "<h3>Objective & Goal</h3><p>Trigger a 'Brute Force Alert' if more than 50 failed attempts occur from a single IP address within 5 minutes.</p><h3>Technical Approach</h3><ul><li>Implement alert logic in `app/core/security.py`.</li><li>Send alert to security operations center or admin email.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Test alert triggering with simulated failed attempts.</li></ul>"
+    },
+    {
+      "title": "[Auth] Return Specific Landing Page Metadata on Successful Login",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "estimated_hours": 1.0,
+      "priority": "Medium",
+      "description": "<h3>Objective & Goal</h3><p>On successful login, return specific landing page metadata based on user role.</p><h3>Technical Approach</h3><ul><li>Determine landing page in `app/api/auth.py` based on user role.</li></ul><h3>Definition of Done (DoD)</h3><ul><li>Verify correct landing page metadata is returned for different roles.</li></ul>"
+    }
+  ]
+}
