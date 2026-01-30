@@ -6,12 +6,12 @@ IssueDetectionAI の指摘をもとに
 """
 
 from langchain_openai import ChatOpenAI
-from langchain.schema import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from dotenv import load_dotenv
 
-from .schemas.us_ac_response import UserStoryAcceptanceCriteria
-from .schemas.issue_response import IssueResponse
-from .prompts.suggestion_ai_prompt import (
+from src.story_refinement.services.schemas.us_ac_response import UserStoryAcceptanceCriteria
+from src.story_refinement.services.schemas.issue_response import IssueResponse
+from src.story_refinement.services.prompts.suggestion_ai_prompt import (
     SUGGESTION_SYSTEM_PROMPT_START,
     SUGGESTION_SYSTEM_PROMPT_END,
     SUGGESTION_INPUT_PROMPT_START,
@@ -73,12 +73,12 @@ def suggest_improvements(
         HumanMessage(content=final_prompt),
     ]
 
-    return llm(messages).content.strip()
+    return llm.invoke(messages).content.strip()
 
 
 if __name__ == "__main__":
-    from .schemas.user_story import UserStory
-    from .schemas.acceptance_criteria import AcceptanceCriteria
+    from src.story_refinement.services.schemas.user_story import UserStory
+    from src.story_refinement.services.schemas.acceptance_criteria import AcceptanceCriteria
 
     us_ac = UserStoryAcceptanceCriteria(
         user_story=UserStory(

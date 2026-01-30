@@ -5,13 +5,14 @@ US / AC の具体度を 0〜100 で評価するAI
 """
 
 from langchain_openai import ChatOpenAI
-from langchain.schema import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from pydantic import ValidationError
 from dotenv import load_dotenv
 
-from .schemas.us_ac_response import UserStoryAcceptanceCriteria
-from .schemas.class_response import ClassifierResponse
-from .prompts.classifier_ai_prompt import (
+# フルパスへの修正箇所
+from src.story_refinement.services.schemas.us_ac_response import UserStoryAcceptanceCriteria
+from src.story_refinement.services.schemas.class_response import ClassifierResponse
+from src.story_refinement.services.prompts.classifier_ai_prompt import (
     CLASSIFIER_SYSTEM_PROMPT_START,
     CLASSIFIER_SYSTEM_PROMPT_END,
     CLASSIFIER_INPUT_PROMPT_START,
@@ -63,7 +64,7 @@ def classify_us_ac(us_ac: UserStoryAcceptanceCriteria) -> ClassifierResponse:
         HumanMessage(content=final_prompt),
     ]
 
-    raw_response = llm(messages).content.strip()
+    raw_response = llm.invoke(messages).content.strip()
 
     try:
         return ClassifierResponse(score=int(raw_response))
@@ -72,8 +73,8 @@ def classify_us_ac(us_ac: UserStoryAcceptanceCriteria) -> ClassifierResponse:
 
 
 if __name__ == "__main__":
-    from .schemas.user_story import UserStory
-    from .schemas.acceptance_criteria import AcceptanceCriteria
+    from src.story_refinement.services.schemas.user_story import UserStory
+    from src.story_refinement.services.schemas.acceptance_criteria import AcceptanceCriteria
 
     sample = UserStoryAcceptanceCriteria(
         user_story=UserStory(
