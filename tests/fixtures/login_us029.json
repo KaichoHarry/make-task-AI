@@ -1,0 +1,26 @@
+[
+    {
+        "domain": "inventory-receiving-process",
+        "persona": "warehouse-staff",
+        "action": "I want to accurately register incoming goods into the inventory system",
+        "reason": "Because I need to prevent inventory discrepancies and ensure correct sales and shipping operations",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to execute the stock-in process.",
+            "The system must restrict operations to users with the specific 'Stock-In Manager' role.",
+            "The system shall require a valid Product ID and verify its existence in the Product Master.",
+            "The system must validate that the Stock-In Quantity is an integer value greater than or equal to 1.",
+            "The system shall automatically record the server timestamp and the User ID for every transaction.",
+            "The system must implement optimistic locking to detect and handle concurrent updates to the same product inventory.",
+            "The system shall execute the inventory increment and history recording within a single database transaction to ensure atomicity.",
+            "The system must require the selection of a Stock-In Reason from a predefined master list and limit the free-text reason field to 500 characters.",
+            "The system shall sanitize all input values to prevent Cross-Site Scripting (XSS) and use parameterized queries to prevent SQL injection.",
+            "The system must publish an inventory change notification event to an asynchronous queue upon successful processing.",
+            "The system shall generate an immutable audit log for every operation and store it in tamper-evident storage.",
+            "The system must support bulk registration via CSV, validating each row and skipping invalid rows while logging specific errors.",
+            "The system shall enforce HTTPS (TLS 1.2+) and rate limiting for all API interactions.",
+            "The system must return an HTTP 403 Forbidden status for unauthorized access and shall not expose internal database details in error responses.",
+            "The system shall target an API response time of under 300ms for stock-in operations.",
+            "The system must trigger an alert notification if the updated inventory quantity exceeds a configured threshold."
+        ]
+    }
+]

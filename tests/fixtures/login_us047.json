@@ -1,0 +1,28 @@
+[
+    {
+        "domain": "payroll-calculation-engine",
+        "persona": "hr-representative",
+        "action": "I want to automatically calculate accurate salaries based on employee attendance data, allowances, and deductions",
+        "reason": "Because I need to prevent manual calculation errors and ensure compliance and operational efficiency",
+        "acceptance_criteria": [
+            "The system shall restrict payroll calculation execution exclusively to authenticated users with the 'HR' role.",
+            "The system must require a mandatory calculation period (start/end date) and exclude data outside this range.",
+            "The system shall only process confirmed attendance data and must fail the calculation if unconfirmed data exists.",
+            "The system must calculate base pay from the employee master and automatically derive allowances (overtime, etc.) based on defined statutory rates.",
+            "The system shall support configurable deduction items (tax, insurance) referring to rates defined in the settings master.",
+            "The system must allow administrators to modify calculation formulas via the administration interface without requiring code changes.",
+            "The system shall execute calculations within a single database transaction and automatically rollback upon any error.",
+            "The system must generate a unique payslip record for each result, preventing duplicates, and archive previous versions upon recalculation.",
+            "The system shall record an execution log including Executor ID, Target Period, and Processed Count.",
+            "The system must support asynchronous batch processing for long-running calculations and provide a progress status endpoint.",
+            "The system shall store payroll data in encrypted storage and support masking of PII fields.",
+            "The system must use parameterized queries to prevent SQL injection and sanitize output to prevent XSS.",
+            "The system shall prohibit manual modification of calculated results, requiring a recalculation flow for corrections.",
+            "The system must restrict the 'Finalize' action to Administrator roles, lock the data from editing, and record the action in the audit log.",
+            "The system shall enforce strict permission checks for CSV exports and log every download event.",
+            "The system must enforce rate limiting and target a response time of under 1 second for synchronous calculations.",
+            "The system shall not expose internal calculation logic in API responses.",
+            "The system must store audit logs in tamper-evident storage to prevent modification."
+        ]
+    }
+]

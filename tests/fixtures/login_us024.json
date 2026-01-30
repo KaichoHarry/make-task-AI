@@ -1,0 +1,33 @@
+[
+    {
+        "domain": "rbac-permission-management",
+        "persona": "system-administrator",
+        "action": "I want to strictly control executable operations for each user based on their roles",
+        "reason": "Because I need to prevent data leakage and operational errors while complying with internal controls and security policies",
+        "acceptance_criteria": [
+            "The system shall restrict access to permission management functions exclusively to users with the 'Administrator' role.",
+            "The system must allow the creation of multiple custom roles, each identified by a globally unique Role ID.",
+            "The system shall support granular permission settings for each role, definable by CRUD (Create, Read, Update, Delete) scopes.",
+            "The system must allow defining access control policies at the individual API endpoint level.",
+            "The system shall control the availability of UI elements and menu data based on the user's assigned permissions.",
+            "The system must support data scope restrictions, such as limiting access to data within the user's own department (Row-Level Security).",
+            "The system shall allow a single user to be assigned multiple roles and apply configurable priority rules to resolve conflicts.",
+            "The system must apply permission changes immediately and enforce re-authentication or token revocation for active users.",
+            "The system shall enforce a 'Default Deny' policy, blocking access to any function or resource not explicitly permitted.",
+            "The system must return an HTTP 403 Forbidden status for any unauthorized access attempts.",
+            "The system shall perform all authorization checks on the backend server to ensure security, regardless of client-side validation.",
+            "The system must implement caching for permission data and automatically invalidate the cache upon configuration changes.",
+            "The system shall maintain a comprehensive history of permission changes, including pre-modification and post-modification values and the modifier's User ID.",
+            "The system must support logical deletion of roles and prevent the assignment of deleted roles to users.",
+            "The system shall generate an immutable audit log for every permission change event and store it in tamper-evident storage.",
+            "The system must use parameterized queries and input sanitization to prevent SQL injection and XSS attacks.",
+            "The system shall enforce strict authentication and rate limiting for all API access points.",
+            "The system must encrypt stored permission configurations and enforce authentication for internal inter-system communications.",
+            "The system shall detect permission inconsistencies and trigger an alert to administrators.",
+            "The system must support exporting and importing permission configurations to facilitate backup and migration.",
+            "The system shall provide role templates initialized with secure defaults based on the principle of least privilege.",
+            "The system must support the automatic revocation of roles for users flagged as retired or deactivated.",
+            "The system shall ensure that authorization checks do not cause performance degradation, even under high system load."
+        ]
+    }
+]

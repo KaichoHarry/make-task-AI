@@ -1,0 +1,27 @@
+[
+    {
+        "domain": "expense-application-submission",
+        "persona": "corporate-employee",
+        "action": "I want to accurately apply for business expenses such as transportation and lodging with necessary evidence",
+        "reason": "Because I need to ensure proper approval and accounting processing in accordance with company regulations",
+        "acceptance_criteria": [
+            "The system shall restrict expense applications to authenticated users and automatically link them to the applicant's account with a unique Application ID.",
+            "The system must require selection of an Expense Type from master data (e.g., Transportation, Lodging) and validate that the Amount is a positive numeric value.",
+            "The system shall support corporate standard or foreign currencies, automatically recording the exchange rate for foreign transactions.",
+            "The system must require a Transaction Date (prohibiting future dates), a Payee name, and a Description of at least 10 characters.",
+            "The system shall require a mandatory receipt attachment (JPG/PNG/PDF, max 10MB), execute a virus scan, and store valid files in tamper-proof storage.",
+            "The system must perform OCR processing to extract amount, date, and payee, and trigger a warning if discrepancies with input values are detected.",
+            "The system shall allow saving applications as 'Draft' without triggering approval, and execute full validation upon submission.",
+            "The system must flag or automatically reject applications exceeding defined limits and detect potential duplicate submissions based on date and amount.",
+            "The system shall allow associating expenses with Department codes, Project codes, and Cost Centers.",
+            "The system must initiate an approval workflow upon submission, managing transitions between defined statuses (Draft to Paid) and recording all state changes.",
+            "The system shall execute persistence within a transaction, use parameterized queries to prevent SQL injection, and sanitize inputs against XSS.",
+            "The system must transmit data to the accounting system via API, utilizing a retry queue for failed attempts.",
+            "The system shall prohibit editing of finalized expenses and allow application withdrawal only prior to approval.",
+            "The system must integrate with machine learning scoring services for fraud detection and auditing purposes.",
+            "The system shall encrypt PII at rest, store audit logs in tamper-evident storage, and adhere to the corporate data retention policy.",
+            "The system must enforce HTTPS (TLS 1.2+), rate limiting, and target an API response time of under 500ms.",
+            "The system shall publish notification events to an asynchronous message queue upon successful application."
+        ]
+    }
+]

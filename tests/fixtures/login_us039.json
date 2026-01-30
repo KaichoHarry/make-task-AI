@@ -1,0 +1,33 @@
+[
+    {
+        "domain": "attendance-time-tracking",
+        "persona": "corporate-employee",
+        "action": "I want to accurately record my clock-in and clock-out times",
+        "reason": "Because I need to maintain accurate records of working hours and ensure consistency in payroll calculations",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to perform time clock operations.",
+            "The system must restrict users to recording attendance data only for themselves.",
+            "The system shall support distinct clocking types: 'Clock-In', 'Clock-Out', 'Break-Start', and 'Break-End'.",
+            "The system must prevent consecutive clocking of the same type (e.g., Clock-In followed immediately by Clock-In).",
+            "The system shall reject 'Clock-Out' attempts if no corresponding 'Clock-In' record exists.",
+            "The system must allow 'Break-End' only if a valid 'Break-Start' record exists.",
+            "The system shall use the server timestamp for all records and must not rely on the client-side time.",
+            "The system must store timestamps in UTC and convert them to local time for display.",
+            "The system shall record the User-Agent string and IP address for every clocking event.",
+            "The system must optionally record GPS location coordinates if enabled and flag records created outside permitted areas.",
+            "The system shall store clocking data in tamper-evident storage for auditing purposes.",
+            "The system must restrict data modification to 'Administrator' roles, prohibiting general employees from editing.",
+            "The system shall retain the original data and maintain a full history of changes including mandatory modification reasons.",
+            "The system must enforce a configurable limit on the number of clocking events per day.",
+            "The system shall enforce rate limiting and implement idempotency control using Request IDs to prevent double submissions.",
+            "The system must execute database persistence within a transaction and utilize optimistic locking to prevent concurrent update conflicts.",
+            "The system shall return an HTTP 400 status for invalid input parameters and use parameterized queries to prevent SQL injection.",
+            "The system must sanitize all input values to prevent Cross-Site Scripting (XSS) and enforce HTTPS (TLS 1.2+) for all communications.",
+            "The system shall publish attendance events to an asynchronous queue upon successful clocking for integration with payroll systems.",
+            "The system must prohibit physical deletion of clocking data, allowing only logical invalidation.",
+            "The system shall allow employees to view their own clocking history and administrators to view the history of all employees.",
+            "The system must target an API response time of under 300ms and manage API versioning.",
+            "The system shall separate user-facing error messages from detailed internal logs and ensure audit logs possess tamper detection mechanisms."
+        ]
+    }
+]

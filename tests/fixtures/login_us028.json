@@ -1,0 +1,33 @@
+[
+    {
+        "domain": "expense-reimbursement-workflow",
+        "persona": "corporate-employee",
+        "action": "I want to submit applications for transportation and business expenses through a correct approval flow",
+        "reason": "Because I need to receive reimbursement according to company regulations and ensure accurate accounting processing",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users with the appropriate 'Applicant' role to create expense applications.",
+            "The system must automatically generate a globally unique Application ID and associate it with the applicant's User ID.",
+            "The system shall require the selection of an Expense Type (e.g., Transportation, Lodging) from a configurable master list.",
+            "The system must validate that the Amount is a numeric value greater than zero and adheres to the configured currency unit.",
+            "The system shall validate that the Transaction Date is present and does not allow future dates.",
+            "The system must validate that the Application Reason is present and contains at least 10 characters.",
+            "The system shall allow file attachments restricted to PDF, JPG, and PNG formats with a maximum size of 10MB.",
+            "The system must execute a virus scan on all attachments and store them in encrypted storage only if they pass.",
+            "The system shall provide access to attached files exclusively via time-limited signed URLs.",
+            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
+            "The system shall sanitize all input values to protect against Cross-Site Scripting (XSS) attacks.",
+            "The system must execute the application creation process within a single database transaction to ensure atomicity.",
+            "The system shall manage application statuses strictly (Draft, Submitted, Approved, Rejected) and allow editing only in the 'Draft' state.",
+            "The system must automatically determine the approval route based on organizational hierarchy and trigger additional approval if the amount exceeds a threshold.",
+            "The system shall restrict approval and rejection actions to designated approvers and require a mandatory comment for these actions.",
+            "The system must maintain a chronological approval history log including User ID, Action, and Timestamp.",
+            "The system shall send asynchronous notifications to the applicant upon rejection and to the accounting department upon final approval.",
+            "The system must support logical deletion of records, restricted to 'Administrator' roles, and generate an audit log upon deletion.",
+            "The system shall maintain a full change history log, recording both pre-modification and post-modification values.",
+            "The system must enforce HTTPS (TLS 1.2+) and rate limiting for all API operations.",
+            "The API must adhere to REST architectural principles, support versioning, and must not expose internal database details in error responses.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification.",
+            "The system must target an API response time of under 400ms for application submission."
+        ]
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "domain": "employee-information-management",
+        "persona": "hr-representative",
+        "action": "I want to accurately and securely manage employee basic information, affiliations, and employment details",
+        "reason": "Because I need to streamline personnel procedures while ensuring the protection of personal information",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to view, register, or update employee information.",
+            "The system must restrict operational privileges based on defined roles (e.g., HR, Admin, Manager).",
+            "The system shall automatically generate a globally unique Employee ID for each record.",
+            "The system must require a mandatory Name field with a maximum length of 100 characters.",
+            "The system shall validate email address formats and support restrictions to specific corporate domains.",
+            "The system must validate phone number formats and manage addresses using multiple structured fields.",
+            "The system shall prohibit future dates for the Date of Birth field.",
+            "The system must require selection of Employment Status and Department from pre-defined master data.",
+            "The system shall allow linking a Supervisor from the existing employee table.",
+            "The system must encrypt personal information at rest and enforce HTTPS (TLS 1.2+) for all data transmission.",
+            "The system shall use parameterized queries and input sanitization to prevent SQL injection and Cross-Site Scripting (XSS).",
+            "The system must reject registrations with missing mandatory fields or invalid data types.",
+            "The system shall implement optimistic locking to detect and prevent concurrent update conflicts.",
+            "The system must maintain a comprehensive change history, recording pre- and post-modification values and the modifier's User ID.",
+            "The system shall allow invalidating the status of retired employees to prevent them from logging in.",
+            "The system must support logical deletion only and record the operation in the audit log.",
+            "The system shall generate specific logs for both successful and failed registration attempts.",
+            "The system must support CSV import, applying the same validation logic per row, skipping invalid rows with error logging, and executing valid data within a transaction.",
+            "The system shall trigger alert notifications when operations violate defined Service Level Agreements (SLA).",
+            "The system must store audit logs in tamper-evident storage to prevent modification.",
+            "The system shall include employee data in regular backup schedules and log any backup failures.",
+            "The API must adhere to REST principles, support versioning, enforce rate limiting, and must not expose internal database details in responses."
+        ]
+    }
+]

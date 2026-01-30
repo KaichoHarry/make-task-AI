@@ -1,0 +1,29 @@
+[
+    {
+        "domain": "attendance-time-tracking-record",
+        "persona": "corporate-employee",
+        "action": "I want to accurately record my clock-in and clock-out times",
+        "reason": "Because I need to ensure the accuracy of payroll calculations and labor management, and prevent fraudulent timestamps or omitted records",
+        "acceptance_criteria": [
+            "The system shall allow only authenticated users to access the time clock function.",
+            "The system must support four distinct clocking types: 'Clock-In', 'Clock-Out', 'Break-Start', and 'Break-End'.",
+            "The system shall automatically associate the User ID with every record and reject requests with invalid User IDs.",
+            "The system must use the server timestamp for all records and strictly disregard client-side time.",
+            "The system shall prevent consecutive clocking of the same type (e.g., Clock-In followed immediately by Clock-In) and enforce logical sequences.",
+            "The system must reject 'Clock-Out' attempts if no corresponding 'Clock-In' exists and 'Break-End' attempts without a 'Break-Start'.",
+            "The system shall execute data persistence within a single database transaction, ensuring automatic rollback upon any failure.",
+            "The system must prohibit the physical deletion of clocking history to ensure auditability.",
+            "The system shall restrict modification capabilities to 'Administrator' roles and retain a full history of original and modified timestamps.",
+            "The system must record the IP address and User-Agent string for every clocking event.",
+            "The system shall detect and alert on suspicious patterns, such as a high volume of clocking attempts within a short duration.",
+            "The system must support integration with payroll systems requiring API token authentication.",
+            "The system shall allow CSV export of attendance data, restricted by user permissions.",
+            "The system must implement optimistic locking to detect and handle concurrent update conflicts.",
+            "The system shall perform monthly data aggregation via batch jobs and log the execution results.",
+            "The system must enforce rate limiting, HTTPS (TLS 1.2+), parameterized queries, and input sanitization.",
+            "The system shall target an API response time of under 300ms and adhere to REST architectural principles.",
+            "The system must not expose internal system details in error responses.",
+            "The system shall store audit logs in tamper-evident storage to prevent modification."
+        ]
+    }
+]
