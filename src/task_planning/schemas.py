@@ -1,76 +1,87 @@
 # ==========================================
-# schemas.py : データの「型（カタ）」を決めるファイル
+# schemas.py : AIが出力するデータの「型（ルールブック）」
 # ==========================================
 
-# データをきれいに扱うための道具をPythonから借りてきます
 from typing import List, Literal
 from pydantic import BaseModel, Field
 
 # ---------------------------------------------------------
-# TechKanの画面にある「サブカテゴリ」の選択肢を定義します
-# AIがこれ以外の勝手な言葉を使わないように制限するためのものです
+# 1. サブカテゴリの選択肢を定義
 # ---------------------------------------------------------
+# ここに書かれている文字列以外がAIから返ってきたらエラーにします。
+# これにより、TechKanアプリ側で分類不能になるのを防ぎます。
 SubCategoryType = Literal[
-    "[Code][BE]",    # バックエンド（サーバー側のプログラム）
-    "[Code][FE]",    # フロントエンド（画面側のプログラム）
-    "[Code][DB]",    # データベース（データの保存場所）
-    "[Code][Infra]", # インフラ（サーバー設定など）
-    "[Test]",        # テスト（プログラムが正しいか確認する作業）
-    "[Design]",      # 設計（どう作るか考える作業）
-    "[Doc]"          # ドキュメント（説明書作成）
+    "[Code][BE]",    # バックエンド実装 (Pythonなど)
+    "[Code][FE]",    # フロントエンド実装 (Next.jsなど)
+    "[Code][DB]",    # データベース設計・SQL
+    "[Code][Infra]", # インフラ・サーバー設定 (Dockerなど)
+    "[Test]",        # テストコード作成
+    "[Design]",      # 設計・ドキュメント作成
+    "[Doc]"          # その他ドキュメント
 ]
 
 # ---------------------------------------------------------
-# 1つの「タスク」の中身を定義します
-# TechKanの入力画面の項目と1対1で対応しています
+# 2. タスク単体の設計図 (TechKanTask)
 # ---------------------------------------------------------
 class TechKanTask(BaseModel):
-    # タイトル：タスクの名前です
+    # --- タスクのタイトル ---
+    # description="..." の中は「AIへの指示」です。
+    # ここで "in English" と書くことで、AIに英語出力を強制しています。
     title: str = Field(
         ..., 
-        description="タスクのタイトル (例: ログインAPIの実装)"
+        description="Technical title of the task in English (e.g., '[Auth] Implement Login API')."
     )
     
-    # カテゴリ：TechKanの仕様上、ここは常に "Task" という文字にします
+    # --- カテゴリ (固定値) ---
+    # TechKanシステムが認識できるように、常に "Task" という文字を入れさせます。
     category: Literal["Task"] = Field(
         "Task", 
-        description="カテゴリ (TechKanの仕様でTask固定)"
+        description="Fixed category 'Task' for TechKan system."
     )
     
-    # サブカテゴリ：上で定義したリストの中から1つ選ばせます
+    # --- サブカテゴリ ---
+    # 上で定義した SubCategoryType のリストから1つ選ばせます。
     subcategory: SubCategoryType = Field(
         ..., 
-        description="作業内容に一番近いサブカテゴリを選んでください"
+        description="Select the most appropriate subcategory."
     )
     
-    # ステータス：最初は必ず "Todo" (未着手) にします
+    # --- ステータス (初期値) ---
+    # 作成直後は必ず "Todo" (未着手) になるように固定します。
     status: Literal["Todo"] = Field(
         "Todo", 
-        description="初期ステータス"
+        description="Initial status must always be 'Todo'."
     )
     
-    # 見積もり時間：AIに変な数字（例えば 1.23時間など）を出させないよう、
-    # TechKanでよく使う 0.5, 1.0, 2.0, 3.0, 4.0 の中から選ばせます
+    # --- 見積もり時間 (数値) ---
+    # float = 小数点を含む数字 です。
+    # 0.5h, 1.0h... のように具体的な数値を指定させています。
     estimated_hours: float = Field(
         ..., 
-        description="見積もり工数(h)。0.5, 1.0, 2.0, 3.0, 4.0, のいずれかを選択してください"
+        description="Estimated effort in hours. Choose from: 0.5, 1.0, 2.0, 3.0, 4.0."
     )
     
-    # 優先度：High(高), Medium(中), Low(低) のどれかです
+    # --- 優先度 ---
+    # High, Medium, Low の3つ以外は認めない設定です。
     priority: Literal["High", "Medium", "Low"] = Field(
         "Medium", 
-        description="優先度"
+        description="Task priority."
     )
     
-    # 詳細説明：HTMLタグを使って、TechKan上で見やすく表示できるようにします
+    # --- 詳細説明 (HTML) ---
+    # ここが一番重要です。
+    # 1. "in English" -> 中身を英語で書かせる
+    # 2. "using HTML tags" -> <h3>や<ul>を使って見やすく整形させる
+    # これにより、TechKanの画面にそのまま貼り付けられるHTMLが生成されます。
     description: str = Field(
         ..., 
-        description="タスクの詳細内容。HTMLタグ (<h3>, <ul>, <li>) を使って書いてください"
+        description="Detailed task description in English using HTML tags (<h3>, <ul>, <li>). Must include Objective, Technical Approach, and Definition of Done."
     )
 
 # ---------------------------------------------------------
-# 複数のタスクをまとめた「リスト」を定義します
-# AIには最終的にこの形（タスクの束）で提出してもらいます
+# 3. タスクリストの定義 (TechKanTaskList)
 # ---------------------------------------------------------
+# AIは最終的にこの形でデータを返します。
+# 「TechKanTask（上で定義したもの）がたくさん入っているリスト」という意味です。
 class TechKanTaskList(BaseModel):
     tasks: List[TechKanTask]

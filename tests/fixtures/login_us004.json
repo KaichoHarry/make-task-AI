@@ -1,25 +1,28 @@
-[
-    {
-        "domain": "deal-registration",
-        "persona": "sales-representative",
-        "action": "I want to register new business opportunity information",
-        "reason": "Because I need to visualize deal progress, enable sales forecasting, and facilitate team collaboration",
-        "acceptance_criteria": [
-            "The system shall allow only authenticated users to access the deal registration function.",
-            "The system must automatically generate a globally unique Deal ID for each new record.",
-            "The system must validate that the Deal Name is present and the input is sanitized against XSS attacks.",
-            "The system shall require a valid Customer ID and must return an error if the specified customer does not exist in the database.",
-            "The system must accept and validate the Deal Status (e.g., New, Proposing, Closed Won, Closed Lost).",
-            "The system shall validate that the Amount is a numeric value greater than or equal to zero.",
-            "The system must ensure that the Estimated Close Date is a valid date format.",
-            "The system must use parameterized queries for all database interactions to prevent SQL injection.",
-            "The system shall execute the registration process within a single database transaction to ensure atomicity.",
-            "The system must maintain a history log of all updates made to the deal information.",
-            "The system shall support logical deletion of deal records rather than physical deletion.",
-            "The system must apply consistent validation logic for API requests and return responses in JSON format.",
-            "The system shall generate an immutable audit log for every registration, capturing the User ID, Deal ID, and timestamp.",
-            "The system must store audit logs in tamper-evident storage to prevent modification.",
-            "The system shall target an API response time of under 400ms for successful registrations."
-        ]
-    }
-]
+{
+    "domain": "Business Management System",
+    "persona": "Sales Representative",
+    "action": "I want to register new deal information",
+    "reason": "To visualize deal progress, sales forecasting, and team collaboration",
+    "acceptance_criteria": [
+        "Deal registration is only possible for authenticated users.",
+        "Deal IDs are automatically numbered and unique.",
+        "Deal name is a required field.",
+        "Linking with a Customer ID is mandatory.",
+        "Registration fails if a non-existent Customer ID is specified.",
+        "Must have a deal status (New/In Progress/Closed Won/Closed Lost).",
+        "Amount field only allows numerical values.",
+        "Amount must be 0 or greater.",
+        "Estimated close date field must exist.",
+        "SQL injection countermeasures must be implemented.",
+        "Input values must be sanitized (Anti-XSS).",
+        "Registration process must be completed within a DB transaction.",
+        "Logs for deal registration must be stored.",
+        "Logs include user_id, deal_id, and timestamp.",
+        "Deal update history must be maintained.",
+        "Deals can be logically deleted.",
+        "Same validation applies when registering via API.",
+        "Response must be in JSON format.",
+        "Target response time for API is within 400ms.",
+        "Audit logs are stored in tamper-evident storage."
+    ]
+}
