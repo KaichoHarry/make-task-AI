@@ -1,76 +1,86 @@
+import json
+import time
+import google.generativeai as genai
+from prompts import TASK_GENERATION_SYSTEM_PROMPT
+
 # ==========================================
-# prompts.py : 業務レベルの厳格なタスク分解指示書 (英語版)
+# 設定エリア
 # ==========================================
+BATCH_SIZE = 5  # 1回に処理するACの数（5個程度が最も高密度になります）
 
-# AIになりきってもらうための「システム設定」です
-# 出力を英語にするため、命令文自体を英語で記述しています
-TASK_GENERATION_SYSTEM_PROMPT = """
-You are a Senior Architect and Project Manager specializing in enterprise systems.
-Your goal is to analyze the provided User Stories (US) and Acceptance Criteria (AC), and decompose them into a list of executable "Implementation Tasks" for the TechKan project management tool.
+# 2回目以降に自動挿入する「クギを刺す」プロンプト
+REMINDER_PROMPT = """
+Great. Now proceed with the next batch of ACs.
 
-The target system requires high security and robustness.
-You must eliminate ambiguity and design tasks at a granularity suitable for professional development.
+⚠️ **CRITICAL REMINDERS (DO NOT FORGET):**
+1. **Maintain the 4-Layer Structure**: [DB], [BE], [FE], [Test] for EVERY single AC.
+2. **Tech Stack**: Next.js (Zod), FastAPI (Pydantic), SQLAlchemy.
+3. **Consistency**: Use the same naming conventions as the previous batch.
+4. **No Summary**: Do not summarize. Keep the high density.
 
-**IMPORTANT: ALL OUTPUT MUST BE IN ENGLISH.**
-
-## 🛠 Technology Stack & Context
-Assume the following stack and include specific technical details in the tasks:
-- **Frontend**: Next.js (TypeScript), React Hook Form, Zod
-- **Backend**: Python (FastAPI), Pydantic
-- **Auth/Security**: 
-  - JWT (RS256 signed), OAuth2PasswordBearer
-  - Password Hash: bcrypt or Argon2id
-  - Rate Limiting: Redis + fastapi-limiter
-  - Audit Log: Async write to Database
-- **Infrastructure**: Docker, Nginx (Reverse Proxy)
-
-## ⚠️ Absolute Rules for Task Decomposition (Strictly Enforced)
-
-1. **"Atomic Task" Principle**:
-   - **Create at least one task per Acceptance Criterion (AC).**
-   - **DO NOT merge multiple ACs into a single task.**
-   - Example: "Implement Login Feature" is PROHIBITED. Split it into "Implement Password Hashing", "Implement JWT Issuance", "Implement Account Lockout", etc.
-
-2. **Workflow Segmentation**:
-   - For complex ACs (e.g., Account Lockout), split them into subtasks if necessary:
-     - [Code][DB]: Schema design & migration
-     - [Code][BE]: Logic implementation
-     - [Test]: Unit tests & Edge case testing
-
-3. **Concrete Security Implementation**:
-   - Abstract tasks like "Ensure security" are PROHIBITED.
-   - Be specific: e.g., "Configure Content-Security-Policy headers to prevent XSS", "Use SQLAlchemy ORM methods to prevent SQL Injection".
-
-## 📝 TechKan Output Format Requirements
-
-- **title**: 
-  - Must be technical and specific in English.
-  - Bad: "Login Feature"
-  - Good: "[Auth] Implement Account Lockout with Redis"
-
-- **estimated_hours**:
-  - Choose strictly from: **0.5, 1.0, 2.0, 3.0, 4.0**.
-  - If a task exceeds 4.0 hours, it is too large. Split it.
-
-- **subcategory**: 
-  - Select from: [Code][BE], [Code][FE], [Code][DB], [Code][Infra], [Test], [Doc]
-
-- **description**: 
-  Must use HTML tags for formatting. Structure the description as follows:
-
-  <h3>Objective & Goal</h3>
-  <p>Which AC is this task addressing?</p>
-  
-  <h3>Technical Approach</h3>
-  <ul>
-    <li>Target file names (e.g., `app/core/security.py`)</li>
-    <li>Libraries/Algorithms to use (e.g., Use `passlib` for `bcrypt`)</li>
-    <li>Specific logic details</li>
-  </ul>
-
-  <h3>Definition of Done (DoD)</h3>
-  <ul>
-    <li>Create and pass Unit Tests (Pytest/Jest)</li>
-    <li>Verify edge cases (e.g., invalid tokens)</li>
-  </ul>
+Here are the next ACs:
 """
+
+# ==========================================
+# メイン処理
+# ==========================================
+def generate_tasks_automatically(json_file_path):
+    # 1. JSONデータの読み込み
+    with open(json_file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    all_acs = data.get("acceptance_criteria", [])
+    total_acs = len(all_acs)
+    print(f"🚀 Total ACs found: {total_acs}")
+
+    # 2. モデルの準備 (APIキーは環境変数等で設定済みとする)
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-pro-latest", # コンテキストウィンドウが広いモデル推奨
+        system_instruction=TASK_GENERATION_SYSTEM_PROMPT
+    )
+    
+    # チャットセッションの開始（これで文脈を記憶させる）
+    chat = model.start_chat(history=[])
+    
+    generated_tasks_log = []
+
+    # 3. バッチ処理ループ
+    for i in range(0, total_acs, BATCH_SIZE):
+        batch_acs = all_acs[i : i + BATCH_SIZE]
+        current_batch_num = (i // BATCH_SIZE) + 1
+        print(f"\nProcessing Batch {current_batch_num} (AC {i+1} to {min(i+BATCH_SIZE, total_acs)})...")
+
+        # --- ここが自動化のキモ ---
+        if i == 0:
+            # 初回: 普通にACを渡す
+            user_message = f"Here is the first batch of ACs:\n{json.dumps(batch_acs)}"
+        else:
+            # 2回目以降: 「リマインダー」＋「次のAC」を結合して渡す
+            user_message = f"{REMINDER_PROMPT}\n{json.dumps(batch_acs)}"
+        # ------------------------
+
+        try:
+            # AIに送信
+            response = chat.send_message(user_message)
+            
+            # 結果を表示・保存（実際はここでパースして保存処理を入れる）
+            print(f"✅ Batch {current_batch_num} Complete. Output length: {len(response.text)} chars")
+            generated_tasks_log.append(response.text)
+            
+            # APIレート制限対策（必要に応じて）
+            time.sleep(2) 
+
+        except Exception as e:
+            print(f"❌ Error in Batch {current_batch_num}: {e}")
+            break
+
+    print("\n🎉 All batches processed successfully!")
+    return generated_tasks_log
+
+if __name__ == "__main__":
+    # 実行
+    results = generate_tasks_automatically("login_us001.json")
+    
+    # 必要なら結果をファイルに保存
+    with open("final_high_density_tasks.md", "w", encoding="utf-8") as f:
+        f.write("\n\n".join(results))
