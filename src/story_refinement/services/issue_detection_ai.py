@@ -5,12 +5,12 @@ US / AC の曖昧さ・不足点を文章で洗い出すAI
 """
 
 from langchain_openai import ChatOpenAI
-from langchain.schema import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from dotenv import load_dotenv
 
-from .schemas.us_ac_response import UserStoryAcceptanceCriteria
-from .schemas.issue_response import IssueResponse
-from .prompts.issue_detection_ai_prompt import (
+from src.story_refinement.services.schemas.us_ac_response import UserStoryAcceptanceCriteria
+from src.story_refinement.services.schemas.issue_response import IssueResponse
+from src.story_refinement.services.prompts.issue_detection_ai_prompt import (
     ISSUE_DETECTION_SYSTEM_PROMPT_START,
     ISSUE_DETECTION_SYSTEM_PROMPT_END,
     ISSUE_DETECTION_INPUT_PROMPT_START,
@@ -62,13 +62,13 @@ def detect_issues(us_ac: UserStoryAcceptanceCriteria) -> IssueResponse:
         HumanMessage(content=final_prompt),
     ]
 
-    response = llm(messages).content.strip()
+    response = llm.invoke(messages).content.strip()
     return IssueResponse(issues=response)
 
 
 if __name__ == "__main__":
-    from .schemas.user_story import UserStory
-    from .schemas.acceptance_criteria import AcceptanceCriteria
+    from src.story_refinement.services.schemas.user_story import UserStory
+    from src.story_refinement.services.schemas.acceptance_criteria import AcceptanceCriteria
 
     sample = UserStoryAcceptanceCriteria(
         user_story=UserStory(
