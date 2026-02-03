@@ -2,7 +2,7 @@
 SuggestionAI
 -------------
 IssueDetectionAI の指摘をもとに
-より具体的な US / AC を生成するAI
+構造化された US / AC を生成するAI
 """
 
 from langchain_openai import ChatOpenAI
@@ -24,19 +24,21 @@ from src.story_refinement.services.prompts.suggestion_ai_prompt import (
 
 load_dotenv()
 
-
 def suggest_improvements(
     us_ac: UserStoryAcceptanceCriteria,
     issues: IssueResponse,
-) -> str:
+) -> UserStoryAcceptanceCriteria: # 戻り値を型定義に変更
     """
-    改善された US / AC（Markdown）を返す
+    改善された UserStoryAcceptanceCriteria オブジェクトを返す
     """
 
     llm = ChatOpenAI(
         model="gpt-4o-mini",
-        temperature=0.4,  # 文章生成なので少し創造性を許可
+        temperature=0.4,
     )
+
+    # 【重要】構造化出力を定義
+    structured_llm = llm.with_structured_output(UserStoryAcceptanceCriteria)
 
     system_prompt = (
         SUGGESTION_SYSTEM_PROMPT_START
@@ -73,29 +75,14 @@ def suggest_improvements(
         HumanMessage(content=final_prompt),
     ]
 
-    return llm.invoke(messages).content.strip()
-
+    # invokeの結果は自動的に UserStoryAcceptanceCriteria オブジェクトになる
+    return structured_llm.invoke(messages)
 
 if __name__ == "__main__":
-    from src.story_refinement.services.schemas.user_story import UserStory
-    from src.story_refinement.services.schemas.acceptance_criteria import AcceptanceCriteria
-
-    us_ac = UserStoryAcceptanceCriteria(
-        user_story=UserStory(
-            domain="Login",
-            persona="User",
-            action="log into the system",
-            reason="access features"
-        ),
-        acceptance_criteria=AcceptanceCriteria(
-            acceptance_criteria=[
-                "User can log in"
-            ]
-        )
-    )
-
-    issues = IssueResponse(
-        issues="The authentication method and error handling are unclear."
-    )
-
-    print(suggest_improvements(us_ac, issues))
+    # テスト実行用のコード（略）
+    # ...
+    result = suggest_improvements(us_ac, issues)
+    print("--- Refined Result ---")
+    print(f"Domain: {result.user_story.domain}")
+    print(f"AC Count: {len(result.acceptance_criteria.acceptance_criteria)}")
+    print(result)

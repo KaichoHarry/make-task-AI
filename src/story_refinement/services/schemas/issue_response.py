@@ -1,21 +1,28 @@
 """
 IssueDetectionAI が返却する内容のスキーマ
-
-- US / AC の「曖昧さ」「不足点」「具体化できる点」を文章で返す
 """
-
 from pydantic import BaseModel, Field
-
+from typing import List
 
 class IssueResponse(BaseModel):
-    issues: str = Field(
+    # description を新しい役割（専門家フィードバックの集約）に合わせて最適化
+    issues: List[str] = Field(
         ...,
-        description="USおよびACに対する不明点・改善点の指摘"
+        description="各専門家（PM, Backend, Security, QA, UX）の視点を踏まえ、US/ACで修正・具体化が必要なポイントを整理したリスト"
     )
-
 
 if __name__ == "__main__":
+    # 単体テスト用
     sample = IssueResponse(
-        issues="The authentication method is unclear. Specify email/password or SSO."
+        issues=[
+            "Backend: パスワードのハッシュ化アルゴリズム（例: Argon2）の指定がありません。",
+            "Security: 連続ログイン失敗時のアカウントロックアウト条件が定義されていません。",
+            "QA: パスワードの最小・最大文字数などの境界値条件が不足しています。"
+        ]
     )
+    print("--- Model Dump ---")
     print(sample.model_dump())
+    
+    print("\n--- Individual Issues ---")
+    for i, issue in enumerate(sample.issues, 1):
+        print(f"{i}. {issue}")

@@ -21,7 +21,6 @@ to make them **clear, concrete, and implementation-ready**.
   - Testable
   - Unambiguous
   - Technically concrete when appropriate
-- Use Markdown formatting for readability.
 
 ## Language Rule (Very Important)
 - Detect the language used in the original User Story.
@@ -52,20 +51,23 @@ SUGGESTION_INPUT_PROMPT_END = """
 
 SUGGESTION_FINAL_PROMPT_START = """
 ## Output Instructions
-- Output ONLY the refined User Story and Acceptance Criteria.
-- Use the following structure:
+Provide the refined User Story and Acceptance Criteria by filling in the required fields.
+Ensure each acceptance criterion is a separate item in the list.
+Do NOT include any conversational text or Markdown headers like "### User Story". 
+Just provide the structured data.
+"""
 
 ### User Story
-- domain:
-- persona:
-- action:
-- reason:
+#- domain:
+#- persona:
+#- action:
+#- reason:
 
 ### Acceptance Criteria
-- (bullet list)
+#- (bullet list)
 
-- Do NOT include explanations.
-"""
+#- Do NOT include explanations.
+#"""
 
 SUGGESTION_FINAL_PROMPT_END = """
 ## End of output instructions

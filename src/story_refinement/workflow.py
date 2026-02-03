@@ -1,11 +1,11 @@
 """
 workflow.py
 -----------
-LangGraph を用いて
-US / AC を「十分に具体的になるまで」改善するワークフローを定義する
+5人の専門家（ClassifierAI）のフィードバックをリレーし、
+US / AC を多角的な視点でブラッシュアップする LangGraph ワークフロー
 """
 
-from typing import TypedDict, Optional
+from typing import TypedDict, Optional, List
 
 from langgraph.graph import StateGraph, END
 
@@ -17,6 +17,8 @@ from src.story_refinement.services.classifier_ai import classify_us_ac
 from src.story_refinement.services.issue_detection_ai import detect_issues
 from src.story_refinement.services.suggestion_ai import suggest_improvements
 
+# ロガーのインポート
+from src.story_refinement.output_log import WorkflowLogger
 
 # =========================
 # State 定義
@@ -28,9 +30,16 @@ class RefinementState(TypedDict):
     """
     us_ac: UserStoryAcceptanceCriteria
     score: Optional[int]
-    issues: Optional[str]
+    expert_feedback_text: Optional[str]  # 専門家たちの詳細な言い分
+    issues: Optional[List[str]]          # 整理された課題リスト
     iteration: int
 
+# =========================
+# 設定
+# =========================
+logger = WorkflowLogger()
+TARGET_SCORE = 85  # 5人のプロが納得する基準なので少し高めに設定
+MAX_ITERATIONS = 5
 
 # =========================
 # Node 関数定義
@@ -38,124 +47,66 @@ class RefinementState(TypedDict):
 
 def classifier_node(state: RefinementState) -> RefinementState:
     """
-    US / AC の具体度を評価するノード
+    5人の専門家がそれぞれの視点で評価し、詳細なフィードバックを生成する
     """
+    print(f"\n===== [Iteration {state['iteration']}: Professional Review] =====")
     result: ClassifierResponse = classify_us_ac(state["us_ac"])
+    
+    # ターミナルに詳細な理由を出力
+    for fb in result.feedback_list:
+        print(f"  ▶ {fb.persona.upper():<16} | Score: {fb.score}")
+        print(f"    Reason: {fb.reason}")
 
-    return {
-        **state,
-        "score": result.score,
+    return { 
+        **state, 
+        "score": result.score, 
+        "expert_feedback_text": result.aggregated_reasons 
     }
-
 
 def issue_detection_node(state: RefinementState) -> RefinementState:
     """
-    US / AC の問題点を洗い出すノード
+    専門家のフィードバックを元に、具体的な修正ポイントをリスト化する
     """
-    issue_response: IssueResponse = detect_issues(state["us_ac"])
+    print("\n--- [Issue Detection: Consolidating Critiques] ---")
+    issue_response: IssueResponse = detect_issues(
+        state["us_ac"], 
+        state["expert_feedback_text"]
+    )
+    
+    for i, issue in enumerate(issue_response.issues, 1):
+        print(f"  {i}. {issue}")
 
-    return {
-        **state,
-        "issues": issue_response.issues,
-    }
-
-
-
-#def suggestion_node(state: RefinementState) -> RefinementState:
-    """
-    US / AC を改善するノード
-    """
-#    refined_text: str = suggest_improvements(
-#        us_ac=state["us_ac"],
-#        issues=IssueResponse(issues=state["issues"]),
-#    )
-
-    # ⚠️ ここでは「AIが返した Markdown」をそのまま保持する
-    # 後段で parser を噛ませて UserStoryAcceptanceCriteria に戻す想定
-    # 今回はワークフロー確認が目的なのでそのまま返す
-
-#    state["iteration"] += 1
-
-#    return {
-#        **state,
-        # 仮実装：そのまま更新された US/AC として扱う
-        # 本番では Markdown → 構造体変換をここに入れる
-#        "us_ac": state["us_ac"],
-#    }
-
-
-# =========================
-# 分岐ロジック
-# =========================
-
-#def should_continue(state: RefinementState) -> str:
-    """
-    次に進むノードを決定する
-    """
-
-    # 成功条件
-#    if state["score"] is not None and state["score"] >= 80:
-#        return END
-
-    # 失敗条件（ループ上限）
-#    if state["iteration"] >= 5:
-#        raise RuntimeError(
-#            "User Story and Acceptance Criteria could not be refined "
-#            "to a sufficient level after 5 iterations."
-#        )
-
-    # 継続
-#    return "issue_detection"
-
-# =========================
-# テスト用
-# =========================
+    return { **state, "issues": issue_response.issues }
 
 def suggestion_node(state: RefinementState) -> RefinementState:
-    print(f"\n--- [Step] Suggestion (Iteration: {state['iteration']}) ---")
-    
-    refined_text: str = suggest_improvements(
+    """
+    指摘事項を全て反映した新しい US / AC を生成する
+    """
+    print("\n--- [Suggestion AI: Refinement in progress...] ---")
+    refined_obj: UserStoryAcceptanceCriteria = suggest_improvements(
         us_ac=state["us_ac"],
         issues=IssueResponse(issues=state["issues"]),
     )
-
-    # デバッグ用にAIが生成したテキストを表示
-    print("AI Suggested Improvements (Markdown):")
-    print(refined_text[:200] + "...") # 長いので冒頭だけ
-
-    # ⚠️ 【重要修正】
-    # 本来はここで Markdown (refined_text) を 
-    # UserStoryAcceptanceCriteria オブジェクトにパースする必要がありますが、
-    # 今は一旦ループを回すために、ダミーで「改善された」ことにしてスコア判定へ戻します。
     
-    # ※ もし suggest_improvements が構造体を返すように作られているなら、
-    # そのまま代入してください。
-    
+    # ロガーにこのターンの記録を保存
+    logger.add_loop_log(
+        score=state["score"],
+        issues=state["issues"],
+        suggestion_obj=refined_obj
+    )
+
     state["iteration"] += 1
-
-    return {
-        **state,
-        # "us_ac": state["us_ac"], # ← これを更新する必要がある！
-        # 一時的なテスト：もし suggest_improvements がテキストを返すなら、
-        # 受入条件の1つにそのテキストを突っ込んで「変化」させてみる例：
-        "us_ac": UserStoryAcceptanceCriteria(
-            user_story=state["us_ac"].user_story,
-            acceptance_criteria=AcceptanceCriteria(
-                acceptance_criteria=[refined_text] # 仮に全入れ替え
-            )
-        )
-    }
+    return { **state, "us_ac": refined_obj }
 
 def should_continue(state: RefinementState) -> str:
-    print(f"\n--- [Check] Score: {state['score']} | Iteration: {state['iteration']} ---")
+    print(f"\n--- [Decision] Final Score: {state['score']} ---")
     
-    if state["score"] is not None and state["score"] >= 80:
-        print("✅ Sufficient quality reached.")
+    if state["score"] is not None and state["score"] >= TARGET_SCORE:
+        print("✅ All professionals satisfied. Sufficient quality reached.")
         return END
 
-    if state["iteration"] >= 5:
-        print("❌ Max iterations reached. Stopping.")
-        # Runtime環境を壊さないために、Raiseせず END にするのも手です
+    if state["iteration"] >= MAX_ITERATIONS:
+        print("❌ Max iterations reached. Stopping refinement.")
         return END 
 
     return "issue_detection"
@@ -165,21 +116,14 @@ def should_continue(state: RefinementState) -> str:
 # =========================
 
 def build_refinement_workflow() -> StateGraph:
-    """
-    LangGraph のワークフローを構築する
-    """
-
     graph = StateGraph(RefinementState)
 
-    # ノード登録
     graph.add_node("classifier", classifier_node)
     graph.add_node("issue_detection", issue_detection_node)
     graph.add_node("suggestion", suggestion_node)
 
-    # エントリーポイント
     graph.set_entry_point("classifier")
 
-    # エッジ定義
     graph.add_conditional_edges(
         "classifier",
         should_continue,
@@ -190,30 +134,44 @@ def build_refinement_workflow() -> StateGraph:
 
     return graph
 
-
 # =========================
-# 単体実行用
+# 実行
 # =========================
 
 if __name__ == "__main__":
     from src.story_refinement.services.schemas.user_story import UserStory
     from src.story_refinement.services.schemas.acceptance_criteria import AcceptanceCriteria
 
-    initial_state: RefinementState = {
-        "us_ac": UserStoryAcceptanceCriteria(
-            user_story=UserStory(
-                domain="Login",
-                persona="User",
-                action="log in",
-                reason="use the app"
-            ),
-            acceptance_criteria=AcceptanceCriteria(
-                acceptance_criteria=[
-                    "User can log in"
-                ]
-            )
+    initial_us_ac = UserStoryAcceptanceCriteria(
+        user_story=UserStory(
+            domain="Hệ thống quản lý công việc nội bộ：Tạo và theo dõi task",
+            persona="Là nhân viên trong công ty",
+            action="tôi muốn tạo và theo dõi các task công việc của mình",
+            reason="để tôi có thể quản lý tiến độ và hoàn thành công việc đúng hạn"
         ),
+        acceptance_criteria=AcceptanceCriteria(
+            acceptance_criteria=[
+                "Người dùng phải đăng nhập thì mới có thể tạo và xem task",
+                "Người dùng có thể tạo task mới với tiêu đề và mô tả",
+                "Mỗi task phải có trạng thái (Chưa làm / Đang làm / Hoàn thành)",
+                "Người dùng có thể chỉnh sửa nội dung task của mình",
+                "Người dùng có thể xóa task do mình tạo",
+                "Task có thể được gán ngày hết hạn (deadline)",
+                "Danh sách task có thể được sắp xếp theo deadline hoặc trạng thái",
+                "Người dùng chỉ có thể xem và chỉnh sửa task của chính mình",
+                "Khi không có task nào, hệ thống hiển thị thông báo “Không có task”",
+                "Thay đổi trạng thái task phải được lưu ngay lập tức và phản ánh trên màn hình"
+            ]
+        )
+    )
+
+    logger.set_config(target_score=TARGET_SCORE, max_iterations=MAX_ITERATIONS)
+    logger.set_initial_input(initial_us_ac)
+
+    initial_state: RefinementState = {
+        "us_ac": initial_us_ac,
         "score": None,
+        "expert_feedback_text": None,
         "issues": None,
         "iteration": 0,
     }
@@ -221,7 +179,12 @@ if __name__ == "__main__":
     workflow = build_refinement_workflow()
     app = workflow.compile()
 
-    result = app.invoke(initial_state)
-
-    print("=== FINAL RESULT ===")
-    print(result)
+    try:
+        result = app.invoke(initial_state)
+        print("\n\n=== FINAL RESULT ===")
+        print(f"Final Score: {result['score']}")
+        print(result['us_ac'])
+    except Exception as e:
+        print(f"Error during workflow: {e}")
+    finally:
+        logger.save()
