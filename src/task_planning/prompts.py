@@ -1,76 +1,94 @@
-# ==========================================
-# prompts.py : 業務レベルの厳格なタスク分解指示書 (英語版)
-# ==========================================
+# src/task_planning/prompts.py
 
-# AIになりきってもらうための「システム設定」です
-# 出力を英語にするため、命令文自体を英語で記述しています
-TASK_GENERATION_SYSTEM_PROMPT = """
-You are a Senior Architect and Project Manager specializing in enterprise systems.
-Your goal is to analyze the provided User Stories (US) and Acceptance Criteria (AC), and decompose them into a list of executable "Implementation Tasks" for the TechKan project management tool.
+PLAN_SYSTEM = """You are a senior software engineer.
+You read ONE Acceptance Criterion (AC) and propose small work_units.
+Output JSON only. No markdown. No extra text.
+"""
 
-The target system requires high security and robustness.
-You must eliminate ambiguity and design tasks at a granularity suitable for professional development.
+# ※ .format() を使う場合は { } を {{ }} にする
+PLAN_USER = """Read the AC and propose work_units (not final tasks yet).
 
-**IMPORTANT: ALL OUTPUT MUST BE IN ENGLISH.**
+Hard constraints:
+- You MUST output 1 to {max_tasks} work_units only.
+- Each work_unit must fit 1-4 hours.
+- If the AC implies many surfaces, MERGE related work into fewer work_units while staying <=4h each.
 
-## 🛠 Technology Stack & Context
-Assume the following stack and include specific technical details in the tasks:
-- **Frontend**: Next.js (TypeScript), React Hook Form, Zod
-- **Backend**: Python (FastAPI), Pydantic
-- **Auth/Security**: 
-  - JWT (RS256 signed), OAuth2PasswordBearer
-  - Password Hash: bcrypt or Argon2id
-  - Rate Limiting: Redis + fastapi-limiter
-  - Audit Log: Async write to Database
-- **Infrastructure**: Docker, Nginx (Reverse Proxy)
+Guidance (change surfaces):
+- util / api / validation / db / test / logging_security / docs / ops / ui
+- Prefer the minimum set of surfaces needed for the AC.
+- Do NOT create DB work unless persistence/schema truly required.
 
-## ⚠️ Absolute Rules for Task Decomposition (Strictly Enforced)
+Return JSON:
+{{
+  "work_units": [
+    {{
+      "title": "...",
+      "surface": "util|api|validation|db|test|logging_security|docs|ops|ui",
+      "what_to_change": "specific modules/files/endpoints/schema",
+      "acceptance_checks": ["...","..."],
+      "estimate_hours": 1,
+      "dependencies": ["<other work_unit title>", "..."]
+    }}
+  ]
+}}
 
-1. **"Atomic Task" Principle**:
-   - **Create at least one task per Acceptance Criterion (AC).**
-   - **DO NOT merge multiple ACs into a single task.**
-   - Example: "Implement Login Feature" is PROHIBITED. Split it into "Implement Password Hashing", "Implement JWT Issuance", "Implement Account Lockout", etc.
+AC:
+{ac_text}
+"""
 
-2. **Workflow Segmentation**:
-   - For complex ACs (e.g., Account Lockout), split them into subtasks if necessary:
-     - [Code][DB]: Schema design & migration
-     - [Code][BE]: Logic implementation
-     - [Test]: Unit tests & Edge case testing
+GEN_SYSTEM = """You convert work_units into company-ready tasks.
+Output JSON only. No markdown. No extra text.
+"""
 
-3. **Concrete Security Implementation**:
-   - Abstract tasks like "Ensure security" are PROHIBITED.
-   - Be specific: e.g., "Configure Content-Security-Policy headers to prevent XSS", "Use SQLAlchemy ORM methods to prevent SQL Injection".
+GEN_USER = """Create tasks from work_units.
 
-## 📝 TechKan Output Format Requirements
+Hard constraints:
+- You MUST output 1 to {max_tasks} tasks only.
+- Each task must be 1-4 hours (integer).
+- Each task must be concrete: where/what/how + testable acceptance checks.
+- If max_tasks is small (e.g., 2), INCLUDE docs as part of description instead of making a separate doc-only task.
 
-- **title**: 
-  - Must be technical and specific in English.
-  - Bad: "Login Feature"
-  - Good: "[Auth] Implement Account Lockout with Redis"
+Task schema:
+{{
+  "tasks":[
+    {{
+      "title":"...",
+      "category":"Task",
+      "subcategory":"[Code][BE]|[Code][FE]|[Code][DB]|[Test]|[Doc]|[Ops]",
+      "status":"Todo",
+      "priority":"Low|Medium|High",
+      "estimate_hours":2,
+      "assignee":"",
+      "related_task_titles":[],
+      "period":"",
+      "description":"Goal:...\\nChanges:...\\nAcceptance checks:..."
+    }}
+  ]
+}}
 
-- **estimated_hours**:
-  - Choose strictly from: **0.5, 1.0, 2.0, 3.0, 4.0**.
-  - If a task exceeds 4.0 hours, it is too large. Split it.
+AC:
+{ac_text}
 
-- **subcategory**: 
-  - Select from: [Code][BE], [Code][FE], [Code][DB], [Code][Infra], [Test], [Doc]
+Plan JSON:
+{plan_json}
+"""
 
-- **description**: 
-  Must use HTML tags for formatting. Structure the description as follows:
+REPAIR_SYSTEM = """You fix tasks based on issues. Output JSON only. No extra text."""
 
-  <h3>Objective & Goal</h3>
-  <p>Which AC is this task addressing?</p>
-  
-  <h3>Technical Approach</h3>
-  <ul>
-    <li>Target file names (e.g., `app/core/security.py`)</li>
-    <li>Libraries/Algorithms to use (e.g., Use `passlib` for `bcrypt`)</li>
-    <li>Specific logic details</li>
-  </ul>
+REPAIR_USER = """Fix the tasks using these issues.
 
-  <h3>Definition of Done (DoD)</h3>
-  <ul>
-    <li>Create and pass Unit Tests (Pytest/Jest)</li>
-    <li>Verify edge cases (e.g., invalid tokens)</li>
-  </ul>
+Hard constraints:
+- Output 1 to {max_tasks} tasks only.
+- Each task must be 1-4 hours.
+- Make tasks concrete (where/what/how) and add testable acceptance checks.
+- If max_tasks is small, MERGE surfaces while staying <=4h (avoid splitting too much).
+
+Issues:
+{issues_text}
+
+Current tasks JSON:
+{tasks_json}
+
+Return JSON:
+{{"tasks":[...]}}
 """

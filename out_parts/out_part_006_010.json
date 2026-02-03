@@ -1,0 +1,396 @@
+{
+  "meta": {
+    "generated_at": "2026-02-03 13:00:52",
+    "model": "gpt-4o-mini",
+    "score": 40,
+    "max_tasks_per_ac": 5,
+    "max_repairs": 1,
+    "range": {
+      "start": 6,
+      "end": 10,
+      "total": 15
+    },
+    "input": "tests/fixtures/login_us001.json"
+  },
+  "items": [
+    {
+      "ac_index": 6,
+      "ac_text": "Passwords must be compared using hash values.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Password Hashing",
+            "surface": "util",
+            "what_to_change": "password hashing utility module",
+            "acceptance_checks": [
+              "Password hashing function is implemented",
+              "Unit tests for hashing function are passing"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update Password Comparison Logic",
+            "surface": "api",
+            "what_to_change": "user authentication endpoint",
+            "acceptance_checks": [
+              "Password comparison uses hashed values",
+              "Integration tests for authentication are passing"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Password Hashing"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Password Hashing",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a secure password hashing utility.\nChanges: Create a password hashing function in the utility module.\nAcceptance checks: Password hashing function is implemented and unit tests for hashing function are passing."
+        },
+        {
+          "title": "Update Password Comparison Logic",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Password Hashing"
+          ],
+          "period": "",
+          "description": "Goal: Ensure user authentication uses secure password comparison.\nChanges: Update the user authentication endpoint to compare hashed passwords.\nAcceptance checks: Password comparison uses hashed values and integration tests for authentication are passing."
+        }
+      ]
+    },
+    {
+      "ac_index": 7,
+      "ac_text": "Password comparison must use constant-time algorithms (Anti-timing attack).",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement constant-time password comparison",
+            "surface": "util",
+            "what_to_change": "password comparison function in auth module",
+            "acceptance_checks": [
+              "Password comparison function does not reveal timing differences",
+              "Unit tests cover various password scenarios"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update documentation for password handling",
+            "surface": "docs",
+            "what_to_change": "authentication documentation to include constant-time comparison details",
+            "acceptance_checks": [
+              "Documentation clearly explains constant-time comparison",
+              "Examples provided for implementation"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement constant-time password comparison"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement constant-time password comparison",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure password comparison is secure against timing attacks.\nChanges: Update the password comparison function in the authentication module to use a constant-time algorithm.\nAcceptance checks: Password comparison function does not reveal timing differences; Unit tests cover various password scenarios."
+        },
+        {
+          "title": "Update documentation for password handling",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement constant-time password comparison"
+          ],
+          "period": "",
+          "description": "Goal: Provide clear guidance on the new password comparison method.\nChanges: Update the authentication documentation to include details about constant-time comparison and its importance.\nAcceptance checks: Documentation clearly explains constant-time comparison; Examples provided for implementation."
+        }
+      ]
+    },
+    {
+      "ac_index": 8,
+      "ac_text": "Passwords must be stored using bcrypt or equivalent/stronger algorithms.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement bcrypt for password storage",
+            "surface": "util",
+            "what_to_change": "password hashing utility module",
+            "acceptance_checks": [
+              "Passwords are hashed using bcrypt",
+              "Password retrieval fails for plain text"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update user registration and login APIs",
+            "surface": "api",
+            "what_to_change": "user registration and login endpoints",
+            "acceptance_checks": [
+              "APIs use the updated password hashing utility",
+              "APIs return appropriate error messages for invalid passwords"
+            ],
+            "estimate_hours": 3,
+            "dependencies": [
+              "Implement bcrypt for password storage"
+            ]
+          },
+          {
+            "title": "Add tests for password hashing and API endpoints",
+            "surface": "test",
+            "what_to_change": "test suite for password utility and API endpoints",
+            "acceptance_checks": [
+              "Tests cover password hashing functionality",
+              "Tests validate API responses for password handling"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement bcrypt for password storage",
+              "Update user registration and login APIs"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement bcrypt for password storage",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a secure password hashing utility using bcrypt.\nChanges: Update the password hashing utility module to use bcrypt for hashing passwords.\nAcceptance checks: Passwords are hashed using bcrypt; Password retrieval fails for plain text."
+        },
+        {
+          "title": "Update user registration and login APIs",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement bcrypt for password storage"
+          ],
+          "period": "",
+          "description": "Goal: Ensure user registration and login APIs utilize the new password hashing method.\nChanges: Modify user registration and login endpoints to use the updated password hashing utility.\nAcceptance checks: APIs use the updated password hashing utility; APIs return appropriate error messages for invalid passwords."
+        },
+        {
+          "title": "Add tests for password hashing and API endpoints",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement bcrypt for password storage",
+            "Update user registration and login APIs"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the reliability of password hashing and API functionality through testing.\nChanges: Expand the test suite to include tests for the password utility and API endpoints.\nAcceptance checks: Tests cover password hashing functionality; Tests validate API responses for password handling."
+        }
+      ]
+    },
+    {
+      "ac_index": 9,
+      "ac_text": "Hashes must include a salt.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Salted Hashing",
+            "surface": "util",
+            "what_to_change": "hashing utility module",
+            "acceptance_checks": [
+              "Hashes include a unique salt for each entry",
+              "Salt is securely generated and stored"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update API to Use Salted Hashing",
+            "surface": "api",
+            "what_to_change": "user registration and authentication endpoints",
+            "acceptance_checks": [
+              "API endpoints utilize the updated hashing utility",
+              "Response includes confirmation of salted hash usage"
+            ],
+            "estimate_hours": 3,
+            "dependencies": [
+              "Implement Salted Hashing"
+            ]
+          },
+          {
+            "title": "Add Tests for Salted Hashing",
+            "surface": "test",
+            "what_to_change": "unit tests for hashing utility and API endpoints",
+            "acceptance_checks": [
+              "Tests cover various scenarios for salted hashes",
+              "All tests pass successfully"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Salted Hashing",
+              "Update API to Use Salted Hashing"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Salted Hashing",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance security of user data by implementing salted hashing.\nChanges: Update the hashing utility module to include a unique salt for each entry.\nAcceptance checks: Hashes include a unique salt for each entry; Salt is securely generated and stored."
+        },
+        {
+          "title": "Update API to Use Salted Hashing",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Salted Hashing"
+          ],
+          "period": "",
+          "description": "Goal: Ensure user registration and authentication endpoints use the new salted hashing method.\nChanges: Modify the API endpoints to utilize the updated hashing utility.\nAcceptance checks: API endpoints utilize the updated hashing utility; Response includes confirmation of salted hash usage."
+        },
+        {
+          "title": "Add Tests for Salted Hashing",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Salted Hashing",
+            "Update API to Use Salted Hashing"
+          ],
+          "period": "",
+          "description": "Goal: Validate the functionality of the new salted hashing implementation.\nChanges: Create unit tests for the hashing utility and API endpoints.\nAcceptance checks: Tests cover various scenarios for salted hashes; All tests pass successfully."
+        }
+      ]
+    },
+    {
+      "ac_index": 10,
+      "ac_text": "Plain text passwords must not be output to DB, logs, or responses.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement password masking in API responses",
+            "surface": "api|logging_security",
+            "what_to_change": "API response handlers for user data",
+            "acceptance_checks": [
+              "Passwords are not included in API responses",
+              "Logs do not contain plain text passwords"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update logging to exclude plain text passwords",
+            "surface": "logging_security",
+            "what_to_change": "Logging configuration and password handling in logs",
+            "acceptance_checks": [
+              "Logs do not contain plain text passwords",
+              "Logging framework is updated to mask passwords"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement password masking in API responses",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that plain text passwords are not exposed in API responses.\nChanges: Update API response handlers for user data to exclude passwords.\nAcceptance checks: Passwords are not included in API responses; Logs do not contain plain text passwords."
+        },
+        {
+          "title": "Update logging to exclude plain text passwords",
+          "category": "Task",
+          "subcategory": "[Ops]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance logging security by masking passwords.\nChanges: Modify logging configuration and password handling in logs to ensure plain text passwords are not logged.\nAcceptance checks: Logs do not contain plain text passwords; Logging framework is updated to mask passwords."
+        }
+      ]
+    }
+  ]
+}

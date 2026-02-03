@@ -1,0 +1,935 @@
+{
+  "items": [
+    {
+      "ac_index": 1,
+      "ac_text": "Authentication via email and password.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Email and Password Authentication",
+            "surface": "api|validation|util",
+            "what_to_change": "auth module, login endpoint, validation logic",
+            "acceptance_checks": [
+              "User can log in with valid email and password",
+              "User receives error message for invalid credentials"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          },
+          {
+            "title": "Add Unit Tests for Authentication",
+            "surface": "test",
+            "what_to_change": "auth module tests",
+            "acceptance_checks": [
+              "All authentication tests pass",
+              "Edge cases are covered"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Email and Password Authentication"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Email and Password Authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a secure authentication system using email and password.\nChanges: Update the auth module, login endpoint, and validation logic to handle email and password authentication.\nAcceptance checks: User can log in with valid email and password; User receives error message for invalid credentials."
+        },
+        {
+          "title": "Add Unit Tests for Authentication",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Email and Password Authentication"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the authentication functionality is reliable through testing.\nChanges: Create and run unit tests for the auth module to validate the login process.\nAcceptance checks: All authentication tests pass; Edge cases are covered."
+        }
+      ]
+    },
+    {
+      "ac_index": 2,
+      "ac_text": "Email address must be unique within the system.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement email uniqueness validation",
+            "surface": "validation",
+            "what_to_change": "User registration and update validation logic",
+            "acceptance_checks": [
+              "Email validation checks for uniqueness",
+              "Error message returned for duplicate email"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update user database schema for email uniqueness",
+            "surface": "db",
+            "what_to_change": "User table to add unique constraint on email column",
+            "acceptance_checks": [
+              "Database schema updated with unique constraint",
+              "No duplicate emails allowed in the database"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Create tests for email uniqueness",
+            "surface": "test",
+            "what_to_change": "Unit and integration tests for email uniqueness validation",
+            "acceptance_checks": [
+              "Tests cover scenarios for unique and duplicate emails",
+              "All tests pass successfully"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement email uniqueness validation",
+              "Update user database schema for email uniqueness"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement email uniqueness validation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that email addresses are unique during user registration and updates.\nChanges: Update the validation logic in the user registration and update processes to check for email uniqueness.\nAcceptance checks: Email validation checks for uniqueness; Error message returned for duplicate email."
+        },
+        {
+          "title": "Update user database schema for email uniqueness",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Modify the user database schema to enforce email uniqueness.\nChanges: Add a unique constraint on the email column in the user table.\nAcceptance checks: Database schema updated with unique constraint; No duplicate emails allowed in the database."
+        },
+        {
+          "title": "Create tests for email uniqueness",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email uniqueness validation",
+            "Update user database schema for email uniqueness"
+          ],
+          "period": "",
+          "description": "Goal: Ensure that the email uniqueness validation works as intended.\nChanges: Develop unit and integration tests for the email uniqueness validation logic.\nAcceptance checks: Tests cover scenarios for unique and duplicate emails; All tests pass successfully."
+        }
+      ]
+    },
+    {
+      "ac_index": 3,
+      "ac_text": "Implement email format validation.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Email Format Validation",
+            "surface": "validation",
+            "what_to_change": "email validation module",
+            "acceptance_checks": [
+              "Validation correctly identifies valid email formats",
+              "Validation correctly identifies invalid email formats"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Write Unit Tests for Email Validation",
+            "surface": "test",
+            "what_to_change": "unit tests for email validation module",
+            "acceptance_checks": [
+              "All test cases pass for valid emails",
+              "All test cases pass for invalid emails"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Email Format Validation"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Email Format Validation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a module to validate email formats.\nChanges: Update the email validation module to include regex checks for valid and invalid email formats.\nAcceptance checks: Validation correctly identifies valid email formats; Validation correctly identifies invalid email formats."
+        },
+        {
+          "title": "Write Unit Tests for Email Validation",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Email Format Validation"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the email validation module works as expected.\nChanges: Create unit tests for the email validation module to cover various valid and invalid email formats.\nAcceptance checks: All test cases pass for valid emails; All test cases pass for invalid emails."
+        }
+      ]
+    },
+    {
+      "ac_index": 4,
+      "ac_text": "Corporate domain restrictions must be configurable.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Configurable Domain Restrictions",
+            "surface": "api|util|validation",
+            "what_to_change": "DomainRestrictionService, ConfigurationManager, API endpoints handling domain restrictions",
+            "acceptance_checks": [
+              "Domain restrictions can be set via configuration file",
+              "API returns correct domain restrictions based on configuration"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Update Documentation for Domain Restrictions",
+            "surface": "docs",
+            "what_to_change": "API documentation and configuration guide",
+            "acceptance_checks": [
+              "Documentation includes instructions for configuring domain restrictions",
+              "Examples of valid configurations are provided"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Configurable Domain Restrictions"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Configurable Domain Restrictions",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enable configurable domain restrictions for the API.\nChanges: Update DomainRestrictionService, ConfigurationManager, and API endpoints to handle domain restrictions based on configuration.\nAcceptance checks: Domain restrictions can be set via configuration file; API returns correct domain restrictions based on configuration."
+        },
+        {
+          "title": "Update Documentation for Domain Restrictions",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Configurable Domain Restrictions"
+          ],
+          "period": "",
+          "description": "Goal: Ensure users can configure domain restrictions effectively.\nChanges: Update API documentation and configuration guide to include instructions for configuring domain restrictions.\nAcceptance checks: Documentation includes instructions for configuring domain restrictions; examples of valid configurations are provided."
+        }
+      ]
+    },
+    {
+      "ac_index": 5,
+      "ac_text": "Authentication fails for non-existent email addresses.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement email existence check in authentication",
+            "surface": "api|validation",
+            "what_to_change": "Authentication service endpoint",
+            "acceptance_checks": [
+              "Check response for non-existent email",
+              "Ensure proper error message is returned"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update tests for authentication failure scenarios",
+            "surface": "test",
+            "what_to_change": "Authentication test suite",
+            "acceptance_checks": [
+              "Test for non-existent email returns correct error",
+              "Test for valid email returns success"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement email existence check in authentication"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement email existence check in authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that authentication fails for non-existent email addresses.\nChanges: Update the authentication service endpoint to check for email existence before proceeding.\nAcceptance checks: Check response for non-existent email and ensure proper error message is returned."
+        },
+        {
+          "title": "Update tests for authentication failure scenarios",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email existence check in authentication"
+          ],
+          "period": "",
+          "description": "Goal: Validate the authentication process against various scenarios.\nChanges: Update the authentication test suite to include tests for non-existent email and valid email scenarios.\nAcceptance checks: Test for non-existent email returns correct error and test for valid email returns success."
+        }
+      ]
+    },
+    {
+      "ac_index": 6,
+      "ac_text": "Passwords must be compared using hash values.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Password Hashing",
+            "surface": "util",
+            "what_to_change": "password hashing utility module",
+            "acceptance_checks": [
+              "Password hashing function is implemented",
+              "Unit tests for hashing function are passing"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update User Authentication Logic",
+            "surface": "api",
+            "what_to_change": "user authentication endpoint to use hashed passwords",
+            "acceptance_checks": [
+              "User authentication uses hashed passwords",
+              "Integration tests for authentication are passing"
+            ],
+            "estimate_hours": 3,
+            "dependencies": [
+              "Implement Password Hashing"
+            ]
+          },
+          {
+            "title": "Add Logging for Password Comparisons",
+            "surface": "logging_security",
+            "what_to_change": "logging module to track password comparison attempts",
+            "acceptance_checks": [
+              "Logging for password comparisons is implemented",
+              "Logs are correctly recorded"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Update User Authentication Logic"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Password Hashing",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a password hashing utility module.\nChanges: Create a function that hashes passwords securely.\nAcceptance checks: Password hashing function is implemented and unit tests for hashing function are passing."
+        },
+        {
+          "title": "Update User Authentication Logic",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Password Hashing"
+          ],
+          "period": "",
+          "description": "Goal: Update the user authentication endpoint to utilize hashed passwords.\nChanges: Modify the authentication logic to compare hashed passwords instead of plain text.\nAcceptance checks: User authentication uses hashed passwords and integration tests for authentication are passing."
+        },
+        {
+          "title": "Add Logging for Password Comparisons",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Update User Authentication Logic"
+          ],
+          "period": "",
+          "description": "Goal: Implement logging for password comparison attempts.\nChanges: Update the logging module to track and record password comparison attempts.\nAcceptance checks: Logging for password comparisons is implemented and logs are correctly recorded."
+        }
+      ]
+    },
+    {
+      "ac_index": 7,
+      "ac_text": "Password comparison must use constant-time algorithms (Anti-timing attack).",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement constant-time password comparison",
+            "surface": "util",
+            "what_to_change": "password comparison function in auth module",
+            "acceptance_checks": [
+              "Password comparison function does not reveal timing information",
+              "Unit tests cover various password scenarios"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update documentation for password handling",
+            "surface": "docs",
+            "what_to_change": "authentication documentation to include constant-time comparison",
+            "acceptance_checks": [
+              "Documentation clearly explains the use of constant-time algorithms",
+              "Documentation is reviewed and approved by the team"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement constant-time password comparison"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement constant-time password comparison",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance security by implementing a constant-time password comparison function in the authentication module.\nChanges: Modify the existing password comparison function to ensure it does not reveal timing information.\nAcceptance checks: Password comparison function does not reveal timing information; Unit tests cover various password scenarios."
+        },
+        {
+          "title": "Update documentation for password handling",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement constant-time password comparison"
+          ],
+          "period": "",
+          "description": "Goal: Ensure that the authentication documentation reflects the new password handling practices.\nChanges: Update the documentation to include details about the constant-time comparison algorithm.\nAcceptance checks: Documentation clearly explains the use of constant-time algorithms; Documentation is reviewed and approved by the team."
+        }
+      ]
+    },
+    {
+      "ac_index": 8,
+      "ac_text": "Passwords must be stored using bcrypt or equivalent/stronger algorithms.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement bcrypt for password storage",
+            "surface": "util",
+            "what_to_change": "password hashing utility module",
+            "acceptance_checks": [
+              "Passwords are hashed using bcrypt",
+              "Password retrieval fails for plain text"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update user registration and login APIs",
+            "surface": "api",
+            "what_to_change": "user registration and login endpoints",
+            "acceptance_checks": [
+              "APIs use the updated password hashing utility",
+              "APIs return appropriate error messages for invalid passwords"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement bcrypt for password storage"
+            ]
+          },
+          {
+            "title": "Add tests for password hashing and API endpoints",
+            "surface": "test",
+            "what_to_change": "test cases for password hashing and user APIs",
+            "acceptance_checks": [
+              "All tests pass for password hashing",
+              "All tests pass for user registration and login APIs"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement bcrypt for password storage",
+              "Update user registration and login APIs"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement bcrypt for password storage",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Securely hash passwords using bcrypt.\nChanges: Update the password hashing utility module to use bcrypt for hashing.\nAcceptance checks: Passwords are hashed using bcrypt; Password retrieval fails for plain text."
+        },
+        {
+          "title": "Update user registration and login APIs",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement bcrypt for password storage"
+          ],
+          "period": "",
+          "description": "Goal: Ensure user registration and login APIs use secure password hashing.\nChanges: Modify user registration and login endpoints to utilize the updated password hashing utility.\nAcceptance checks: APIs use the updated password hashing utility; APIs return appropriate error messages for invalid passwords."
+        },
+        {
+          "title": "Add tests for password hashing and API endpoints",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement bcrypt for password storage",
+            "Update user registration and login APIs"
+          ],
+          "period": "",
+          "description": "Goal: Ensure reliability of password hashing and API functionality.\nChanges: Create test cases for password hashing and user registration/login APIs.\nAcceptance checks: All tests pass for password hashing; All tests pass for user registration and login APIs."
+        }
+      ]
+    },
+    {
+      "ac_index": 9,
+      "ac_text": "Hashes must include a salt.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Salted Hashing",
+            "surface": "util",
+            "what_to_change": "hashing utility module",
+            "acceptance_checks": [
+              "Hashes include a unique salt for each entry",
+              "Salt is securely generated and stored"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update API to Use Salted Hashing",
+            "surface": "api",
+            "what_to_change": "user registration and authentication endpoints",
+            "acceptance_checks": [
+              "API returns salted hashes for new users",
+              "Existing users are migrated to use salted hashes"
+            ],
+            "estimate_hours": 3,
+            "dependencies": [
+              "Implement Salted Hashing"
+            ]
+          },
+          {
+            "title": "Add Tests for Salted Hashing",
+            "surface": "test",
+            "what_to_change": "unit tests for hashing utility and API endpoints",
+            "acceptance_checks": [
+              "Tests cover various scenarios for salted hashes",
+              "Tests pass successfully"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Salted Hashing",
+              "Update API to Use Salted Hashing"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Salted Hashing",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance security of hashing utility.\nChanges: Update the hashing utility module to include a unique salt for each entry.\nAcceptance checks: Hashes include a unique salt for each entry, and the salt is securely generated and stored."
+        },
+        {
+          "title": "Update API to Use Salted Hashing",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Salted Hashing"
+          ],
+          "period": "",
+          "description": "Goal: Ensure user registration and authentication use salted hashes.\nChanges: Modify user registration and authentication endpoints to return salted hashes for new users and migrate existing users.\nAcceptance checks: API returns salted hashes for new users, and existing users are migrated to use salted hashes."
+        },
+        {
+          "title": "Add Tests for Salted Hashing",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Salted Hashing",
+            "Update API to Use Salted Hashing"
+          ],
+          "period": "",
+          "description": "Goal: Ensure reliability of the new hashing implementation.\nChanges: Create unit tests for the hashing utility and API endpoints to cover various scenarios for salted hashes.\nAcceptance checks: Tests cover various scenarios for salted hashes, and all tests pass successfully."
+        }
+      ]
+    },
+    {
+      "ac_index": 10,
+      "ac_text": "Plain text passwords must not be output to DB, logs, or responses.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement password masking in API responses",
+            "surface": "api|logging_security",
+            "what_to_change": "API response handlers for user data",
+            "acceptance_checks": [
+              "Passwords are not included in API responses",
+              "Logs do not contain plain text passwords"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update logging to exclude plain text passwords",
+            "surface": "logging_security",
+            "what_to_change": "Logging configuration and log message formats",
+            "acceptance_checks": [
+              "Log messages do not contain plain text passwords",
+              "Logging framework is updated to handle sensitive data"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement password masking in API responses",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that plain text passwords are not exposed in API responses.\nChanges: Update API response handlers for user data to mask passwords.\nAcceptance checks: Passwords are not included in API responses; Logs do not contain plain text passwords."
+        },
+        {
+          "title": "Update logging to exclude plain text passwords",
+          "category": "Task",
+          "subcategory": "[Ops]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance logging security by excluding plain text passwords.\nChanges: Modify logging configuration and log message formats to prevent sensitive data exposure.\nAcceptance checks: Log messages do not contain plain text passwords; Logging framework is updated to handle sensitive data."
+        }
+      ]
+    },
+    {
+      "ac_index": 11,
+      "ac_text": "Passwords must be at least 8 characters long.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement password length validation",
+            "surface": "validation",
+            "what_to_change": "Password validation logic in the authentication module",
+            "acceptance_checks": [
+              "Password shorter than 8 characters is rejected",
+              "Password 8 characters or longer is accepted"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update documentation for password requirements",
+            "surface": "docs",
+            "what_to_change": "User authentication documentation",
+            "acceptance_checks": [
+              "Documentation reflects new password length requirement",
+              "Documentation is clear and accessible"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement password length validation"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement password length validation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure password validation meets security standards.\nChanges: Update the password validation logic in the authentication module to enforce a minimum length of 8 characters.\nAcceptance checks: Password shorter than 8 characters is rejected; Password 8 characters or longer is accepted."
+        },
+        {
+          "title": "Update documentation for password requirements",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement password length validation"
+          ],
+          "period": "",
+          "description": "Goal: Provide clear guidelines on password requirements for users.\nChanges: Revise the user authentication documentation to include the new password length requirement of at least 8 characters.\nAcceptance checks: Documentation reflects new password length requirement; Documentation is clear and accessible."
+        }
+      ]
+    },
+    {
+      "ac_index": 12,
+      "ac_text": "Configurable rules for combinations of uppercase, lowercase, numbers, and symbols.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement validation for password rules",
+            "surface": "validation",
+            "what_to_change": "password validation module",
+            "acceptance_checks": [
+              "Validation rules accept uppercase, lowercase, numbers, and symbols",
+              "Validation rules reject invalid combinations"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update API to support configurable password rules",
+            "surface": "api",
+            "what_to_change": "password API endpoint",
+            "acceptance_checks": [
+              "API accepts configurable rules",
+              "API returns appropriate error messages for invalid passwords"
+            ],
+            "estimate_hours": 3,
+            "dependencies": [
+              "Implement validation for password rules"
+            ]
+          },
+          {
+            "title": "Create tests for password validation and API",
+            "surface": "test",
+            "what_to_change": "test suite for password validation and API",
+            "acceptance_checks": [
+              "All validation rules are covered by tests",
+              "API tests validate response for different configurations"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement validation for password rules",
+              "Update API to support configurable password rules"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement validation for password rules",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance password security by implementing validation rules.\nChanges: Update the password validation module to enforce rules for uppercase, lowercase, numbers, and symbols.\nAcceptance checks: Validation rules accept uppercase, lowercase, numbers, and symbols; Validation rules reject invalid combinations."
+        },
+        {
+          "title": "Update API to support configurable password rules",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement validation for password rules"
+          ],
+          "period": "",
+          "description": "Goal: Allow dynamic configuration of password rules via API.\nChanges: Modify the password API endpoint to accept configurable rules.\nAcceptance checks: API accepts configurable rules; API returns appropriate error messages for invalid passwords."
+        },
+        {
+          "title": "Create tests for password validation and API",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement validation for password rules",
+            "Update API to support configurable password rules"
+          ],
+          "period": "",
+          "description": "Goal: Ensure reliability of password validation and API functionality.\nChanges: Develop a comprehensive test suite for password validation and API.\nAcceptance checks: All validation rules are covered by tests; API tests validate response for different configurations."
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "generated_at": "2026-02-03 14:04:33",
+    "model": "gpt-4o-mini",
+    "max_repairs": 1,
+    "start": 1,
+    "limit": 12,
+    "score": 40,
+    "max_tasks_per_ac": 5,
+    "batch_size": 5,
+    "ac_count_selected": 12,
+    "ac_count_total": 48,
+    "range": "1-12",
+    "db": "task_planning.sqlite",
+    "saved": 12,
+    "skipped": 0
+  }
+}
