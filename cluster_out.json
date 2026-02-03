@@ -1,0 +1,547 @@
+{
+  "clusters": [
+    {
+      "cluster_id": 0,
+      "size": 1,
+      "representative_ac_index": 1,
+      "representative_ac_text": "Authentication via email and password.",
+      "ac_indices": [
+        1
+      ],
+      "ac_texts": [
+        "Authentication via email and password."
+      ]
+    },
+    {
+      "cluster_id": 1,
+      "size": 1,
+      "representative_ac_index": 2,
+      "representative_ac_text": "Email address must be unique within the system.",
+      "ac_indices": [
+        2
+      ],
+      "ac_texts": [
+        "Email address must be unique within the system."
+      ]
+    },
+    {
+      "cluster_id": 2,
+      "size": 1,
+      "representative_ac_index": 3,
+      "representative_ac_text": "Implement email format validation.",
+      "ac_indices": [
+        3
+      ],
+      "ac_texts": [
+        "Implement email format validation."
+      ]
+    },
+    {
+      "cluster_id": 3,
+      "size": 1,
+      "representative_ac_index": 4,
+      "representative_ac_text": "Corporate domain restrictions must be configurable.",
+      "ac_indices": [
+        4
+      ],
+      "ac_texts": [
+        "Corporate domain restrictions must be configurable."
+      ]
+    },
+    {
+      "cluster_id": 4,
+      "size": 1,
+      "representative_ac_index": 5,
+      "representative_ac_text": "Authentication fails for non-existent email addresses.",
+      "ac_indices": [
+        5
+      ],
+      "ac_texts": [
+        "Authentication fails for non-existent email addresses."
+      ]
+    },
+    {
+      "cluster_id": 5,
+      "size": 2,
+      "representative_ac_index": 6,
+      "representative_ac_text": "Passwords must be compared using hash values.",
+      "ac_indices": [
+        6,
+        8
+      ],
+      "ac_texts": [
+        "Passwords must be compared using hash values.",
+        "Passwords must be stored using bcrypt or equivalent/stronger algorithms."
+      ]
+    },
+    {
+      "cluster_id": 6,
+      "size": 1,
+      "representative_ac_index": 7,
+      "representative_ac_text": "Password comparison must use constant-time algorithms (Anti-timing attack).",
+      "ac_indices": [
+        7
+      ],
+      "ac_texts": [
+        "Password comparison must use constant-time algorithms (Anti-timing attack)."
+      ]
+    },
+    {
+      "cluster_id": 7,
+      "size": 1,
+      "representative_ac_index": 9,
+      "representative_ac_text": "Hashes must include a salt.",
+      "ac_indices": [
+        9
+      ],
+      "ac_texts": [
+        "Hashes must include a salt."
+      ]
+    },
+    {
+      "cluster_id": 8,
+      "size": 1,
+      "representative_ac_index": 10,
+      "representative_ac_text": "Plain text passwords must not be output to DB, logs, or responses.",
+      "ac_indices": [
+        10
+      ],
+      "ac_texts": [
+        "Plain text passwords must not be output to DB, logs, or responses."
+      ]
+    },
+    {
+      "cluster_id": 9,
+      "size": 1,
+      "representative_ac_index": 11,
+      "representative_ac_text": "Passwords must be at least 8 characters long.",
+      "ac_indices": [
+        11
+      ],
+      "ac_texts": [
+        "Passwords must be at least 8 characters long."
+      ]
+    },
+    {
+      "cluster_id": 10,
+      "size": 1,
+      "representative_ac_index": 12,
+      "representative_ac_text": "Configurable rules for combinations of uppercase, lowercase, numbers, and symbols.",
+      "ac_indices": [
+        12
+      ],
+      "ac_texts": [
+        "Configurable rules for combinations of uppercase, lowercase, numbers, and symbols."
+      ]
+    },
+    {
+      "cluster_id": 11,
+      "size": 1,
+      "representative_ac_index": 13,
+      "representative_ac_text": "Password input fields must be masked.",
+      "ac_indices": [
+        13
+      ],
+      "ac_texts": [
+        "Password input fields must be masked."
+      ]
+    },
+    {
+      "cluster_id": 12,
+      "size": 1,
+      "representative_ac_index": 14,
+      "representative_ac_text": "Account lockout after 5 consecutive failed attempts.",
+      "ac_indices": [
+        14
+      ],
+      "ac_texts": [
+        "Account lockout after 5 consecutive failed attempts."
+      ]
+    },
+    {
+      "cluster_id": 13,
+      "size": 1,
+      "representative_ac_index": 15,
+      "representative_ac_text": "Lockout duration is configurable (Initial: 30 minutes).",
+      "ac_indices": [
+        15
+      ],
+      "ac_texts": [
+        "Lockout duration is configurable (Initial: 30 minutes)."
+      ]
+    },
+    {
+      "cluster_id": 14,
+      "size": 1,
+      "representative_ac_index": 16,
+      "representative_ac_text": "Locked accounts cannot be authenticated.",
+      "ac_indices": [
+        16
+      ],
+      "ac_texts": [
+        "Locked accounts cannot be authenticated."
+      ]
+    },
+    {
+      "cluster_id": 15,
+      "size": 1,
+      "representative_ac_index": 17,
+      "representative_ac_text": "Unlockable only by administrators.",
+      "ac_indices": [
+        17
+      ],
+      "ac_texts": [
+        "Unlockable only by administrators."
+      ]
+    },
+    {
+      "cluster_id": 16,
+      "size": 1,
+      "representative_ac_index": 18,
+      "representative_ac_text": "Security logs generated upon lockout events.",
+      "ac_indices": [
+        18
+      ],
+      "ac_texts": [
+        "Security logs generated upon lockout events."
+      ]
+    },
+    {
+      "cluster_id": 17,
+      "size": 1,
+      "representative_ac_index": 19,
+      "representative_ac_text": "Brute-force alerts for excessive attempts from a single IP.",
+      "ac_indices": [
+        19
+      ],
+      "ac_texts": [
+        "Brute-force alerts for excessive attempts from a single IP."
+      ]
+    },
+    {
+      "cluster_id": 18,
+      "size": 1,
+      "representative_ac_index": 20,
+      "representative_ac_text": "Issue a JWT upon successful authentication.",
+      "ac_indices": [
+        20
+      ],
+      "ac_texts": [
+        "Issue a JWT upon successful authentication."
+      ]
+    },
+    {
+      "cluster_id": 19,
+      "size": 2,
+      "representative_ac_index": 21,
+      "representative_ac_text": "JWT must contain user_id, role, and expiration date.",
+      "ac_indices": [
+        21,
+        22
+      ],
+      "ac_texts": [
+        "JWT must contain user_id, role, and expiration date.",
+        "JWT must be signed."
+      ]
+    },
+    {
+      "cluster_id": 20,
+      "size": 1,
+      "representative_ac_index": 23,
+      "representative_ac_text": "Token signature verification is mandatory.",
+      "ac_indices": [
+        23
+      ],
+      "ac_texts": [
+        "Token signature verification is mandatory."
+      ]
+    },
+    {
+      "cluster_id": 21,
+      "size": 1,
+      "representative_ac_index": 24,
+      "representative_ac_text": "Invalid or tampered tokens must be rejected.",
+      "ac_indices": [
+        24
+      ],
+      "ac_texts": [
+        "Invalid or tampered tokens must be rejected."
+      ]
+    },
+    {
+      "cluster_id": 22,
+      "size": 1,
+      "representative_ac_index": 25,
+      "representative_ac_text": "JWT expiration is configurable (Initial: 60 minutes).",
+      "ac_indices": [
+        25
+      ],
+      "ac_texts": [
+        "JWT expiration is configurable (Initial: 60 minutes)."
+      ]
+    },
+    {
+      "cluster_id": 23,
+      "size": 1,
+      "representative_ac_index": 26,
+      "representative_ac_text": "Tokens must only be transmitted over HTTPS.",
+      "ac_indices": [
+        26
+      ],
+      "ac_texts": [
+        "Tokens must only be transmitted over HTTPS."
+      ]
+    },
+    {
+      "cluster_id": 24,
+      "size": 2,
+      "representative_ac_index": 27,
+      "representative_ac_text": "Secure attribute must be set when using cookies.",
+      "ac_indices": [
+        27,
+        28
+      ],
+      "ac_texts": [
+        "Secure attribute must be set when using cookies.",
+        "HttpOnly attribute must be set when using cookies."
+      ]
+    },
+    {
+      "cluster_id": 25,
+      "size": 1,
+      "representative_ac_index": 29,
+      "representative_ac_text": "SameSite attribute must be set.",
+      "ac_indices": [
+        29
+      ],
+      "ac_texts": [
+        "SameSite attribute must be set."
+      ]
+    },
+    {
+      "cluster_id": 26,
+      "size": 1,
+      "representative_ac_index": 30,
+      "representative_ac_text": "CSRF protection tokens are mandatory.",
+      "ac_indices": [
+        30
+      ],
+      "ac_texts": [
+        "CSRF protection tokens are mandatory."
+      ]
+    },
+    {
+      "cluster_id": 27,
+      "size": 1,
+      "representative_ac_index": 31,
+      "representative_ac_text": "Anti-session fixation measures must be implemented.",
+      "ac_indices": [
+        31
+      ],
+      "ac_texts": [
+        "Anti-session fixation measures must be implemented."
+      ]
+    },
+    {
+      "cluster_id": 28,
+      "size": 1,
+      "representative_ac_index": 32,
+      "representative_ac_text": "Use parameterized queries/ORM against SQL injection.",
+      "ac_indices": [
+        32
+      ],
+      "ac_texts": [
+        "Use parameterized queries/ORM against SQL injection."
+      ]
+    },
+    {
+      "cluster_id": 29,
+      "size": 1,
+      "representative_ac_index": 33,
+      "representative_ac_text": "Sanitize input values (Anti-XSS).",
+      "ac_indices": [
+        33
+      ],
+      "ac_texts": [
+        "Sanitize input values (Anti-XSS)."
+      ]
+    },
+    {
+      "cluster_id": 30,
+      "size": 2,
+      "representative_ac_index": 34,
+      "representative_ac_text": "Store logs for successful logins.",
+      "ac_indices": [
+        34,
+        35
+      ],
+      "ac_texts": [
+        "Store logs for successful logins.",
+        "Store logs for failed logins."
+      ]
+    },
+    {
+      "cluster_id": 31,
+      "size": 1,
+      "representative_ac_index": 36,
+      "representative_ac_text": "Logs include user_id, IP, User-Agent, and timestamp.",
+      "ac_indices": [
+        36
+      ],
+      "ac_texts": [
+        "Logs include user_id, IP, User-Agent, and timestamp."
+      ]
+    },
+    {
+      "cluster_id": 32,
+      "size": 1,
+      "representative_ac_index": 37,
+      "representative_ac_text": "Logs must be stored in tamper-evident storage.",
+      "ac_indices": [
+        37
+      ],
+      "ac_texts": [
+        "Logs must be stored in tamper-evident storage."
+      ]
+    },
+    {
+      "cluster_id": 33,
+      "size": 1,
+      "representative_ac_index": 38,
+      "representative_ac_text": "Log retention period must be configurable.",
+      "ac_indices": [
+        38
+      ],
+      "ac_texts": [
+        "Log retention period must be configurable."
+      ]
+    },
+    {
+      "cluster_id": 34,
+      "size": 1,
+      "representative_ac_index": 39,
+      "representative_ac_text": "Apply rate limiting to the login API.",
+      "ac_indices": [
+        39
+      ],
+      "ac_texts": [
+        "Apply rate limiting to the login API."
+      ]
+    },
+    {
+      "cluster_id": 35,
+      "size": 1,
+      "representative_ac_index": 40,
+      "representative_ac_text": "Return HTTP 429 when rate limit is exceeded.",
+      "ac_indices": [
+        40
+      ],
+      "ac_texts": [
+        "Return HTTP 429 when rate limit is exceeded."
+      ]
+    },
+    {
+      "cluster_id": 36,
+      "size": 1,
+      "representative_ac_index": 41,
+      "representative_ac_text": "Authentication process must support asynchronous I/O.",
+      "ac_indices": [
+        41
+      ],
+      "ac_texts": [
+        "Authentication process must support asynchronous I/O."
+      ]
+    },
+    {
+      "cluster_id": 37,
+      "size": 1,
+      "representative_ac_index": 42,
+      "representative_ac_text": "Target response time for login API is within 200ms.",
+      "ac_indices": [
+        42
+      ],
+      "ac_texts": [
+        "Target response time for login API is within 200ms."
+      ]
+    },
+    {
+      "cluster_id": 38,
+      "size": 1,
+      "representative_ac_index": 43,
+      "representative_ac_text": "Error responses must not reveal internal system information.",
+      "ac_indices": [
+        43
+      ],
+      "ac_texts": [
+        "Error responses must not reveal internal system information."
+      ]
+    },
+    {
+      "cluster_id": 39,
+      "size": 1,
+      "representative_ac_index": 44,
+      "representative_ac_text": "Transition to business screens only upon successful authentication.",
+      "ac_indices": [
+        44
+      ],
+      "ac_texts": [
+        "Transition to business screens only upon successful authentication."
+      ]
+    },
+    {
+      "cluster_id": 40,
+      "size": 1,
+      "representative_ac_index": 45,
+      "representative_ac_text": "Initial screen branching based on role permissions.",
+      "ac_indices": [
+        45
+      ],
+      "ac_texts": [
+        "Initial screen branching based on role permissions."
+      ]
+    },
+    {
+      "cluster_id": 41,
+      "size": 1,
+      "representative_ac_index": 46,
+      "representative_ac_text": "Login state maintained until token expiration.",
+      "ac_indices": [
+        46
+      ],
+      "ac_texts": [
+        "Login state maintained until token expiration."
+      ]
+    },
+    {
+      "cluster_id": 42,
+      "size": 1,
+      "representative_ac_index": 47,
+      "representative_ac_text": "Invalidate tokens upon logout.",
+      "ac_indices": [
+        47
+      ],
+      "ac_texts": [
+        "Invalidate tokens upon logout."
+      ]
+    },
+    {
+      "cluster_id": 43,
+      "size": 1,
+      "representative_ac_index": 48,
+      "representative_ac_text": "Invalidated tokens managed via a blacklist (Redis).",
+      "ac_indices": [
+        48
+      ],
+      "ac_texts": [
+        "Invalidated tokens managed via a blacklist (Redis)."
+      ]
+    }
+  ],
+  "meta": {
+    "generated_at": "2026-02-02 21:01:10",
+    "embed_model": "text-embedding-3-small",
+    "threshold": 0.68,
+    "ac_count": 48,
+    "cluster_count": 44
+  }
+}

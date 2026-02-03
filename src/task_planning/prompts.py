@@ -1,86 +1,123 @@
-import json
-import time
-import google.generativeai as genai
-from prompts import TASK_GENERATION_SYSTEM_PROMPT
-
-# ==========================================
-# 設定エリア
-# ==========================================
-BATCH_SIZE = 5  # 1回に処理するACの数（5個程度が最も高密度になります）
-
-# 2回目以降に自動挿入する「クギを刺す」プロンプト
-REMINDER_PROMPT = """
-Great. Now proceed with the next batch of ACs.
-
-⚠️ **CRITICAL REMINDERS (DO NOT FORGET):**
-1. **Maintain the 4-Layer Structure**: [DB], [BE], [FE], [Test] for EVERY single AC.
-2. **Tech Stack**: Next.js (Zod), FastAPI (Pydantic), SQLAlchemy.
-3. **Consistency**: Use the same naming conventions as the previous batch.
-4. **No Summary**: Do not summarize. Keep the high density.
-
-Here are the next ACs:
+PLAN_SYSTEM = """You are a senior software engineer creating actionable engineering tasks from Acceptance Criteria (AC).
+You must optimize for: (1) concrete implementation steps, (2) each task fits 1-4 hours, (3) minimal duplication across ACs.
+Output MUST be valid JSON only. No markdown. No extra text.
 """
 
-# ==========================================
-# メイン処理
-# ==========================================
-def generate_tasks_automatically(json_file_path):
-    # 1. JSONデータの読み込み
-    with open(json_file_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    
-    all_acs = data.get("acceptance_criteria", [])
-    total_acs = len(all_acs)
-    print(f"🚀 Total ACs found: {total_acs}")
+PLAN_USER = """Read the AC and propose work_units (not final tasks yet).
+Rules:
+- Each work_unit must fit 1-4 hours by itself.
+- Prefer separating by "change surface": util / api / validation / db_migration / ui / test / logging_security / docs.
+- DO NOT create DB work_unit unless AC truly requires persistence/schema changes.
+- Include canonical_key for each work_unit (stable key to deduplicate across ACs).
+- Max 6 work_units per AC. If more, merge related ones while still <=4h.
 
-    # 2. モデルの準備 (APIキーは環境変数等で設定済みとする)
-    model = genai.GenerativeModel(
-        model_name="gemini-1.5-pro-latest", # コンテキストウィンドウが広いモデル推奨
-        system_instruction=TASK_GENERATION_SYSTEM_PROMPT
-    )
-    
-    # チャットセッションの開始（これで文脈を記憶させる）
-    chat = model.start_chat(history=[])
-    
-    generated_tasks_log = []
+Return JSON:
+{{
+  "ac_index": {ac_index},
+  "ac_text": {ac_text_json},
+  "work_units": [
+    {{
+      "surface": "util|api|validation|db_migration|ui|test|logging_security|docs|ops",
+      "title_hint": "short",
+      "what_to_change": "specific modules/files/endpoint/schema involved",
+      "acceptance_checks": ["...","..."],
+      "estimate_hours": 1,
+      "canonical_key": "e.g. util:auth:password_hash_bcrypt"
+    }}
+  ]
+}}
+"""
 
-    # 3. バッチ処理ループ
-    for i in range(0, total_acs, BATCH_SIZE):
-        batch_acs = all_acs[i : i + BATCH_SIZE]
-        current_batch_num = (i // BATCH_SIZE) + 1
-        print(f"\nProcessing Batch {current_batch_num} (AC {i+1} to {min(i+BATCH_SIZE, total_acs)})...")
+GENERATE_SYSTEM = """You convert work_units into Techkan-compatible tasks.
+Output MUST be valid JSON only. No markdown. No extra text.
+"""
 
-        # --- ここが自動化のキモ ---
-        if i == 0:
-            # 初回: 普通にACを渡す
-            user_message = f"Here is the first batch of ACs:\n{json.dumps(batch_acs)}"
-        else:
-            # 2回目以降: 「リマインダー」＋「次のAC」を結合して渡す
-            user_message = f"{REMINDER_PROMPT}\n{json.dumps(batch_acs)}"
-        # ------------------------
+GENERATE_USER = """Create tasks from work_units.
+Rules:
+- Each task must be 1-4 hours (integer).
+- Task fields must match exactly:
+  title, category, subcategory, status, priority, estimate_hours, assignee, related_task_titles, period, description, canonical_key, depends_on_keys, flags
+- category must be "Task"
+- status must be "Todo"
+- subcategory must be one of: [Code][BE], [Code][FE], [Code][DB], [Test], [Doc], [Ops]
+- priority: Low|Medium|High
+- description must include:
+  Goal, Changes (concrete), Acceptance checks (bullet-like)
+- Use depends_on_keys to reference shared tasks when needed.
 
-        try:
-            # AIに送信
-            response = chat.send_message(user_message)
-            
-            # 結果を表示・保存（実際はここでパースして保存処理を入れる）
-            print(f"✅ Batch {current_batch_num} Complete. Output length: {len(response.text)} chars")
-            generated_tasks_log.append(response.text)
-            
-            # APIレート制限対策（必要に応じて）
-            time.sleep(2) 
+Input plan JSON:
+{plan_json}
 
-        except Exception as e:
-            print(f"❌ Error in Batch {current_batch_num}: {e}")
-            break
+Return JSON:
+{{
+  "ac_index": {ac_index},
+  "tasks": [
+    {{
+      "title": "...",
+      "category": "Task",
+      "subcategory": "[Code][BE]",
+      "status": "Todo",
+      "priority": "Medium",
+      "estimate_hours": 2,
+      "assignee": "",
+      "related_task_titles": [],
+      "period": "",
+      "description": "Goal:...\\nChanges:...\\nAcceptance checks:...",
+      "canonical_key": "...",
+      "depends_on_keys": [],
+      "flags": []
+    }}
+  ]
+}}
+"""
 
-    print("\n🎉 All batches processed successfully!")
-    return generated_tasks_log
+JUDGE_SYSTEM = """You are a strict reviewer. You must output JSON only. No extra text.
+"""
 
-if __name__ == "__main__":
-    # 実行
-    results = generate_tasks_automatically("login_us001.json")
-    
-    # 必要なら結果をファイルに保存
-    with open("final_high_density_tasks.md", "w", encoding="utf-8") as f:
-        f.write("\n\n".join(results))
+JUDGE_USER = """Review the generated tasks for this AC with gate rules.
+Gate rules (fail if any):
+- any estimate_hours is outside 1-4
+- any task is too vague (missing concrete change surface or acceptance checks)
+- a task mixes multiple surfaces (util+api+db+migration+test all in one)
+- duplication likely (canonical_key overlaps with registry keys)
+- too many tasks: > {max_tasks_per_ac}
+
+Return JSON:
+{{
+  "pass": true|false,
+  "issues": [
+    {{
+      "type": "HOURS|VAGUE|MIXED_SURFACE|DUPLICATE|TOO_MANY",
+      "detail": "..."
+    }}
+  ],
+  "repair_instructions": "If fail, give concise fix instructions."
+}}
+"""
+
+REPAIR_SYSTEM = """You rewrite tasks to satisfy gate rules. Output JSON only. No extra text.
+"""
+
+REPAIR_USER = """Fix the tasks using the judge issues and instructions.
+Constraints:
+- Keep tasks 1-4 hours.
+- Split mixed-surface tasks into separate ones.
+- Remove duplicates by referencing existing tasks via depends_on_keys.
+- Ensure each description has Goal/Changes/Acceptance checks.
+- Limit tasks to <= {max_tasks_per_ac}.
+
+Registry keys already exist (do NOT re-create these):
+{registry_keys_json}
+
+Current tasks JSON:
+{tasks_json}
+
+Judge issues:
+{issues_json}
+
+Return JSON (same schema as Generate):
+{{
+  "ac_index": {ac_index},
+  "tasks": [ ... ]
+}}
+"""

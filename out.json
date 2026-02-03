@@ -1,0 +1,556 @@
+{
+  "items": [
+    {
+      "ac_index": 1,
+      "ac_text": "Authentication via email and password.",
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement email and password authentication API endpoint",
+            "surface": "api",
+            "description": "Create a RESTful API endpoint for user authentication that accepts email and password, validates the credentials, and returns a JWT token upon successful authentication.",
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Set up database schema for user credentials",
+            "surface": "db",
+            "description": "Design and implement the database schema to store user credentials securely, including fields for email, hashed password, and any necessary metadata.",
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Create unit tests for authentication API",
+            "surface": "test",
+            "description": "Write unit tests for the authentication API endpoint to ensure it correctly handles valid and invalid credentials, including edge cases.",
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement email and password authentication API endpoint"
+            ]
+          },
+          {
+            "title": "Implement password hashing and validation utility",
+            "surface": "util",
+            "description": "Develop a utility function to hash passwords before storing them in the database and validate hashed passwords during authentication.",
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Document authentication API usage",
+            "surface": "doc",
+            "description": "Create documentation for the authentication API, including endpoint details, request/response formats, and example usage.",
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement email and password authentication API endpoint"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement email and password authentication API endpoint",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Create a RESTful API endpoint for user authentication.\nChanges: Implement the endpoint at /api/auth/login that accepts email and password, validates the credentials, and returns a JWT token upon successful authentication.\nAcceptance checks: Test the endpoint with valid credentials to ensure it returns a JWT token and with invalid credentials to ensure it returns an error."
+        },
+        {
+          "title": "Set up database schema for user credentials",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Design and implement the database schema for user credentials.\nChanges: Create a table named 'users' with fields for email, hashed password, and necessary metadata (e.g., created_at, updated_at).\nAcceptance checks: Verify the schema by checking the table structure in the database and ensuring it meets the requirements."
+        },
+        {
+          "title": "Create unit tests for authentication API",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email and password authentication API endpoint"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the authentication API endpoint works correctly.\nChanges: Write unit tests for the endpoint to cover valid and invalid credentials, including edge cases.\nAcceptance checks: Run the tests and ensure all pass without errors."
+        },
+        {
+          "title": "Implement password hashing and validation utility",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Securely handle user passwords.\nChanges: Develop a utility function to hash passwords before storing them in the database and validate hashed passwords during authentication.\nAcceptance checks: Test the utility to ensure it correctly hashes and validates passwords."
+        },
+        {
+          "title": "Document authentication API usage",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email and password authentication API endpoint"
+          ],
+          "period": "",
+          "description": "Goal: Provide clear documentation for the authentication API.\nChanges: Create documentation detailing the endpoint at /api/auth/login, including request/response formats and example usage.\nAcceptance checks: Review the documentation for completeness and clarity."
+        }
+      ]
+    },
+    {
+      "ac_index": 2,
+      "ac_text": "Email address must be unique within the system.",
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement unique email constraint in database",
+            "surface": "db",
+            "description": "Add a unique constraint on the email column in the users table to ensure that email addresses are unique within the system.",
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update user registration API to check for unique email",
+            "surface": "api",
+            "description": "Modify the user registration API endpoint to check if the provided email address already exists in the database before creating a new user.",
+            "estimate_hours": 3,
+            "dependencies": [
+              "Implement unique email constraint in database"
+            ]
+          },
+          {
+            "title": "Create unit tests for unique email validation",
+            "surface": "test",
+            "description": "Write unit tests for the user registration API to verify that it correctly handles cases where the email is not unique.",
+            "estimate_hours": 2,
+            "dependencies": [
+              "Update user registration API to check for unique email"
+            ]
+          },
+          {
+            "title": "Update API documentation for user registration",
+            "surface": "doc",
+            "description": "Revise the API documentation to include information about the unique email requirement for user registration.",
+            "estimate_hours": 1,
+            "dependencies": [
+              "Update user registration API to check for unique email"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement unique email constraint in database",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure email addresses are unique within the system.\nChanges: Add a unique constraint on the email column in the users table.\nAcceptance checks: Verify that the database throws an error when attempting to insert duplicate email addresses."
+        },
+        {
+          "title": "Update user registration API to check for unique email",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement unique email constraint in database"
+          ],
+          "period": "",
+          "description": "Goal: Prevent duplicate email registrations.\nChanges: Modify the user registration API endpoint to check if the provided email address already exists in the database before creating a new user.\nAcceptance checks: Test the API with existing and new email addresses to ensure it returns appropriate responses."
+        },
+        {
+          "title": "Create unit tests for unique email validation",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Update user registration API to check for unique email"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the API correctly handles unique email validation.\nChanges: Write unit tests for the user registration API to verify that it correctly handles cases where the email is not unique.\nAcceptance checks: Run the tests and confirm that they pass for both unique and duplicate email scenarios."
+        },
+        {
+          "title": "Update API documentation for user registration",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Update user registration API to check for unique email"
+          ],
+          "period": "",
+          "description": "Goal: Provide clear documentation for API users.\nChanges: Revise the API documentation to include information about the unique email requirement for user registration.\nAcceptance checks: Review the documentation to ensure it accurately reflects the new email uniqueness requirement."
+        }
+      ]
+    },
+    {
+      "ac_index": 3,
+      "ac_text": "Implement email format validation.",
+      "plan": {
+        "work_units": [
+          {
+            "title": "Create email validation utility function",
+            "surface": "util",
+            "description": "Develop a utility function that checks if an email address is in a valid format using regex.",
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Integrate email validation in user registration API",
+            "surface": "api",
+            "description": "Modify the user registration API to include the email format validation using the utility function created.",
+            "estimate_hours": 3,
+            "dependencies": [
+              "Create email validation utility function"
+            ]
+          },
+          {
+            "title": "Write unit tests for email validation function",
+            "surface": "test",
+            "description": "Create unit tests to ensure the email validation utility function works correctly with various email formats.",
+            "estimate_hours": 2,
+            "dependencies": [
+              "Create email validation utility function"
+            ]
+          },
+          {
+            "title": "Update API documentation for email validation",
+            "surface": "doc",
+            "description": "Update the API documentation to include information about the email format validation requirements for the user registration endpoint.",
+            "estimate_hours": 1,
+            "dependencies": [
+              "Integrate email validation in user registration API"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Create email validation utility function",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Develop a utility function that checks if an email address is in a valid format using regex.\nChanges: Implement the function in the 'util' module.\nAcceptance checks: Ensure the function passes various test cases for valid and invalid email formats."
+        },
+        {
+          "title": "Integrate email validation in user registration API",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Create email validation utility function"
+          ],
+          "period": "",
+          "description": "Goal: Modify the user registration API to include the email format validation using the utility function created.\nChanges: Update the registration endpoint in the 'api' module to call the email validation function.\nAcceptance checks: Test the API to ensure it rejects invalid email formats and accepts valid ones."
+        },
+        {
+          "title": "Write unit tests for email validation function",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Create email validation utility function"
+          ],
+          "period": "",
+          "description": "Goal: Create unit tests to ensure the email validation utility function works correctly with various email formats.\nChanges: Add test cases in the test suite for the utility function.\nAcceptance checks: Run the test suite and confirm all tests pass."
+        },
+        {
+          "title": "Update API documentation for email validation",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Integrate email validation in user registration API"
+          ],
+          "period": "",
+          "description": "Goal: Update the API documentation to include information about the email format validation requirements for the user registration endpoint.\nChanges: Modify the documentation file to reflect the new validation rules.\nAcceptance checks: Review the documentation for clarity and accuracy regarding email validation."
+        }
+      ]
+    },
+    {
+      "ac_index": 4,
+      "ac_text": "Corporate domain restrictions must be configurable.",
+      "plan": {
+        "work_units": [
+          {
+            "title": "Design configuration schema for domain restrictions",
+            "surface": "config",
+            "description": "Create a JSON schema that defines the structure for configurable corporate domain restrictions.",
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Implement API endpoint for domain restrictions",
+            "surface": "api",
+            "description": "Develop a RESTful API endpoint to retrieve and update corporate domain restrictions based on the configuration schema.",
+            "estimate_hours": 3,
+            "dependencies": [
+              "Design configuration schema for domain restrictions"
+            ]
+          },
+          {
+            "title": "Create database table for storing domain restrictions",
+            "surface": "db",
+            "description": "Set up a new database table to persist corporate domain restrictions, ensuring it aligns with the configuration schema.",
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Write unit tests for domain restrictions API",
+            "surface": "test",
+            "description": "Develop unit tests for the API endpoint to ensure it correctly handles retrieval and updates of domain restrictions.",
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement API endpoint for domain restrictions"
+            ]
+          },
+          {
+            "title": "Document configuration options for domain restrictions",
+            "surface": "doc",
+            "description": "Create documentation outlining how to configure corporate domain restrictions, including examples and API usage.",
+            "estimate_hours": 1,
+            "dependencies": [
+              "Design configuration schema for domain restrictions"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Design configuration schema for domain restrictions",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Create a JSON schema for corporate domain restrictions.\nChanges: Define the structure and fields required for the configuration.\nAcceptance checks: Validate the JSON schema against sample data to ensure it meets requirements."
+        },
+        {
+          "title": "Implement API endpoint for domain restrictions",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Design configuration schema for domain restrictions"
+          ],
+          "period": "",
+          "description": "Goal: Develop a RESTful API for domain restrictions.\nChanges: Create an endpoint to retrieve and update restrictions based on the schema.\nAcceptance checks: Test the endpoint with various requests to ensure it returns correct data and updates successfully."
+        },
+        {
+          "title": "Create database table for storing domain restrictions",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Set up a database table for domain restrictions.\nChanges: Create a new table that aligns with the configuration schema.\nAcceptance checks: Verify the table structure and ensure it can store sample data correctly."
+        },
+        {
+          "title": "Write unit tests for domain restrictions API",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement API endpoint for domain restrictions"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the API endpoint functions correctly.\nChanges: Develop unit tests for retrieval and update operations.\nAcceptance checks: Run tests to confirm all scenarios pass and edge cases are handled."
+        },
+        {
+          "title": "Document configuration options for domain restrictions",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Design configuration schema for domain restrictions"
+          ],
+          "period": "",
+          "description": "Goal: Provide clear documentation for users.\nChanges: Outline configuration options with examples and API usage.\nAcceptance checks: Review documentation for clarity and completeness, ensuring it is easy to follow."
+        }
+      ]
+    },
+    {
+      "ac_index": 5,
+      "ac_text": "Authentication fails for non-existent email addresses.",
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement email validation in authentication API",
+            "surface": "api",
+            "description": "Update the authentication API to check if the provided email exists in the database before proceeding with authentication.",
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Create unit tests for email validation logic",
+            "surface": "test",
+            "description": "Write unit tests to ensure that the authentication API correctly handles non-existent email addresses and returns appropriate error messages.",
+            "estimate_hours": 3,
+            "dependencies": [
+              "Implement email validation in authentication API"
+            ]
+          },
+          {
+            "title": "Update API documentation for authentication endpoint",
+            "surface": "doc",
+            "description": "Revise the API documentation to include information about the new email validation feature and the expected error responses for non-existent emails.",
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement email validation in authentication API"
+            ]
+          },
+          {
+            "title": "Review and update security measures for authentication",
+            "surface": "security",
+            "description": "Conduct a review of the authentication process to ensure that the new email validation does not introduce any security vulnerabilities.",
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement email validation in authentication API"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement email validation in authentication API",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that authentication fails for non-existent email addresses.\nChanges: Update the authentication API to check if the provided email exists in the database before proceeding with authentication.\nAcceptance checks: Test the API with both existing and non-existent email addresses to confirm correct behavior."
+        },
+        {
+          "title": "Create unit tests for email validation logic",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email validation in authentication API"
+          ],
+          "period": "",
+          "description": "Goal: Validate the email validation logic in the authentication API.\nChanges: Write unit tests to ensure that the authentication API correctly handles non-existent email addresses and returns appropriate error messages.\nAcceptance checks: Run the unit tests and verify that all tests pass, particularly those related to non-existent email addresses."
+        },
+        {
+          "title": "Update API documentation for authentication endpoint",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email validation in authentication API"
+          ],
+          "period": "",
+          "description": "Goal: Ensure users are informed about the new email validation feature.\nChanges: Revise the API documentation to include information about the new email validation feature and the expected error responses for non-existent emails.\nAcceptance checks: Review the updated documentation for accuracy and completeness."
+        },
+        {
+          "title": "Review and update security measures for authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email validation in authentication API"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the security of the authentication process.\nChanges: Conduct a review of the authentication process to ensure that the new email validation does not introduce any security vulnerabilities.\nAcceptance checks: Document findings and implement any necessary changes to enhance security."
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "generated_at": "2026-02-02 17:13:08",
+    "model": "gpt-4o-mini",
+    "max_tasks_per_ac": 10,
+    "max_repairs": 1,
+    "limit": 5,
+    "ac_count": 5
+  }
+}
