@@ -1,0 +1,370 @@
+{
+  "meta": {
+    "generated_at": "2026-02-03 13:01:55",
+    "model": "gpt-4o-mini",
+    "score": 40,
+    "max_tasks_per_ac": 5,
+    "max_repairs": 1,
+    "range": {
+      "start": 11,
+      "end": 15,
+      "total": 15
+    },
+    "input": "tests/fixtures/login_us001.json"
+  },
+  "items": [
+    {
+      "ac_index": 11,
+      "ac_text": "Passwords must be at least 8 characters long.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement password length validation",
+            "surface": "validation",
+            "what_to_change": "password validation logic in user registration and update modules",
+            "acceptance_checks": [
+              "Password validation correctly enforces minimum length of 8 characters",
+              "Error message is displayed for passwords shorter than 8 characters"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update documentation for password requirements",
+            "surface": "docs",
+            "what_to_change": "user registration and password policy documentation",
+            "acceptance_checks": [
+              "Documentation reflects the new password length requirement",
+              "Documentation is reviewed and approved by the team"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement password length validation"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement password length validation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that user passwords meet the minimum length requirement.\nChanges: Update the password validation logic in user registration and update modules to enforce a minimum length of 8 characters.\nAcceptance checks: Password validation correctly enforces minimum length of 8 characters; Error message is displayed for passwords shorter than 8 characters."
+        },
+        {
+          "title": "Update documentation for password requirements",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement password length validation"
+          ],
+          "period": "",
+          "description": "Goal: Update the documentation to reflect new password requirements.\nChanges: Revise user registration and password policy documentation to include the new minimum password length of 8 characters.\nAcceptance checks: Documentation reflects the new password length requirement; Documentation is reviewed and approved by the team."
+        }
+      ]
+    },
+    {
+      "ac_index": 12,
+      "ac_text": "Configurable rules for combinations of uppercase, lowercase, numbers, and symbols.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement validation for password rules",
+            "surface": "validation",
+            "what_to_change": "password validation module",
+            "acceptance_checks": [
+              "Validation rules accept uppercase, lowercase, numbers, and symbols",
+              "Validation rules can be configured via settings"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Create API endpoint for password rule configuration",
+            "surface": "api",
+            "what_to_change": "password rules configuration endpoint",
+            "acceptance_checks": [
+              "API allows updating password rules",
+              "API returns current password rules"
+            ],
+            "estimate_hours": 3,
+            "dependencies": [
+              "Implement validation for password rules"
+            ]
+          },
+          {
+            "title": "Update documentation for password rules",
+            "surface": "docs",
+            "what_to_change": "API documentation and user guide",
+            "acceptance_checks": [
+              "Documentation includes new password rules",
+              "Examples of API usage are provided"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Create API endpoint for password rule configuration"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement validation for password rules",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a password validation module that enforces configurable rules.\nChanges: Update the password validation module to include checks for uppercase, lowercase, numbers, and symbols.\nAcceptance checks: Validation rules accept uppercase, lowercase, numbers, and symbols; Validation rules can be configured via settings."
+        },
+        {
+          "title": "Create API endpoint for password rule configuration",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement validation for password rules"
+          ],
+          "period": "",
+          "description": "Goal: Develop an API endpoint to manage password rule configurations.\nChanges: Create an endpoint that allows updating and retrieving current password rules.\nAcceptance checks: API allows updating password rules; API returns current password rules."
+        },
+        {
+          "title": "Update documentation for password rules",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Create API endpoint for password rule configuration"
+          ],
+          "period": "",
+          "description": "Goal: Ensure documentation reflects the new password rules and API usage.\nChanges: Update API documentation and user guide to include new password rules and examples.\nAcceptance checks: Documentation includes new password rules; Examples of API usage are provided."
+        }
+      ]
+    },
+    {
+      "ac_index": 13,
+      "ac_text": "Password input fields must be masked.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement password masking in input fields",
+            "surface": "ui",
+            "what_to_change": "Password input fields in the login and registration forms",
+            "acceptance_checks": [
+              "Password input fields display masked characters",
+              "User can still input and submit passwords"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement password masking in input fields",
+          "category": "Task",
+          "subcategory": "[Code][FE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance security by masking password input fields.\nChanges: Update the login and registration forms to mask password characters.\nAcceptance checks: Password input fields display masked characters and users can still input and submit passwords."
+        }
+      ]
+    },
+    {
+      "ac_index": 14,
+      "ac_text": "Account lockout after 5 consecutive failed attempts.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement account lockout logic",
+            "surface": "api|util|validation",
+            "what_to_change": "Authentication service, user validation logic",
+            "acceptance_checks": [
+              "Account locks after 5 failed attempts",
+              "Unlocks after specified duration or admin action"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Add logging for failed login attempts",
+            "surface": "logging_security",
+            "what_to_change": "Logging module for authentication events",
+            "acceptance_checks": [
+              "Logs are created for each failed attempt",
+              "Logs include timestamp and user identifier"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement account lockout logic"
+            ]
+          },
+          {
+            "title": "Create tests for account lockout feature",
+            "surface": "test",
+            "what_to_change": "Test suite for authentication",
+            "acceptance_checks": [
+              "Tests cover all scenarios for failed attempts",
+              "Tests validate lockout and unlock behavior"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement account lockout logic"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement account lockout logic",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement account lockout after 5 consecutive failed login attempts.\nChanges: Update the authentication service and user validation logic to include lockout functionality.\nAcceptance checks: Account locks after 5 failed attempts; Unlocks after specified duration or admin action."
+        },
+        {
+          "title": "Add logging for failed login attempts",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement account lockout logic"
+          ],
+          "period": "",
+          "description": "Goal: Enhance security by logging failed login attempts.\nChanges: Modify the logging module to capture authentication events related to failed logins.\nAcceptance checks: Logs are created for each failed attempt; Logs include timestamp and user identifier."
+        },
+        {
+          "title": "Create tests for account lockout feature",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement account lockout logic"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the account lockout feature works as intended.\nChanges: Develop a test suite for the authentication module focusing on the lockout feature.\nAcceptance checks: Tests cover all scenarios for failed attempts; Tests validate lockout and unlock behavior."
+        }
+      ]
+    },
+    {
+      "ac_index": 15,
+      "ac_text": "Lockout duration is configurable (Initial: 30 minutes).",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Configurable Lockout Duration",
+            "surface": "api|util|validation|test",
+            "what_to_change": "Lockout duration logic in authentication service, API endpoint for configuration, validation rules for input, and test cases for new functionality.",
+            "acceptance_checks": [
+              "Lockout duration can be set via API",
+              "Default lockout duration is 30 minutes",
+              "Validation checks for lockout duration input"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Update Documentation for Lockout Configuration",
+            "surface": "docs",
+            "what_to_change": "API documentation to include details on lockout duration configuration and default values.",
+            "acceptance_checks": [
+              "Documentation reflects new API endpoint",
+              "Examples of lockout duration configuration are provided"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement Configurable Lockout Duration"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Configurable Lockout Duration",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a configurable lockout duration for the authentication service.\nChanges: Update the lockout duration logic, create an API endpoint for configuration, and add validation rules for input.\nAcceptance checks: Lockout duration can be set via API, default lockout duration is 30 minutes, validation checks for lockout duration input."
+        },
+        {
+          "title": "Update Documentation for Lockout Configuration",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Configurable Lockout Duration"
+          ],
+          "period": "",
+          "description": "Goal: Update API documentation to reflect the new lockout duration configuration.\nChanges: Include details on the new API endpoint and default values for lockout duration.\nAcceptance checks: Documentation reflects new API endpoint, examples of lockout duration configuration are provided."
+        }
+      ]
+    }
+  ]
+}

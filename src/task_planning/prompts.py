@@ -1,123 +1,94 @@
-PLAN_SYSTEM = """You are a senior software engineer creating actionable engineering tasks from Acceptance Criteria (AC).
-You must optimize for: (1) concrete implementation steps, (2) each task fits 1-4 hours, (3) minimal duplication across ACs.
-Output MUST be valid JSON only. No markdown. No extra text.
+# src/task_planning/prompts.py
+
+PLAN_SYSTEM = """You are a senior software engineer.
+You read ONE Acceptance Criterion (AC) and propose small work_units.
+Output JSON only. No markdown. No extra text.
 """
 
+# ※ .format() を使う場合は { } を {{ }} にする
 PLAN_USER = """Read the AC and propose work_units (not final tasks yet).
-Rules:
-- Each work_unit must fit 1-4 hours by itself.
-- Prefer separating by "change surface": util / api / validation / db_migration / ui / test / logging_security / docs.
-- DO NOT create DB work_unit unless AC truly requires persistence/schema changes.
-- Include canonical_key for each work_unit (stable key to deduplicate across ACs).
-- Max 6 work_units per AC. If more, merge related ones while still <=4h.
+
+Hard constraints:
+- You MUST output 1 to {max_tasks} work_units only.
+- Each work_unit must fit 1-4 hours.
+- If the AC implies many surfaces, MERGE related work into fewer work_units while staying <=4h each.
+
+Guidance (change surfaces):
+- util / api / validation / db / test / logging_security / docs / ops / ui
+- Prefer the minimum set of surfaces needed for the AC.
+- Do NOT create DB work unless persistence/schema truly required.
 
 Return JSON:
 {{
-  "ac_index": {ac_index},
-  "ac_text": {ac_text_json},
   "work_units": [
     {{
-      "surface": "util|api|validation|db_migration|ui|test|logging_security|docs|ops",
-      "title_hint": "short",
-      "what_to_change": "specific modules/files/endpoint/schema involved",
+      "title": "...",
+      "surface": "util|api|validation|db|test|logging_security|docs|ops|ui",
+      "what_to_change": "specific modules/files/endpoints/schema",
       "acceptance_checks": ["...","..."],
       "estimate_hours": 1,
-      "canonical_key": "e.g. util:auth:password_hash_bcrypt"
+      "dependencies": ["<other work_unit title>", "..."]
     }}
   ]
 }}
+
+AC:
+{ac_text}
 """
 
-GENERATE_SYSTEM = """You convert work_units into Techkan-compatible tasks.
-Output MUST be valid JSON only. No markdown. No extra text.
+GEN_SYSTEM = """You convert work_units into company-ready tasks.
+Output JSON only. No markdown. No extra text.
 """
 
-GENERATE_USER = """Create tasks from work_units.
-Rules:
+GEN_USER = """Create tasks from work_units.
+
+Hard constraints:
+- You MUST output 1 to {max_tasks} tasks only.
 - Each task must be 1-4 hours (integer).
-- Task fields must match exactly:
-  title, category, subcategory, status, priority, estimate_hours, assignee, related_task_titles, period, description, canonical_key, depends_on_keys, flags
-- category must be "Task"
-- status must be "Todo"
-- subcategory must be one of: [Code][BE], [Code][FE], [Code][DB], [Test], [Doc], [Ops]
-- priority: Low|Medium|High
-- description must include:
-  Goal, Changes (concrete), Acceptance checks (bullet-like)
-- Use depends_on_keys to reference shared tasks when needed.
+- Each task must be concrete: where/what/how + testable acceptance checks.
+- If max_tasks is small (e.g., 2), INCLUDE docs as part of description instead of making a separate doc-only task.
 
-Input plan JSON:
-{plan_json}
-
-Return JSON:
+Task schema:
 {{
-  "ac_index": {ac_index},
-  "tasks": [
+  "tasks":[
     {{
-      "title": "...",
-      "category": "Task",
-      "subcategory": "[Code][BE]",
-      "status": "Todo",
-      "priority": "Medium",
-      "estimate_hours": 2,
-      "assignee": "",
-      "related_task_titles": [],
-      "period": "",
-      "description": "Goal:...\\nChanges:...\\nAcceptance checks:...",
-      "canonical_key": "...",
-      "depends_on_keys": [],
-      "flags": []
+      "title":"...",
+      "category":"Task",
+      "subcategory":"[Code][BE]|[Code][FE]|[Code][DB]|[Test]|[Doc]|[Ops]",
+      "status":"Todo",
+      "priority":"Low|Medium|High",
+      "estimate_hours":2,
+      "assignee":"",
+      "related_task_titles":[],
+      "period":"",
+      "description":"Goal:...\\nChanges:...\\nAcceptance checks:..."
     }}
   ]
 }}
+
+AC:
+{ac_text}
+
+Plan JSON:
+{plan_json}
 """
 
-JUDGE_SYSTEM = """You are a strict reviewer. You must output JSON only. No extra text.
-"""
+REPAIR_SYSTEM = """You fix tasks based on issues. Output JSON only. No extra text."""
 
-JUDGE_USER = """Review the generated tasks for this AC with gate rules.
-Gate rules (fail if any):
-- any estimate_hours is outside 1-4
-- any task is too vague (missing concrete change surface or acceptance checks)
-- a task mixes multiple surfaces (util+api+db+migration+test all in one)
-- duplication likely (canonical_key overlaps with registry keys)
-- too many tasks: > {max_tasks_per_ac}
+REPAIR_USER = """Fix the tasks using these issues.
 
-Return JSON:
-{{
-  "pass": true|false,
-  "issues": [
-    {{
-      "type": "HOURS|VAGUE|MIXED_SURFACE|DUPLICATE|TOO_MANY",
-      "detail": "..."
-    }}
-  ],
-  "repair_instructions": "If fail, give concise fix instructions."
-}}
-"""
+Hard constraints:
+- Output 1 to {max_tasks} tasks only.
+- Each task must be 1-4 hours.
+- Make tasks concrete (where/what/how) and add testable acceptance checks.
+- If max_tasks is small, MERGE surfaces while staying <=4h (avoid splitting too much).
 
-REPAIR_SYSTEM = """You rewrite tasks to satisfy gate rules. Output JSON only. No extra text.
-"""
-
-REPAIR_USER = """Fix the tasks using the judge issues and instructions.
-Constraints:
-- Keep tasks 1-4 hours.
-- Split mixed-surface tasks into separate ones.
-- Remove duplicates by referencing existing tasks via depends_on_keys.
-- Ensure each description has Goal/Changes/Acceptance checks.
-- Limit tasks to <= {max_tasks_per_ac}.
-
-Registry keys already exist (do NOT re-create these):
-{registry_keys_json}
+Issues:
+{issues_text}
 
 Current tasks JSON:
 {tasks_json}
 
-Judge issues:
-{issues_json}
-
-Return JSON (same schema as Generate):
-{{
-  "ac_index": {ac_index},
-  "tasks": [ ... ]
-}}
+Return JSON:
+{{"tasks":[...]}}
 """

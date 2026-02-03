@@ -1,75 +1,42 @@
+# src/task_planning/pipeline.py
+from __future__ import annotations
+
+import json
 from typing import Any, Dict, List
 
 from .llm import call_llm_json
-from .validate import validate_tasks  # ★ここが変更点（validate_result じゃない）
+from .validate import validate_tasks_obj
+from .prompts import (
+    PLAN_SYSTEM, PLAN_USER,
+    GEN_SYSTEM, GEN_USER,
+    REPAIR_SYSTEM, REPAIR_USER,
+)
+
+# ✅ subcategory 許可リスト（ここ以外はBEへ落とす）
+ALLOWED_SUBCATS = {"[Code][BE]", "[Code][FE]", "[Code][DB]", "[Test]", "[Doc]", "[Ops]"}
 
 
-PLAN_PROMPT = """You are a senior software engineer.
-Read ONE acceptance criterion (AC) and design small work units that each finish in 1–4 hours.
-
-Rules:
-- Output JSON only.
-- Create 2–6 work_units.
-- Each work_unit must be actionable and specific (file/area/API/db/test).
-- Each work_unit must include a short "surface" tag: one of
-  ["util","api","db","integration","test","config","doc","security","perf","fe"].
-
-JSON schema:
-{
-  "work_units": [
-    {
-      "title": "...",
-      "surface": "util|api|db|integration|test|config|doc|security|perf|fe",
-      "description": "...",
-      "estimate_hours": 1-4,
-      "dependencies": ["<other work_unit title>", ...]
-    }
-  ]
-}
-"""
-
-GEN_PROMPT = """You are generating company-ready tasks from work units.
-Output JSON only.
-
-Task constraints:
-- Each task must be doable in 1-4 hours.
-- The task must include concrete changes (where/what) and acceptance checks.
-- related_task_titles should reference dependencies by title.
-
-JSON schema:
-{
-  "tasks": [
-    {
-      "title": "...",
-      "category": "Task",
-      "subcategory": "[Code][BE]|[Code][FE]|[Code][DB]|[Test]|[Doc]",
-      "status": "Todo",
-      "priority": "Low|Medium|High",
-      "estimate_hours": 1-4,
-      "assignee": "",
-      "related_task_titles": ["...", ...],
-      "period": "",
-      "description": "Goal...\\nChanges...\\nAcceptance checks..."
-    }
-  ]
-}
-"""
-
-REPAIR_PROMPT = """You will fix the tasks based on issues.
-Output JSON only with the same schema as tasks.
-Make tasks smaller and more specific if needed.
-"""
+def plan_one_ac(model: str, ac_text: str, max_tasks: int) -> Dict[str, Any]:
+    return call_llm_json(
+        model=model,
+        messages=[
+            {"role": "system", "content": PLAN_SYSTEM},
+            {"role": "user", "content": PLAN_USER.format(ac_text=ac_text, max_tasks=max_tasks)},
+        ],
+        temperature=0.0,
+        max_tokens=1400,
+    )
 
 
-def plan_one_ac(model: str, ac_text: str) -> Dict[str, Any]:
-    messages = [
-        {"role": "system", "content": PLAN_PROMPT},
-        {"role": "user", "content": f"AC: {ac_text}"},
-    ]
-    return call_llm_json(model=model, messages=messages, temperature=0.0, max_tokens=1200)
+def _normalize_tasks(tasks: Any, max_tasks: int) -> Dict[str, Any]:
+    # ✅ 事故防止：max_tasks を必ず int 化
+    try:
+        max_tasks_i = int(max_tasks)
+    except Exception:
+        max_tasks_i = 1
+    if max_tasks_i <= 0:
+        max_tasks_i = 1
 
-
-def _normalize_tasks(tasks: Any, max_tasks_per_ac: int) -> Dict[str, Any]:
     if not isinstance(tasks, list):
         tasks = []
 
@@ -84,7 +51,23 @@ def _normalize_tasks(tasks: Any, max_tasks_per_ac: int) -> Dict[str, Any]:
         t.setdefault("assignee", "")
         t.setdefault("related_task_titles", [])
         t.setdefault("period", "")
-        t.setdefault("subcategory", "[Code][BE]")
+
+        # ✅ subcategory：文字列化 → "|"除去 → 許可リスト以外はBEへ矯正
+        sub = t.get("subcategory") or "[Code][BE]"
+        sub = str(sub).strip()
+
+        # 例: "[Code][BE]|[Doc]" → "[Code][BE]"
+        if "|" in sub:
+            sub = sub.split("|", 1)[0].strip()
+
+        if not sub:
+            sub = "[Code][BE]"
+
+        # 例: "[Code][Validation]" などはBEへ落とす
+        if sub not in ALLOWED_SUBCATS:
+            sub = "[Code][BE]"
+
+        t["subcategory"] = sub
 
         # estimate_hours 最終防衛（1-4に丸める）
         try:
@@ -95,86 +78,79 @@ def _normalize_tasks(tasks: Any, max_tasks_per_ac: int) -> Dict[str, Any]:
 
         fixed.append(t)
 
-    return {"tasks": fixed[:max_tasks_per_ac]}
+    return {"tasks": fixed[:max_tasks_i]}
 
 
-def generate_from_plan(
-    model: str,
-    ac_text: str,
-    plan: Dict[str, Any],
-    max_tasks_per_ac: int,
-) -> Dict[str, Any]:
-    messages = [
-        {"role": "system", "content": GEN_PROMPT},
-        {
-            "role": "user",
-            "content": f"AC: {ac_text}\nPlan JSON:\n{plan}\nMax tasks: {max_tasks_per_ac}",
-        },
-    ]
-    out = call_llm_json(model=model, messages=messages, temperature=0.1, max_tokens=1800)
-    return _normalize_tasks(out.get("tasks"), max_tasks_per_ac)
+def generate_tasks(model: str, ac_text: str, plan: Dict[str, Any], max_tasks: int) -> Dict[str, Any]:
+    plan_json = json.dumps(plan, ensure_ascii=False, indent=2)
+    out = call_llm_json(
+        model=model,
+        messages=[
+            {"role": "system", "content": GEN_SYSTEM},
+            {"role": "user", "content": GEN_USER.format(ac_text=ac_text, plan_json=plan_json, max_tasks=max_tasks)},
+        ],
+        temperature=0.1,
+        max_tokens=1800,
+    )
+    return _normalize_tasks(out.get("tasks", []), max_tasks=max_tasks)
 
 
-def repair_tasks(
-    model: str,
-    ac_text: str,
-    tasks_obj: Dict[str, Any],
-    issues: List[str],
-    max_tasks_per_ac: int,
-) -> Dict[str, Any]:
-    messages = [
-        {"role": "system", "content": REPAIR_PROMPT},
-        {
-            "role": "user",
-            "content": (
-                f"AC: {ac_text}\n"
-                f"Issues:\n- " + "\n- ".join([str(x) for x in issues]) + "\n\n"
-                f"Current tasks JSON:\n{tasks_obj}\n"
-                f"Max tasks: {max_tasks_per_ac}"
-            ),
-        },
-    ]
-    out = call_llm_json(model=model, messages=messages, temperature=0.1, max_tokens=1800)
-    return _normalize_tasks(out.get("tasks"), max_tasks_per_ac)
+def repair_tasks(model: str, issues: List[str], tasks_obj: Dict[str, Any], max_tasks: int) -> Dict[str, Any]:
+    issues_text = "\n".join([f"- {x}" for x in issues])
+    tasks_json = json.dumps(tasks_obj, ensure_ascii=False, indent=2)
+    out = call_llm_json(
+        model=model,
+        messages=[
+            {"role": "system", "content": REPAIR_SYSTEM},
+            {"role": "user", "content": REPAIR_USER.format(
+                issues_text=issues_text,
+                tasks_json=tasks_json,
+                max_tasks=max_tasks
+            )},
+        ],
+        temperature=0.1,
+        max_tokens=1800,
+    )
+    return _normalize_tasks(out.get("tasks", []), max_tasks=max_tasks)
 
 
 def run_pipeline(
     *,
     model: str,
     acceptance_criteria: List[str],
-    max_tasks_per_ac: int = 6,
+    max_tasks_per_ac: int,
     max_repairs: int = 1,
+    start_ac_index: int = 1,  # ✅ part実行でAC番号ズレない
 ) -> Dict[str, Any]:
     items: List[Dict[str, Any]] = []
 
-    for idx, ac in enumerate(acceptance_criteria, start=1):
+    for offset, ac in enumerate(acceptance_criteria, start=0):
+        ac_index = start_ac_index + offset  # ✅ 元のAC番号で出す
         try:
-            plan = plan_one_ac(model, ac)
-            gen = generate_from_plan(model, ac, plan, max_tasks_per_ac=max_tasks_per_ac)
+            plan = plan_one_ac(model, ac, max_tasks=max_tasks_per_ac)
+            gen = generate_tasks(model, ac, plan, max_tasks=max_tasks_per_ac)
 
-            # ★ここが変更点：validate_result ではなく validate_tasks
-            ok, issues = validate_tasks(gen, max_tasks_per_ac=max_tasks_per_ac)
-
+            ok, issues = validate_tasks_obj(gen, max_tasks=max_tasks_per_ac)
             repairs = 0
             while (not ok) and repairs < max_repairs:
-                gen = repair_tasks(model, ac, gen, issues, max_tasks_per_ac=max_tasks_per_ac)
-                ok, issues = validate_tasks(gen, max_tasks_per_ac=max_tasks_per_ac)
+                gen = repair_tasks(model, issues, gen, max_tasks=max_tasks_per_ac)
+                ok, issues = validate_tasks_obj(gen, max_tasks=max_tasks_per_ac)
                 repairs += 1
 
             items.append(
                 {
-                    "ac_index": idx,
+                    "ac_index": ac_index,
                     "ac_text": ac,
+                    "max_tasks": int(max_tasks_per_ac),
                     "plan": plan,
                     "validate": {"pass": bool(ok), "issues": issues},
-                    "tasks": gen.get("tasks", [])[:max_tasks_per_ac],
+                    "tasks": gen.get("tasks", [])[: int(max_tasks_per_ac)],
                 }
             )
-
         except Exception as e:
             items.append(
                 {
-                    "ac_index": idx,
+                    "ac_index": ac_index,
                     "ac_text": ac,
                     "error": f"{type(e).__name__}: {e}",
                     "tasks": [],

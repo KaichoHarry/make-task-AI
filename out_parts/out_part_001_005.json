@@ -1,0 +1,365 @@
+{
+  "meta": {
+    "generated_at": "2026-02-03 12:59:51",
+    "model": "gpt-4o-mini",
+    "score": 40,
+    "max_tasks_per_ac": 5,
+    "max_repairs": 1,
+    "range": {
+      "start": 1,
+      "end": 5,
+      "total": 15
+    },
+    "input": "tests/fixtures/login_us001.json"
+  },
+  "items": [
+    {
+      "ac_index": 1,
+      "ac_text": "Authentication via email and password.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Email and Password Authentication",
+            "surface": "api|validation|util",
+            "what_to_change": "auth module, login endpoint, validation logic",
+            "acceptance_checks": [
+              "User can log in with valid email and password",
+              "User receives error for invalid credentials"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          },
+          {
+            "title": "Add Unit Tests for Authentication",
+            "surface": "test",
+            "what_to_change": "auth module tests",
+            "acceptance_checks": [
+              "All authentication tests pass",
+              "Edge cases are covered"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Email and Password Authentication"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Email and Password Authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a secure authentication system using email and password.\nChanges: Update the auth module, login endpoint, and validation logic to support email and password authentication.\nAcceptance checks: User can log in with valid email and password; User receives error for invalid credentials."
+        },
+        {
+          "title": "Add Unit Tests for Authentication",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Email and Password Authentication"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the authentication functionality is reliable through testing.\nChanges: Create and run unit tests for the auth module to cover various scenarios.\nAcceptance checks: All authentication tests pass; Edge cases are covered."
+        }
+      ]
+    },
+    {
+      "ac_index": 2,
+      "ac_text": "Email address must be unique within the system.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement email uniqueness validation",
+            "surface": "validation",
+            "what_to_change": "User registration and update validation logic",
+            "acceptance_checks": [
+              "Email validation logic checks for uniqueness",
+              "Validation error message is returned for duplicate emails"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update user database schema for email uniqueness",
+            "surface": "db",
+            "what_to_change": "User table to add unique constraint on email column",
+            "acceptance_checks": [
+              "Database schema reflects unique constraint on email",
+              "No duplicate emails can be inserted into the database"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Create tests for email uniqueness validation",
+            "surface": "test",
+            "what_to_change": "Unit tests for user registration and update scenarios",
+            "acceptance_checks": [
+              "Tests cover cases for unique and duplicate emails",
+              "All tests pass successfully"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement email uniqueness validation"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement email uniqueness validation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that email addresses are unique during user registration and updates.\nChanges: Update the user registration and update validation logic to check for email uniqueness.\nAcceptance checks: Email validation logic checks for uniqueness; Validation error message is returned for duplicate emails."
+        },
+        {
+          "title": "Update user database schema for email uniqueness",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Modify the user database schema to enforce email uniqueness.\nChanges: Add a unique constraint on the email column in the user table.\nAcceptance checks: Database schema reflects unique constraint on email; No duplicate emails can be inserted into the database."
+        },
+        {
+          "title": "Create tests for email uniqueness validation",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email uniqueness validation"
+          ],
+          "period": "",
+          "description": "Goal: Ensure that the email uniqueness validation works correctly.\nChanges: Develop unit tests for user registration and update scenarios focusing on email uniqueness.\nAcceptance checks: Tests cover cases for unique and duplicate emails; All tests pass successfully."
+        }
+      ]
+    },
+    {
+      "ac_index": 3,
+      "ac_text": "Implement email format validation.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Email Format Validation",
+            "surface": "validation",
+            "what_to_change": "email validation module",
+            "acceptance_checks": [
+              "Validation correctly identifies valid email formats",
+              "Validation correctly rejects invalid email formats"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Write Unit Tests for Email Validation",
+            "surface": "test",
+            "what_to_change": "email validation test suite",
+            "acceptance_checks": [
+              "All test cases for valid emails pass",
+              "All test cases for invalid emails pass"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Email Format Validation"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Email Format Validation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a module to validate email formats.\nChanges: Update the email validation module to include regex checks for valid and invalid email formats.\nAcceptance checks: Validation correctly identifies valid email formats; Validation correctly rejects invalid email formats."
+        },
+        {
+          "title": "Write Unit Tests for Email Validation",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Email Format Validation"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the email validation module works as expected.\nChanges: Create a test suite for the email validation module covering various valid and invalid email formats.\nAcceptance checks: All test cases for valid emails pass; All test cases for invalid emails pass."
+        }
+      ]
+    },
+    {
+      "ac_index": 4,
+      "ac_text": "Corporate domain restrictions must be configurable.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Configurable Domain Restrictions",
+            "surface": "api|util|validation",
+            "what_to_change": "DomainRestrictionConfig module, API endpoint for updating restrictions",
+            "acceptance_checks": [
+              "Domain restrictions can be updated via API",
+              "Validation checks are in place for domain formats"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Update Documentation for Domain Restrictions",
+            "surface": "docs",
+            "what_to_change": "API documentation for domain restrictions configuration",
+            "acceptance_checks": [
+              "Documentation includes examples of how to configure domain restrictions",
+              "All endpoints related to domain restrictions are documented"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Configurable Domain Restrictions"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Configurable Domain Restrictions",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enable the configuration of corporate domain restrictions via an API.\nChanges: Update the DomainRestrictionConfig module and create an API endpoint for updating restrictions.\nAcceptance checks: Domain restrictions can be updated via API; Validation checks are in place for domain formats."
+        },
+        {
+          "title": "Update Documentation for Domain Restrictions",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Configurable Domain Restrictions"
+          ],
+          "period": "",
+          "description": "Goal: Ensure that the API documentation reflects the new domain restrictions configuration.\nChanges: Update API documentation to include examples and details for domain restrictions configuration.\nAcceptance checks: Documentation includes examples of how to configure domain restrictions; All endpoints related to domain restrictions are documented."
+        }
+      ]
+    },
+    {
+      "ac_index": 5,
+      "ac_text": "Authentication fails for non-existent email addresses.",
+      "max_tasks": 5,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement email existence check in authentication",
+            "surface": "api|validation",
+            "what_to_change": "Authentication service endpoint",
+            "acceptance_checks": [
+              "Return error message for non-existent email",
+              "Ensure no authentication occurs for non-existent email"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update authentication tests for non-existent email",
+            "surface": "test",
+            "what_to_change": "Authentication test suite",
+            "acceptance_checks": [
+              "Test case for non-existent email returns correct error",
+              "Test case for valid email still authenticates correctly"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement email existence check in authentication"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement email existence check in authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that authentication fails for non-existent email addresses.\nChanges: Update the authentication service endpoint to check for email existence before proceeding with authentication.\nAcceptance checks: Return error message for non-existent email; Ensure no authentication occurs for non-existent email."
+        },
+        {
+          "title": "Update authentication tests for non-existent email",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement email existence check in authentication"
+          ],
+          "period": "",
+          "description": "Goal: Validate the authentication process with respect to non-existent email addresses.\nChanges: Update the authentication test suite to include test cases for non-existent emails.\nAcceptance checks: Test case for non-existent email returns correct error; Test case for valid email still authenticates correctly."
+        }
+      ]
+    }
+  ]
+}
