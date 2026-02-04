@@ -1,0 +1,1174 @@
+{
+  "items": [
+    {
+      "ac_index": 1,
+      "ac_text": "Customer search is only possible for authenticated users.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Authentication Check for Customer Search",
+            "surface": "api|validation",
+            "what_to_change": "Customer search API endpoint",
+            "acceptance_checks": [
+              "Authenticated users can access customer search",
+              "Unauthenticated users receive an error message"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          },
+          {
+            "title": "Update Documentation for Customer Search Authentication",
+            "surface": "docs",
+            "what_to_change": "API documentation for customer search endpoint",
+            "acceptance_checks": [
+              "Documentation reflects authentication requirement",
+              "Examples include authenticated and unauthenticated scenarios"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement Authentication Check for Customer Search"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Authentication Check for Customer Search",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that only authenticated users can access the customer search API.\nChanges: Modify the customer search API endpoint to include an authentication check.\nAcceptance checks: Authenticated users can access customer search; Unauthenticated users receive an error message."
+        },
+        {
+          "title": "Update Documentation for Customer Search Authentication",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Authentication Check for Customer Search"
+          ],
+          "period": "",
+          "description": "Goal: Update the API documentation to reflect the new authentication requirement for customer search.\nChanges: Revise the API documentation for the customer search endpoint to include authentication details.\nAcceptance checks: Documentation reflects authentication requirement; Examples include authenticated and unauthenticated scenarios."
+        }
+      ]
+    },
+    {
+      "ac_index": 2,
+      "ac_text": "Roles without permissions cannot view the customer list.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Role-Based Access Control for Customer List",
+            "surface": "api|validation|test",
+            "what_to_change": "CustomerList API endpoint, validation logic for user roles",
+            "acceptance_checks": [
+              "Roles without permissions receive a 403 Forbidden response",
+              "Roles with permissions can access the customer list"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Role-Based Access Control for Customer List",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure that only authorized roles can access the customer list.\nChanges: Update the CustomerList API endpoint and validation logic to enforce role-based access control.\nAcceptance checks: 1. Roles without permissions receive a 403 Forbidden response. 2. Roles with permissions can access the customer list."
+        }
+      ]
+    },
+    {
+      "ac_index": 3,
+      "ac_text": "Partial match search by customer name is possible.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Partial Match Search for Customer Name",
+            "surface": "api|util|test",
+            "what_to_change": "customer search API endpoint, search utility function, and related tests",
+            "acceptance_checks": [
+              "API returns results for partial matches",
+              "Existing tests pass",
+              "New tests cover partial match functionality"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Partial Match Search for Customer Name",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance the customer search functionality to support partial matches.\nChanges: Update the customer search API endpoint and the search utility function to allow for partial name matches. Additionally, create new tests to validate this functionality and ensure existing tests continue to pass.\nAcceptance checks: API returns results for partial matches, existing tests pass, new tests cover partial match functionality."
+        }
+      ]
+    },
+    {
+      "ac_index": 4,
+      "ac_text": "Search by email address is possible.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Email Search Functionality",
+            "surface": "api",
+            "what_to_change": "Add search endpoint to user API for email address",
+            "acceptance_checks": [
+              "Email search returns correct user data",
+              "Handles invalid email input gracefully"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Create Tests for Email Search",
+            "surface": "test",
+            "what_to_change": "Add unit and integration tests for email search functionality",
+            "acceptance_checks": [
+              "All tests pass",
+              "Tests cover valid and invalid email scenarios"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Email Search Functionality"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Email Search Functionality",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Add a search endpoint to the user API for email address.\nChanges: Implement the logic to search users by their email addresses in the backend.\nAcceptance checks: Email search returns correct user data; Handles invalid email input gracefully."
+        },
+        {
+          "title": "Create Tests for Email Search",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Email Search Functionality"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the email search functionality is reliable.\nChanges: Add unit and integration tests for the email search functionality.\nAcceptance checks: All tests pass; Tests cover valid and invalid email scenarios."
+        }
+      ]
+    },
+    {
+      "ac_index": 5,
+      "ac_text": "Search by phone number is possible.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Phone Number Search API",
+            "surface": "api",
+            "what_to_change": "Add endpoint for searching by phone number in the existing user API",
+            "acceptance_checks": [
+              "API returns correct user data for valid phone numbers",
+              "API handles invalid phone numbers gracefully"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Add Validation for Phone Number Input",
+            "surface": "validation",
+            "what_to_change": "Implement validation logic for phone number format in the search API",
+            "acceptance_checks": [
+              "Validation rejects improperly formatted phone numbers",
+              "Validation accepts correctly formatted phone numbers"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Phone Number Search API"
+            ]
+          },
+          {
+            "title": "Write Tests for Phone Number Search Functionality",
+            "surface": "test",
+            "what_to_change": "Create unit and integration tests for the phone number search API and validation",
+            "acceptance_checks": [
+              "All tests pass successfully",
+              "Edge cases are covered in tests"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Phone Number Search API",
+              "Add Validation for Phone Number Input"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Phone Number Search API",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Add an endpoint for searching by phone number in the existing user API.\nChanges: Implement the API endpoint and ensure it retrieves user data based on phone number input.\nAcceptance checks: API returns correct user data for valid phone numbers; API handles invalid phone numbers gracefully."
+        },
+        {
+          "title": "Add Validation for Phone Number Input and Write Tests",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Phone Number Search API"
+          ],
+          "period": "",
+          "description": "Goal: Implement validation logic for phone number format in the search API and create tests for the functionality.\nChanges: Add validation to ensure only correctly formatted phone numbers are accepted and write unit and integration tests for both the API and validation logic.\nAcceptance checks: Validation rejects improperly formatted phone numbers; Validation accepts correctly formatted phone numbers; All tests pass successfully; Edge cases are covered in tests."
+        }
+      ]
+    },
+    {
+      "ac_index": 6,
+      "ac_text": "Address filtering by country and prefecture is possible.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Country and Prefecture Filtering Logic",
+            "surface": "api|validation",
+            "what_to_change": "filtering logic in the API endpoint for data retrieval",
+            "acceptance_checks": [
+              "Filtering by country works as expected",
+              "Filtering by prefecture works as expected"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Update API Documentation for Filtering Features",
+            "surface": "docs",
+            "what_to_change": "API documentation to include new filtering parameters",
+            "acceptance_checks": [
+              "Documentation reflects new filtering options",
+              "Examples in documentation are accurate"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement Country and Prefecture Filtering Logic"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Country and Prefecture Filtering Logic",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement filtering logic in the API endpoint for data retrieval based on country and prefecture.\nChanges: Update the API to accept filtering parameters for country and prefecture.\nAcceptance checks: Filtering by country works as expected; Filtering by prefecture works as expected."
+        },
+        {
+          "title": "Update API Documentation for Filtering Features",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Country and Prefecture Filtering Logic"
+          ],
+          "period": "",
+          "description": "Goal: Update the API documentation to include new filtering parameters for country and prefecture.\nChanges: Add sections for the new filtering options and provide examples.\nAcceptance checks: Documentation reflects new filtering options; Examples in documentation are accurate."
+        }
+      ]
+    },
+    {
+      "ac_index": 7,
+      "ac_text": "Filtering by customer status (Active/Dormant/Suspended) is possible.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Customer Status Filtering",
+            "surface": "api|ui",
+            "what_to_change": "Customer API endpoint and UI filter component",
+            "acceptance_checks": [
+              "API returns customers filtered by status",
+              "UI allows selection of customer status"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Add Unit Tests for Customer Status Filtering",
+            "surface": "test",
+            "what_to_change": "Unit tests for the customer filtering logic",
+            "acceptance_checks": [
+              "Tests cover all customer status scenarios",
+              "Tests pass successfully"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Customer Status Filtering"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Customer Status Filtering",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enable filtering of customers by their status (Active/Dormant/Suspended).\nChanges: Update the Customer API endpoint to support status filtering and modify the UI filter component to allow selection of customer status.\nAcceptance checks: API returns customers filtered by status; UI allows selection of customer status."
+        },
+        {
+          "title": "Add Unit Tests for Customer Status Filtering",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Customer Status Filtering"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the customer filtering logic is robust and reliable.\nChanges: Create unit tests that cover all customer status scenarios for the filtering logic.\nAcceptance checks: Tests cover all customer status scenarios; Tests pass successfully."
+        }
+      ]
+    },
+    {
+      "ac_index": 8,
+      "ac_text": "Multiple search conditions can be specified simultaneously (AND condition).",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement AND condition for search functionality",
+            "surface": "api|util|test",
+            "what_to_change": "search API endpoint, search utility functions, and related test cases",
+            "acceptance_checks": [
+              "Search results match all specified conditions",
+              "Unit tests cover multiple conditions"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement AND condition for search functionality",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance the search functionality to support multiple conditions using AND logic.\nChanges: Update the search API endpoint and utility functions to handle multiple search conditions. Modify existing test cases to ensure coverage for the new functionality.\nAcceptance checks: Search results match all specified conditions; Unit tests cover multiple conditions."
+        }
+      ]
+    },
+    {
+      "ac_index": 9,
+      "ac_text": "Pagination functionality must be implemented.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Pagination Logic",
+            "surface": "api|util",
+            "what_to_change": "Pagination logic in API endpoints",
+            "acceptance_checks": [
+              "Pagination works for all API responses",
+              "Pagination parameters are validated"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Add Unit Tests for Pagination",
+            "surface": "test",
+            "what_to_change": "Unit tests for pagination functionality",
+            "acceptance_checks": [
+              "All pagination edge cases are covered",
+              "Tests pass successfully"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Pagination Logic"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Pagination Logic",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement pagination functionality in API endpoints.\nChanges: Update API logic to handle pagination parameters and return paginated results.\nAcceptance checks: Pagination works for all API responses; Pagination parameters are validated."
+        },
+        {
+          "title": "Add Unit Tests for Pagination",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Pagination Logic"
+          ],
+          "period": "",
+          "description": "Goal: Ensure pagination functionality is thoroughly tested.\nChanges: Create unit tests covering all edge cases for pagination.\nAcceptance checks: All pagination edge cases are covered; Tests pass successfully."
+        }
+      ]
+    },
+    {
+      "ac_index": 10,
+      "ac_text": "The number of items per page is configurable.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Configurable Items Per Page",
+            "surface": "api|ui",
+            "what_to_change": "Update pagination API endpoint and UI component to accept configurable items per page",
+            "acceptance_checks": [
+              "API returns correct number of items based on configuration",
+              "UI reflects the configurable items per page setting"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          },
+          {
+            "title": "Add Validation for Items Per Page Configuration",
+            "surface": "validation|test",
+            "what_to_change": "Implement validation logic for items per page configuration and create corresponding unit tests",
+            "acceptance_checks": [
+              "Validation correctly rejects invalid configuration values",
+              "Unit tests cover all validation scenarios"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Configurable Items Per Page"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Configurable Items Per Page",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enable pagination to allow configurable items per page.\nChanges: Update pagination API endpoint and UI component to accept configurable items per page.\nAcceptance checks: API returns correct number of items based on configuration; UI reflects the configurable items per page setting."
+        },
+        {
+          "title": "Add Validation for Items Per Page Configuration",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Configurable Items Per Page"
+          ],
+          "period": "",
+          "description": "Goal: Ensure only valid configuration values are accepted for items per page.\nChanges: Implement validation logic for items per page configuration and create corresponding unit tests.\nAcceptance checks: Validation correctly rejects invalid configuration values; Unit tests cover all validation scenarios."
+        }
+      ]
+    },
+    {
+      "ac_index": 11,
+      "ac_text": "SQL injection countermeasures must be implemented.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement SQL Injection Prevention in API",
+            "surface": "api|validation",
+            "what_to_change": "API endpoints that interact with the database",
+            "acceptance_checks": [
+              "All API endpoints are protected against SQL injection",
+              "Input validation is implemented for all user inputs"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          },
+          {
+            "title": "Update Documentation for SQL Injection Countermeasures",
+            "surface": "docs",
+            "what_to_change": "API documentation to include SQL injection prevention measures",
+            "acceptance_checks": [
+              "Documentation reflects the new security measures",
+              "Examples of safe API usage are provided"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement SQL Injection Prevention in API"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement SQL Injection Prevention in API",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance the security of API endpoints against SQL injection attacks.\nChanges: Implement input validation and parameterized queries for all API endpoints that interact with the database.\nAcceptance checks: All API endpoints are protected against SQL injection; Input validation is implemented for all user inputs."
+        },
+        {
+          "title": "Update Documentation for SQL Injection Countermeasures",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement SQL Injection Prevention in API"
+          ],
+          "period": "",
+          "description": "Goal: Ensure API documentation is up-to-date with security measures.\nChanges: Update the API documentation to include SQL injection prevention measures and provide examples of safe API usage.\nAcceptance checks: Documentation reflects the new security measures; Examples of safe API usage are provided."
+        }
+      ]
+    },
+    {
+      "ac_index": 12,
+      "ac_text": "Input values must be sanitized (Anti-XSS).",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Input Sanitization",
+            "surface": "util|api|validation",
+            "what_to_change": "input handling modules and API endpoints",
+            "acceptance_checks": [
+              "Input values are sanitized against XSS attacks",
+              "Sanitization functions are tested and validated"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Update Documentation for Input Sanitization",
+            "surface": "docs",
+            "what_to_change": "API documentation and developer guidelines",
+            "acceptance_checks": [
+              "Documentation reflects the new sanitization process",
+              "Examples of sanitized inputs are included"
+            ],
+            "estimate_hours": 1,
+            "dependencies": [
+              "Implement Input Sanitization"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Input Sanitization",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure all input values are sanitized to prevent XSS attacks.\nChanges: Update input handling modules and API endpoints to include sanitization functions.\nAcceptance checks: Input values are sanitized against XSS attacks; Sanitization functions are tested and validated."
+        },
+        {
+          "title": "Update Documentation for Input Sanitization",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 1,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Input Sanitization"
+          ],
+          "period": "",
+          "description": "Goal: Provide clear documentation on the new input sanitization process.\nChanges: Update API documentation and developer guidelines to reflect the new sanitization process.\nAcceptance checks: Documentation reflects the new sanitization process; Examples of sanitized inputs are included."
+        }
+      ]
+    },
+    {
+      "ac_index": 13,
+      "ac_text": "Target response time for search API is within 500ms.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Optimize Search API Performance",
+            "surface": "api",
+            "what_to_change": "search API endpoint implementation",
+            "acceptance_checks": [
+              "Response time is measured and confirmed to be under 500ms",
+              "Performance tests are updated to reflect new benchmarks"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          },
+          {
+            "title": "Implement Caching for Search Results",
+            "surface": "util",
+            "what_to_change": "caching mechanism for search results",
+            "acceptance_checks": [
+              "Caching is implemented and configured",
+              "Response time for cached results is under 500ms"
+            ],
+            "estimate_hours": 3,
+            "dependencies": [
+              "Optimize Search API Performance"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Optimize Search API Performance",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Improve the performance of the search API.\nChanges: Refactor the search API endpoint implementation to enhance efficiency.\nAcceptance checks: Response time is measured and confirmed to be under 500ms; Performance tests are updated to reflect new benchmarks."
+        },
+        {
+          "title": "Implement Caching for Search Results",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [
+            "Optimize Search API Performance"
+          ],
+          "period": "",
+          "description": "Goal: Reduce response time for search results.\nChanges: Implement a caching mechanism for search results to improve performance.\nAcceptance checks: Caching is implemented and configured; Response time for cached results is under 500ms."
+        }
+      ]
+    },
+    {
+      "ac_index": 14,
+      "ac_text": "Personal information masking settings can be applied to search results.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Personal Information Masking Logic",
+            "surface": "util|api|validation",
+            "what_to_change": "masking logic in search results processing",
+            "acceptance_checks": [
+              "Masking settings are applied correctly to search results",
+              "Unmasked data is not displayed when masking is enabled"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Update API to Support Masking Settings",
+            "surface": "api|validation|test",
+            "what_to_change": "API endpoints for search results to include masking settings",
+            "acceptance_checks": [
+              "API returns search results with applied masking settings",
+              "Validation for masking settings is implemented"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Personal Information Masking Logic"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Personal Information Masking Logic",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement masking logic in search results processing.\nChanges: Update the backend logic to ensure personal information is masked based on user settings.\nAcceptance checks: Masking settings are applied correctly to search results; Unmasked data is not displayed when masking is enabled."
+        },
+        {
+          "title": "Update API to Support Masking Settings",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Personal Information Masking Logic"
+          ],
+          "period": "",
+          "description": "Goal: Update API endpoints for search results to include masking settings.\nChanges: Modify the API to return search results with applied masking settings and implement validation for these settings.\nAcceptance checks: API returns search results with applied masking settings; Validation for masking settings is implemented."
+        }
+      ]
+    },
+    {
+      "ac_index": 15,
+      "ac_text": "Display fields are controlled based on user permissions.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement User Permissions Logic",
+            "surface": "api|validation|ui",
+            "what_to_change": "User permissions middleware and UI components for field display",
+            "acceptance_checks": [
+              "Fields are displayed/hidden based on user roles",
+              "API returns correct field visibility based on permissions"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          },
+          {
+            "title": "Create Unit Tests for Permissions Logic",
+            "surface": "test",
+            "what_to_change": "Unit tests for user permissions logic in API and UI",
+            "acceptance_checks": [
+              "All tests pass for different user roles",
+              "Edge cases for permissions are covered"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement User Permissions Logic"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement User Permissions Logic",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement middleware and UI components to control field display based on user permissions.\nChanges: Update user permissions middleware and modify UI components accordingly.\nAcceptance checks: Fields are displayed/hidden based on user roles; API returns correct field visibility based on permissions."
+        },
+        {
+          "title": "Create Unit Tests for Permissions Logic",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement User Permissions Logic"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the user permissions logic is thoroughly tested.\nChanges: Develop unit tests for the API and UI components related to user permissions.\nAcceptance checks: All tests pass for different user roles; edge cases for permissions are covered."
+        }
+      ]
+    },
+    {
+      "ac_index": 16,
+      "ac_text": "Search history logs must be stored.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Search History Logging",
+            "surface": "util|db|logging_security",
+            "what_to_change": "search history logging module, database schema for logs",
+            "acceptance_checks": [
+              "Search history logs are stored in the database",
+              "Logs can be retrieved for user sessions"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Search History Logging",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a module to log user search history.\nChanges: Update the search history logging module and modify the database schema to accommodate the logs.\nAcceptance checks: Search history logs must be stored in the database and logs can be retrieved for user sessions."
+        }
+      ]
+    },
+    {
+      "ac_index": 17,
+      "ac_text": "Logs include user_id, search conditions, and timestamp.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Logging for User Searches",
+            "surface": "logging_security",
+            "what_to_change": "search logging module",
+            "acceptance_checks": [
+              "Logs include user_id",
+              "Logs include search conditions",
+              "Logs include timestamp"
+            ],
+            "estimate_hours": 2,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Logging for User Searches",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Enhance the security of user searches by implementing a logging mechanism.\nChanges: Modify the search logging module to include user_id, search conditions, and timestamp in the logs.\nAcceptance checks: Verify that logs include user_id, search conditions, and timestamp."
+        }
+      ]
+    },
+    {
+      "ac_index": 18,
+      "ac_text": "Rate limiting is applied to the search API.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Rate Limiting for Search API",
+            "surface": "api",
+            "what_to_change": "search API endpoint",
+            "acceptance_checks": [
+              "Rate limiting is enforced on the search API",
+              "API returns appropriate error message when limit is exceeded"
+            ],
+            "estimate_hours": 3,
+            "dependencies": []
+          },
+          {
+            "title": "Add Unit Tests for Rate Limiting",
+            "surface": "test",
+            "what_to_change": "test cases for search API rate limiting",
+            "acceptance_checks": [
+              "All test cases pass",
+              "Tests cover various rate limit scenarios"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Rate Limiting for Search API"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Rate Limiting for Search API",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement rate limiting on the search API endpoint.\nChanges: Modify the search API to enforce rate limits based on predefined criteria.\nAcceptance checks: Rate limiting is enforced on the search API; API returns appropriate error message when limit is exceeded."
+        },
+        {
+          "title": "Add Unit Tests for Rate Limiting",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Rate Limiting for Search API"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the rate limiting functionality is thoroughly tested.\nChanges: Create unit tests for various scenarios of the search API rate limiting.\nAcceptance checks: All test cases pass; tests cover various rate limit scenarios."
+        }
+      ]
+    },
+    {
+      "ac_index": 19,
+      "ac_text": "API must be REST-compliant.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Ensure REST Compliance for API Endpoints",
+            "surface": "api",
+            "what_to_change": "All existing API endpoints to follow REST principles",
+            "acceptance_checks": [
+              "All endpoints return appropriate HTTP status codes",
+              "Endpoints use correct HTTP methods (GET, POST, PUT, DELETE)"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Ensure REST Compliance for API Endpoints",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Ensure all existing API endpoints adhere to REST principles.\nChanges: Update API endpoints to return appropriate HTTP status codes and use correct HTTP methods (GET, POST, PUT, DELETE).\nAcceptance checks: Verify that all endpoints return the correct HTTP status codes and confirm that each endpoint uses the appropriate HTTP method."
+        }
+      ]
+    },
+    {
+      "ac_index": 20,
+      "ac_text": "Audit logs are stored in tamper-evident storage.",
+      "max_tasks": 3,
+      "plan": {
+        "work_units": [
+          {
+            "title": "Implement Tamper-Evident Storage for Audit Logs",
+            "surface": "util|db",
+            "what_to_change": "Audit log storage mechanism in the logging module",
+            "acceptance_checks": [
+              "Audit logs are stored in a tamper-evident format",
+              "Verify integrity of stored logs"
+            ],
+            "estimate_hours": 4,
+            "dependencies": []
+          },
+          {
+            "title": "Create Tests for Tamper-Evident Audit Log Storage",
+            "surface": "test",
+            "what_to_change": "Unit tests for the new audit log storage functionality",
+            "acceptance_checks": [
+              "All tests pass",
+              "Tests cover tamper-evidence scenarios"
+            ],
+            "estimate_hours": 2,
+            "dependencies": [
+              "Implement Tamper-Evident Storage for Audit Logs"
+            ]
+          }
+        ]
+      },
+      "validate": {
+        "pass": true,
+        "issues": []
+      },
+      "tasks": [
+        {
+          "title": "Implement Tamper-Evident Storage for Audit Logs",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "assignee": "",
+          "related_task_titles": [],
+          "period": "",
+          "description": "Goal: Implement a tamper-evident storage mechanism for audit logs.\nChanges: Update the logging module to store audit logs in a tamper-evident format.\nAcceptance checks: Audit logs are stored in a tamper-evident format; Verify integrity of stored logs."
+        },
+        {
+          "title": "Create Tests for Tamper-Evident Audit Log Storage",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "assignee": "",
+          "related_task_titles": [
+            "Implement Tamper-Evident Storage for Audit Logs"
+          ],
+          "period": "",
+          "description": "Goal: Ensure the new audit log storage functionality is thoroughly tested.\nChanges: Develop unit tests that cover the tamper-evidence scenarios for the audit log storage.\nAcceptance checks: All tests pass; Tests cover tamper-evidence scenarios."
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "generated_at": "2026-02-04 07:37:37",
+    "model": "gpt-4o-mini",
+    "max_repairs": 1,
+    "start": 1,
+    "limit": 0,
+    "score": 50,
+    "max_tasks_per_ac": 3,
+    "batch_size": 5,
+    "ac_count_selected": 20,
+    "ac_count_total": 20,
+    "range": "1-20",
+    "db": "",
+    "saved": 0,
+    "skipped": 0
+  }
+}

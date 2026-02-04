@@ -1,0 +1,11 @@
+{
+  "domain": "Internal Task Management",
+  "persona": "Employee",
+  "action": "I want to create and track my tasks",
+  "reason": "so I can manage progress and meet deadlines",
+  "acceptance_criteria": [
+    "User must be logged in to create a task",
+    "Task has status (Todo/Doing/Done)",
+    "User can edit and delete their own task"
+  ]
+}

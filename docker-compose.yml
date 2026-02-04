@@ -1,11 +1,7 @@
 services:
-  app:
+  api:
     build: .
-    volumes:
-      - .:/app
-    env_file:
-      - .env
     ports:
       - "8000:8000"
-    tty: true  # ← これを追加：コンテナを「対話モード」で維持します
-    stdin_open: true # ← これも追加
+    env_file:
+      - .env

@@ -1,0 +1,10 @@
+.venv
+venv
+__pycache__/
+*.pyc
+.git
+.DS_Store
+out*.json
+run*.log
+src/story_refinement/history_log*
+task_planning.sqlite
