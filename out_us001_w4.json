@@ -1,0 +1,1080 @@
+{
+  "story": {
+    "domain": "Identity and Access Management",
+    "persona": "Corporate Employee",
+    "action": "I want to authenticate into the Business Management System using my secure credentials",
+    "reason": "Ensure security and prevent data leakage/unauthorized operations"
+  },
+  "ac_map": {
+    "AC-001": "Authentication via email and password.",
+    "AC-002": "Email address must be unique within the system.",
+    "AC-003": "Implement email format validation.",
+    "AC-004": "Corporate domain restrictions must be configurable.",
+    "AC-005": "Authentication fails for non-existent email addresses.",
+    "AC-006": "Passwords must be compared using hash values.",
+    "AC-007": "Password comparison must use constant-time algorithms (Anti-timing attack).",
+    "AC-008": "Passwords must be stored using bcrypt or equivalent/stronger algorithms.",
+    "AC-009": "Hashes must include a salt.",
+    "AC-010": "Plain text passwords must not be output to DB, logs, or responses.",
+    "AC-011": "Passwords must be at least 8 characters long.",
+    "AC-012": "Configurable rules for combinations of uppercase, lowercase, numbers, and symbols.",
+    "AC-013": "Password input fields must be masked.",
+    "AC-014": "Account lockout after 5 consecutive failed attempts.",
+    "AC-015": "Lockout duration is configurable (Initial: 30 minutes).",
+    "AC-016": "Locked accounts cannot be authenticated.",
+    "AC-017": "Unlockable only by administrators.",
+    "AC-018": "Security logs generated upon lockout events.",
+    "AC-019": "Brute-force alerts for excessive attempts from a single IP.",
+    "AC-020": "Issue a JWT upon successful authentication.",
+    "AC-021": "JWT must contain user_id, role, and expiration date.",
+    "AC-022": "JWT must be signed.",
+    "AC-023": "Token signature verification is mandatory.",
+    "AC-024": "Invalid or tampered tokens must be rejected.",
+    "AC-025": "JWT expiration is configurable (Initial: 60 minutes).",
+    "AC-026": "Tokens must only be transmitted over HTTPS.",
+    "AC-027": "Secure attribute must be set when using cookies.",
+    "AC-028": "HttpOnly attribute must be set when using cookies.",
+    "AC-029": "SameSite attribute must be set.",
+    "AC-030": "CSRF protection tokens are mandatory.",
+    "AC-031": "Anti-session fixation measures must be implemented.",
+    "AC-032": "Use parameterized queries/ORM against SQL injection.",
+    "AC-033": "Sanitize input values (Anti-XSS).",
+    "AC-034": "Store logs for successful logins.",
+    "AC-035": "Store logs for failed logins.",
+    "AC-036": "Logs include user_id, IP, User-Agent, and timestamp.",
+    "AC-037": "Logs must be stored in tamper-evident storage.",
+    "AC-038": "Log retention period must be configurable.",
+    "AC-039": "Apply rate limiting to the login API.",
+    "AC-040": "Return HTTP 429 when rate limit is exceeded.",
+    "AC-041": "Authentication process must support asynchronous I/O.",
+    "AC-042": "Target response time for login API is within 200ms.",
+    "AC-043": "Error responses must not reveal internal system information.",
+    "AC-044": "Transition to business screens only upon successful authentication.",
+    "AC-045": "Initial screen branching based on role permissions.",
+    "AC-046": "Login state maintained until token expiration.",
+    "AC-047": "Invalidate tokens upon logout.",
+    "AC-048": "Invalidated tokens managed via a blacklist (Redis)."
+  },
+  "grouping": {
+    "groups": [
+      {
+        "group_id": "G01",
+        "ac_ids": [
+          "AC-001",
+          "AC-002",
+          "AC-003",
+          "AC-004",
+          "AC-005",
+          "AC-011",
+          "AC-012",
+          "AC-013"
+        ],
+        "label": "Authentication Basics",
+        "rationale": "These ACs cover the fundamental aspects of user authentication, including email validation and password requirements.",
+        "tags": []
+      },
+      {
+        "group_id": "G02",
+        "ac_ids": [
+          "AC-006",
+          "AC-007",
+          "AC-008",
+          "AC-009",
+          "AC-010",
+          "AC-014",
+          "AC-015",
+          "AC-016",
+          "AC-017"
+        ],
+        "label": "Password Security",
+        "rationale": "This group focuses on the security measures related to password handling and storage.",
+        "tags": []
+      },
+      {
+        "group_id": "G03",
+        "ac_ids": [
+          "AC-020",
+          "AC-021",
+          "AC-022",
+          "AC-023",
+          "AC-024",
+          "AC-025",
+          "AC-026",
+          "AC-027",
+          "AC-028",
+          "AC-029"
+        ],
+        "label": "JWT Management",
+        "rationale": "These ACs pertain to the generation, signing, and validation of JWTs for secure authentication.",
+        "tags": []
+      },
+      {
+        "group_id": "G04",
+        "ac_ids": [
+          "AC-030",
+          "AC-031",
+          "AC-046",
+          "AC-047",
+          "AC-048"
+        ],
+        "label": "Session Security",
+        "rationale": "This group includes measures to protect user sessions and prevent common vulnerabilities.",
+        "tags": []
+      },
+      {
+        "group_id": "G05",
+        "ac_ids": [
+          "AC-034",
+          "AC-035",
+          "AC-036",
+          "AC-038"
+        ],
+        "label": "Logging and Monitoring",
+        "rationale": "These ACs focus on logging successful and failed login attempts for auditing purposes.",
+        "tags": [
+          "log_audit"
+        ]
+      },
+      {
+        "group_id": "G06",
+        "ac_ids": [
+          "AC-018",
+          "AC-019",
+          "AC-032",
+          "AC-033"
+        ],
+        "label": "Security Logging",
+        "rationale": "This group is dedicated to security-related logs, including lockout events and brute-force alerts.",
+        "tags": [
+          "log_security"
+        ]
+      },
+      {
+        "group_id": "G07",
+        "ac_ids": [
+          "AC-039",
+          "AC-040",
+          "AC-037"
+        ],
+        "label": "API Rate Limiting",
+        "rationale": "These ACs ensure that the login API is protected against excessive requests.",
+        "tags": []
+      },
+      {
+        "group_id": "G08",
+        "ac_ids": [
+          "AC-041",
+          "AC-042",
+          "AC-043",
+          "AC-044",
+          "AC-045"
+        ],
+        "label": "Error Handling and Performance",
+        "rationale": "This group addresses error handling and performance requirements for the authentication process.",
+        "tags": []
+      }
+    ],
+    "meta": {
+      "self_check": {
+        "n_acs": 48,
+        "groups_count": 8,
+        "group_sizes": [
+          8,
+          9,
+          10,
+          5,
+          4,
+          4,
+          3,
+          5
+        ],
+        "max_ac_per_group": 10,
+        "min_group_size": 3,
+        "missing_ids": [],
+        "duplicate_ids": [],
+        "unknown_ids": [],
+        "orphan_groups": [],
+        "log_split_ok": true,
+        "relaxations_applied": []
+      },
+      "fallback": false,
+      "repairs_used": 1,
+      "warnings": [],
+      "policy": {
+        "max_ac_per_group": 10,
+        "target_groups": [
+          8,
+          12
+        ],
+        "max_groups": 15,
+        "min_group_size": 3,
+        "log_split": true
+      },
+      "policy_used": {
+        "max_ac_per_group": 10,
+        "target_groups_min": 8,
+        "target_groups_max": 12,
+        "max_groups": 15,
+        "min_group_size": 3
+      }
+    }
+  },
+  "group_results": [
+    {
+      "group_id": "G01",
+      "label": "Authentication Basics",
+      "ac_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-003",
+        "AC-004",
+        "AC-005",
+        "AC-011",
+        "AC-012",
+        "AC-013"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement email and password authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-001"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Enable users to authenticate using their email and password.\nChanges: Create authentication endpoint and logic.\nAcceptance checks: Verify successful login with valid credentials."
+        },
+        {
+          "title": "Ensure unique email addresses in the system",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-002"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Prevent duplicate email addresses during registration.\nChanges: Update database schema and validation logic.\nAcceptance checks: Attempt to register with an existing email and verify failure."
+        },
+        {
+          "title": "Implement email format validation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-003"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Validate email format during registration and login.\nChanges: Add regex validation for email fields.\nAcceptance checks: Test various email formats for acceptance and rejection."
+        },
+        {
+          "title": "Add corporate domain restrictions configuration",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-004"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow configuration of allowed corporate domains.\nChanges: Implement settings for domain restrictions.\nAcceptance checks: Verify login with allowed and disallowed domains."
+        },
+        {
+          "title": "Handle authentication failure for non-existent emails",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-005"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Provide feedback for non-existent email addresses during login.\nChanges: Update authentication logic to check email existence.\nAcceptance checks: Attempt login with a non-registered email and verify error message."
+        },
+        {
+          "title": "Enforce minimum password length requirement",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-011"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure passwords are at least 8 characters long.\nChanges: Add validation for password length during registration.\nAcceptance checks: Test registration with passwords shorter than 8 characters."
+        },
+        {
+          "title": "Implement configurable password complexity rules",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-012"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow configuration of password complexity requirements.\nChanges: Create settings for uppercase, lowercase, numbers, and symbols.\nAcceptance checks: Verify registration with various password combinations."
+        },
+        {
+          "title": "Mask password input fields in UI",
+          "category": "Task",
+          "subcategory": "[Code][FE]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 1,
+          "ac_ids": [
+            "AC-013"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure password fields are masked for security.\nChanges: Update frontend input fields to mask passwords.\nAcceptance checks: Verify that password input is not visible."
+        }
+      ]
+    },
+    {
+      "group_id": "G02",
+      "label": "Password Security",
+      "ac_ids": [
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-010",
+        "AC-014",
+        "AC-015",
+        "AC-016",
+        "AC-017"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement password hashing using bcrypt",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-008"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure passwords are securely hashed.\nChanges: Integrate bcrypt for password hashing.\nAcceptance checks: Verify that passwords are hashed using bcrypt."
+        },
+        {
+          "title": "Add salt to password hashes",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-009"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Enhance password security with salt.\nChanges: Implement salting mechanism for password hashes.\nAcceptance checks: Confirm that all password hashes include a unique salt."
+        },
+        {
+          "title": "Implement constant-time password comparison",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-007"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Prevent timing attacks during password verification.\nChanges: Use constant-time algorithms for password comparison.\nAcceptance checks: Test for timing attack vulnerabilities."
+        },
+        {
+          "title": "Ensure plain text passwords are not logged",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-010"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Protect sensitive data from exposure.\nChanges: Update logging mechanisms to exclude plain text passwords.\nAcceptance checks: Review logs to confirm no plain text passwords are present."
+        },
+        {
+          "title": "Implement account lockout after failed attempts",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-014"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Enhance security against brute-force attacks.\nChanges: Add logic to lock accounts after 5 failed login attempts.\nAcceptance checks: Test account lockout functionality."
+        },
+        {
+          "title": "Make lockout duration configurable",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-015"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow flexibility in lockout duration.\nChanges: Implement configuration for lockout duration.\nAcceptance checks: Verify that lockout duration can be changed in settings."
+        },
+        {
+          "title": "Prevent authentication for locked accounts",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-016"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure locked accounts cannot log in.\nChanges: Add checks to prevent authentication for locked accounts.\nAcceptance checks: Test login attempts for locked accounts."
+        },
+        {
+          "title": "Implement admin unlock functionality for accounts",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-017"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow administrators to unlock accounts.\nChanges: Create admin interface for unlocking accounts.\nAcceptance checks: Verify that admins can unlock locked accounts."
+        },
+        {
+          "title": "Hash password comparison tests",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-006",
+            "AC-007"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure password comparison is secure.\nChanges: Write tests for hashed password comparison.\nAcceptance checks: Confirm tests pass for constant-time comparison."
+        },
+        {
+          "title": "Test account lockout functionality",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-014",
+            "AC-015"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Validate account lockout mechanism.\nChanges: Create tests for lockout after failed attempts.\nAcceptance checks: Ensure tests confirm lockout behavior."
+        }
+      ]
+    },
+    {
+      "group_id": "G03",
+      "label": "JWT Management",
+      "ac_ids": [
+        "AC-020",
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024",
+        "AC-025",
+        "AC-026",
+        "AC-027",
+        "AC-028",
+        "AC-029"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement JWT Issuance on Authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-020"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Issue a JWT upon successful authentication.\nChanges: Implement the logic to generate a JWT after verifying user credentials.\nAcceptance checks: Verify that a JWT is returned upon successful login."
+        },
+        {
+          "title": "Add User Information to JWT",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-021"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure JWT contains necessary user information.\nChanges: Modify JWT payload to include user_id, role, and expiration date.\nAcceptance checks: Validate that the JWT contains the correct user information."
+        },
+        {
+          "title": "Implement JWT Signing Mechanism",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-022"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure JWT is securely signed.\nChanges: Integrate a signing algorithm to sign the JWT.\nAcceptance checks: Verify that the JWT is signed and can be validated."
+        },
+        {
+          "title": "Implement Token Signature Verification",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-023"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Verify the signature of incoming JWTs.\nChanges: Implement middleware to check the signature of the JWT on each request.\nAcceptance checks: Ensure that only valid tokens are accepted."
+        },
+        {
+          "title": "Handle Invalid or Tampered Tokens",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-024"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Reject invalid or tampered tokens.\nChanges: Implement logic to return an error for invalid tokens.\nAcceptance checks: Test with tampered tokens to ensure they are rejected."
+        },
+        {
+          "title": "Configure JWT Expiration Settings",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-025"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow configurable expiration for JWTs.\nChanges: Implement a configuration setting for JWT expiration time.\nAcceptance checks: Verify that the expiration time can be set and is respected."
+        },
+        {
+          "title": "Ensure JWT Transmission Over HTTPS",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-026"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Securely transmit JWTs.\nChanges: Enforce HTTPS for all token transmissions.\nAcceptance checks: Test that tokens are only sent over HTTPS."
+        },
+        {
+          "title": "Set Secure Attribute for Cookies",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-027"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Enhance cookie security.\nChanges: Set the Secure attribute for cookies that store JWTs.\nAcceptance checks: Verify that cookies are marked as Secure."
+        },
+        {
+          "title": "Set HttpOnly Attribute for Cookies",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-028"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Prevent client-side access to cookies.\nChanges: Set the HttpOnly attribute for JWT cookies.\nAcceptance checks: Ensure that cookies cannot be accessed via JavaScript."
+        },
+        {
+          "title": "Set SameSite Attribute for Cookies",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-029"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Mitigate CSRF attacks.\nChanges: Set the SameSite attribute for cookies storing JWTs.\nAcceptance checks: Verify that the SameSite attribute is correctly applied."
+        }
+      ]
+    },
+    {
+      "group_id": "G04",
+      "label": "Session Security",
+      "ac_ids": [
+        "AC-030",
+        "AC-031",
+        "AC-046",
+        "AC-047",
+        "AC-048"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement CSRF Protection Tokens",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-030"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure CSRF protection for user sessions.\nChanges: Implement mandatory CSRF tokens in the authentication flow.\nAcceptance checks: Verify that CSRF tokens are generated and validated correctly."
+        },
+        {
+          "title": "Develop Anti-Session Fixation Measures",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-031"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Prevent session fixation attacks.\nChanges: Implement measures to regenerate session IDs upon login.\nAcceptance checks: Ensure that session IDs change after authentication."
+        },
+        {
+          "title": "Maintain Login State Until Token Expiration",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-046"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure user login state is maintained.\nChanges: Implement logic to keep the session active until the token expires.\nAcceptance checks: Verify that sessions remain active until token expiration."
+        },
+        {
+          "title": "Invalidate Tokens Upon User Logout",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-047"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure tokens are invalidated when a user logs out.\nChanges: Implement token invalidation logic during logout.\nAcceptance checks: Verify that tokens are no longer valid after logout."
+        },
+        {
+          "title": "Manage Invalidated Tokens via Blacklist in Redis",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-048"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Manage invalidated tokens effectively.\nChanges: Implement a blacklist for invalidated tokens using Redis.\nAcceptance checks: Verify that invalidated tokens are stored and checked against the blacklist."
+        }
+      ]
+    },
+    {
+      "group_id": "G05",
+      "label": "Logging and Monitoring",
+      "ac_ids": [
+        "AC-034",
+        "AC-035",
+        "AC-036",
+        "AC-038"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement logging for successful logins",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-034"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To ensure successful login attempts are logged.\nChanges: Implement logging functionality in the authentication module.\nAcceptance checks: Verify that successful login attempts are recorded with the required details."
+        },
+        {
+          "title": "Implement logging for failed logins",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-035"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To ensure failed login attempts are logged.\nChanges: Add logging functionality for failed logins in the authentication module.\nAcceptance checks: Verify that failed login attempts are recorded with the required details."
+        },
+        {
+          "title": "Enhance logs to include user details",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-036"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To include user_id, IP, User-Agent, and timestamp in logs.\nChanges: Modify the logging structure to capture additional user details.\nAcceptance checks: Verify that logs contain all specified user details."
+        },
+        {
+          "title": "Implement configurable log retention period",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-038"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To allow configuration of log retention period.\nChanges: Add a configuration option for log retention in the database.\nAcceptance checks: Verify that the retention period can be set and logs are deleted accordingly."
+        }
+      ]
+    },
+    {
+      "group_id": "G06",
+      "label": "Security Logging",
+      "ac_ids": [
+        "AC-018",
+        "AC-019",
+        "AC-032",
+        "AC-033"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement security logging for lockout events",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-018"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that security logs are generated whenever a lockout event occurs.\nChanges: Add logging functionality to the authentication module.\nAcceptance checks: Verify that logs are created for each lockout event."
+        },
+        {
+          "title": "Set up brute-force alerting mechanism",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-019"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Implement an alerting system for excessive login attempts from a single IP.\nChanges: Integrate alerting logic into the authentication service.\nAcceptance checks: Test that alerts are triggered after a defined number of failed attempts."
+        },
+        {
+          "title": "Implement parameterized queries for SQL interactions",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-032"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Protect against SQL injection by using parameterized queries.\nChanges: Refactor existing SQL queries to use ORM or parameterized syntax.\nAcceptance checks: Conduct security testing to ensure no SQL injection vulnerabilities exist."
+        },
+        {
+          "title": "Sanitize input values to prevent XSS attacks",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-033"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure all input values are sanitized to prevent cross-site scripting (XSS).\nChanges: Implement input validation and sanitization in the authentication module.\nAcceptance checks: Test various input scenarios to confirm that XSS is mitigated."
+        },
+        {
+          "title": "Review and document security logging implementation",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-018"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Provide documentation for the security logging feature.\nChanges: Create a document outlining the logging process and its importance.\nAcceptance checks: Ensure documentation is clear and accessible to the development team."
+        }
+      ]
+    },
+    {
+      "group_id": "G07",
+      "label": "API Rate Limiting",
+      "ac_ids": [
+        "AC-039",
+        "AC-040",
+        "AC-037"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement Rate Limiting for Login API",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-039"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To ensure that the login API is protected against excessive requests.\nChanges: Implement rate limiting logic in the backend for the login endpoint.\nAcceptance checks: Verify that the rate limiting is applied correctly under load."
+        },
+        {
+          "title": "Handle HTTP 429 Response for Rate Limit Exceedance",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-040"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To provide appropriate feedback when the rate limit is exceeded.\nChanges: Modify the response handling to return HTTP 429 status code when the limit is reached.\nAcceptance checks: Ensure that the correct status code is returned and that the response message is clear."
+        },
+        {
+          "title": "Implement Tamper-Evident Logging for Rate Limiting",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-037"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To ensure that logs related to rate limiting are secure and tamper-evident.\nChanges: Set up a logging mechanism that stores logs in a tamper-evident format.\nAcceptance checks: Verify that logs cannot be altered and are stored securely."
+        }
+      ]
+    },
+    {
+      "group_id": "G08",
+      "label": "Error Handling and Performance",
+      "ac_ids": [
+        "AC-041",
+        "AC-042",
+        "AC-043",
+        "AC-044",
+        "AC-045"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement Asynchronous I/O for Authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-041"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Enhance the authentication process to support asynchronous I/O.\nChanges: Refactor the authentication service to utilize asynchronous programming techniques.\nAcceptance checks: Verify that the authentication process can handle multiple requests concurrently without blocking."
+        },
+        {
+          "title": "Optimize Login API Response Time",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-042"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure the login API responds within the target time.\nChanges: Analyze and optimize the current implementation of the login API.\nAcceptance checks: Measure response times and confirm they are consistently under 200ms."
+        },
+        {
+          "title": "Implement Secure Error Handling for Authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-043"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure error responses do not reveal internal system information.\nChanges: Update error handling logic to provide generic error messages.\nAcceptance checks: Test various error scenarios to confirm no sensitive information is exposed."
+        },
+        {
+          "title": "Redirect to Business Screens on Successful Authentication",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-044"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Transition users to business screens only after successful authentication.\nChanges: Implement logic to check authentication status before redirecting.\nAcceptance checks: Verify that users are only redirected upon successful login."
+        },
+        {
+          "title": "Implement Role-Based Initial Screen Branching",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-045"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Branch initial screens based on user role permissions.\nChanges: Develop logic to determine the initial screen based on user roles.\nAcceptance checks: Test with different user roles to ensure correct screen is displayed."
+        },
+        {
+          "title": "Performance Testing for Login API",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-042"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Validate the performance of the login API under load.\nChanges: Create and execute performance tests for the login API.\nAcceptance checks: Ensure the API meets the response time requirements under various load conditions."
+        },
+        {
+          "title": "Documentation for Error Handling Practices",
+          "category": "Task",
+          "subcategory": "[Doc]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-043"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Document the error handling practices for the authentication process.\nChanges: Write comprehensive documentation outlining the error handling strategy.\nAcceptance checks: Review documentation for clarity and completeness."
+        }
+      ]
+    }
+  ],
+  "trace": {
+    "missing_ac_ids": [],
+    "mode": "attach",
+    "changed": false
+  },
+  "meta": {
+    "generated_at": "2026-02-04 14:23:45",
+    "model": "gpt-4o-mini",
+    "score": 50,
+    "max_tasks_per_ac": 3,
+    "max_ac_per_group": 10,
+    "target_groups": [
+      8,
+      12
+    ],
+    "max_groups": 15,
+    "min_group_size": 3,
+    "max_ac_per_task": 2,
+    "max_repairs": 2,
+    "workers": 4,
+    "ac_count_selected": 48,
+    "group_count": 8,
+    "total_tasks": 52,
+    "fallback": false,
+    "fallback_reason": ""
+  }
+}

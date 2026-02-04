@@ -12,6 +12,9 @@ from .grouped_taskgen.taskgen_agent import generate_tasks_for_group
 # ✅ new: failsafe
 from .failsafe_taskgen import ac_map_to_min_tasks
 
+# ✅ new: traceability
+from .traceability import enforce_ac_traceability
+
 
 def _load_json(path: str) -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as f:
@@ -125,7 +128,6 @@ def _make_failsafe_output(
 ) -> Dict[str, Any]:
     tasks = ac_map_to_min_tasks(ac_map)
 
-    # groupingも形は維持（1グループに全部入れる）
     groups = [
         {
             "group_id": "G00",
@@ -145,17 +147,28 @@ def _make_failsafe_output(
         },
     }
 
+    group_results = [
+        {
+            "group_id": "G00",
+            "tasks": tasks,
+            "meta": {"mode": "failsafe"},
+        }
+    ]
+
+    # ✅ traceability (failsafe too)
+    trace = enforce_ac_traceability(
+        ac_map=ac_map,
+        grouping=grouping,
+        group_results=group_results,
+        mode="attach",
+    )
+
     out = {
         "story": story,
         "ac_map": ac_map,
         "grouping": grouping,
-        "group_results": [
-            {
-                "group_id": "G00",
-                "tasks": tasks,
-                "meta": {"mode": "failsafe"},
-            }
-        ],
+        "group_results": group_results,
+        "trace": trace,
         "meta": {
             "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "model": model,
@@ -194,6 +207,9 @@ def main():
     p.add_argument("--max-ac-per-task", type=int, default=2)
     p.add_argument("--max-repairs", type=int, default=2)
 
+    # ✅ new: 並列数
+    p.add_argument("--workers", type=int, default=4)
+
     args = p.parse_args()
 
     input_obj = _load_json(args.input)
@@ -228,8 +244,7 @@ def main():
             min_group_size=tuned["min_group_size"],
             max_repairs=int(args.max_repairs),
         )
-    except Exception as e:
-        # ✅ grouping自体が壊れたら即 failsafe
+    except Exception:
         return _make_failsafe_output(
             story=story,
             ac_map=ac_map,
@@ -259,7 +274,6 @@ def main():
             model=args.model,
         )
 
-    # ✅ cluster_acs が fallback=True の場合も failsafe に落とす（LLMタスク生成を回避）
     if bool((grouping.get("meta") or {}).get("fallback")):
         return _make_failsafe_output(
             story=story,
@@ -270,36 +284,75 @@ def main():
         )
 
     # -------------------------
-    # 2) taskgen per group
+    # 2) taskgen per group (PARALLEL)
     # -------------------------
+    import concurrent.futures
+
     max_tasks_per_ac = max_tasks_from_score(int(args.score))
+    workers = max(1, int(args.workers))
+
+    def _taskgen_one_group(g: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            return generate_tasks_for_group(
+                model=args.model,
+                story=story,
+                group=g,
+                ac_map=ac_map,
+                max_ac_per_task=int(args.max_ac_per_task),
+                max_tasks_per_ac=int(max_tasks_per_ac),
+                max_repairs=int(args.max_repairs),
+            )
+        except Exception as e:
+            g_ac_ids = g.get("ac_ids") or []
+            if not isinstance(g_ac_ids, list):
+                g_ac_ids = []
+            sub_ac_map = {aid: ac_map[aid] for aid in g_ac_ids if aid in ac_map}
+            tasks = ac_map_to_min_tasks(sub_ac_map)
+
+            return {
+                "group_id": g.get("group_id", "G??"),
+                "tasks": tasks,
+                "meta": {
+                    "mode": "failsafe_group",
+                    "error": f"{type(e).__name__}: {e}",
+                },
+            }
+
+    indexed_groups = [(i, g) for i, g in enumerate(groups) if isinstance(g, dict)]
+    results_by_index: Dict[int, Dict[str, Any]] = {}
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+        future_map = {ex.submit(_taskgen_one_group, g): i for i, g in indexed_groups}
+        for fut in concurrent.futures.as_completed(future_map):
+            i = future_map[fut]
+            results_by_index[i] = fut.result()
 
     group_results: List[Dict[str, Any]] = []
     total_tasks = 0
-
-    for g in groups:
-        if not isinstance(g, dict):
-            continue
-        gr = generate_tasks_for_group(
-            model=args.model,
-            story=story,
-            group=g,
-            ac_map=ac_map,
-            max_ac_per_task=int(args.max_ac_per_task),
-            max_tasks_per_ac=int(max_tasks_per_ac),
-            max_repairs=int(args.max_repairs),
-        )
+    for i, _g in indexed_groups:
+        gr = results_by_index.get(i) or {"group_id": "G??", "tasks": [], "meta": {"mode": "empty"}}
         group_results.append(gr)
-
         tasks = gr.get("tasks", [])
         if isinstance(tasks, list):
             total_tasks += len(tasks)
 
+    # ✅ traceability (NEW)
+    trace = enforce_ac_traceability(
+        ac_map=ac_map,
+        grouping=grouping,
+        group_results=group_results,
+        mode="attach",
+    )
+
+    # -------------------------
+    # 3) output
+    # -------------------------
     out: Dict[str, Any] = {
         "story": story,
         "ac_map": ac_map,
         "grouping": grouping,
         "group_results": group_results,
+        "trace": trace,  # ✅ NEW
         "meta": {
             "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "model": args.model,
@@ -311,6 +364,7 @@ def main():
             "min_group_size": int(tuned["min_group_size"]),
             "max_ac_per_task": int(args.max_ac_per_task),
             "max_repairs": int(args.max_repairs),
+            "workers": int(workers),
             "ac_count_selected": len(selected_acs),
             "group_count": len(groups),
             "total_tasks": int(total_tasks),
@@ -325,7 +379,7 @@ def main():
     print(
         f"[OK] wrote: {args.output} "
         f"acs={len(selected_acs)} groups={len(groups)} total_tasks={total_tasks} "
-        f"fallback={out['meta']['fallback']}"
+        f"fallback={out['meta']['fallback']} workers={workers}"
     )
 
 

@@ -1,0 +1,1066 @@
+{
+  "story": {
+    "domain": "Enterprise Workflow System",
+    "persona": "Corporate Manager",
+    "action": "I want to approve applications (expenses, contracts, discounts, etc.) in stages",
+    "reason": "To prevent misprocessing and fraudulent applications, and to maintain internal control"
+  },
+  "ac_map": {
+    "AC-001": "The approval workflow is only available to authenticated users.",
+    "AC-002": "Only roles with application creation authority can register applications.",
+    "AC-003": "Only roles with approval authority can execute approval operations.",
+    "AC-004": "Application IDs are automatically numbered and unique.",
+    "AC-005": "Application types (Expenses/Contracts/Purchase/Special Request, etc.) must be selectable from predefined options.",
+    "AC-006": "The applicant's User ID must always be linked to the application.",
+    "AC-007": "The application date and time are automatically recorded.",
+    "AC-008": "Applications must have a status (Draft/Submitted/Approved/Rejected/Cancelled).",
+    "AC-009": "Only applications in 'Draft' status can be edited.",
+    "AC-010": "Application content is generally uneditable once transitioned to 'Submitted' (except during return/remand).",
+    "AC-011": "Multi-stage approval flows can be configured (e.g., Level 1 -> Level 2 -> Final).",
+    "AC-012": "Approval roles or approval groups can be set for each approval stage.",
+    "AC-013": "Approval order must follow the sequence (next stage cannot proceed if previous is unapproved).",
+    "AC-014": "Approval operations cannot be performed by anyone other than the designated approver.",
+    "AC-015": "The approver's ID and approval timestamp are stored at the time of approval.",
+    "AC-016": "A reason for rejection (max 300 characters) is mandatory when rejected.",
+    "AC-017": "Rejection reasons must be sanitized (Anti-XSS).",
+    "AC-018": "Applicants are notified of returns when an application is rejected.",
+    "AC-019": "A setting is possible to return the status to 'Draft' after a remand.",
+    "AC-020": "Full approval history must be maintained.",
+    "AC-021": "Approval history includes 'Stage/Operation Type/Operating User/Timestamp/Comments'.",
+    "AC-022": "Application content can support variable fields using a JSON structure, etc.",
+    "AC-023": "Transition to 'Submitted' is prohibited if mandatory items are missing.",
+    "AC-024": "Numeric format checks are performed for applications involving monetary amounts.",
+    "AC-025": "Settings allow for the automatic insertion of additional approval stages if a monetary limit is exceeded.",
+    "AC-026": "DB access uses parameterized queries/ORM (Anti-SQL Injection).",
+    "AC-027": "Input values must be sanitized (Anti-XSS).",
+    "AC-028": "Approval operations must be completed within a DB transaction.",
+    "AC-029": "If an exception occurs during approval processing, it must be rolled back.",
+    "AC-030": "Concurrent approval conflicts for the same application must be detected (Optimistic Locking).",
+    "AC-031": "Approval operations fail if there is a version mismatch.",
+    "AC-032": "Event notifications to related systems can be issued upon approval completion.",
+    "AC-033": "Notifications are processed via asynchronous queues.",
+    "AC-034": "Application and approval operation logs are stored as audit logs.",
+    "AC-035": "Audit logs include user_id, operation type, application ID, IP, User-Agent, and timestamp.",
+    "AC-036": "Audit logs are stored in tamper-evident storage.",
+    "AC-037": "The same validation as the UI applies to operations via API.",
+    "AC-038": "The API must be REST-compliant.",
+    "AC-039": "API versioning is managed.",
+    "AC-040": "Rate limiting is applied to the endpoints.",
+    "AC-041": "Appropriate HTTP status codes (400/401/403/404/409/429) are returned for invalid requests.",
+    "AC-042": "Internal exception information is not included in error responses.",
+    "AC-043": "Response formats are unified as JSON.",
+    "AC-044": "Character encoding is unified as UTF-8.",
+    "AC-045": "Dates and times are handled in ISO-8601 format.",
+    "AC-046": "Time zones follow the system configuration.",
+    "AC-047": "The approval list screen only displays data based on user permissions.",
+    "AC-048": "Viewing restrictions for applications from other departments can be applied."
+  },
+  "grouping": {
+    "groups": [
+      {
+        "group_id": "G01",
+        "ac_ids": [
+          "AC-001",
+          "AC-002",
+          "AC-003",
+          "AC-014"
+        ],
+        "label": "Authentication and Authorization",
+        "rationale": "These ACs ensure that only authorized users can access and perform actions on the application workflow.",
+        "tags": []
+      },
+      {
+        "group_id": "G02",
+        "ac_ids": [
+          "AC-004",
+          "AC-005",
+          "AC-006",
+          "AC-008",
+          "AC-009",
+          "AC-010",
+          "AC-023"
+        ],
+        "label": "Application Management",
+        "rationale": "These ACs focus on the creation, status, and content management of applications.",
+        "tags": []
+      },
+      {
+        "group_id": "G03",
+        "ac_ids": [
+          "AC-011",
+          "AC-012",
+          "AC-013",
+          "AC-015",
+          "AC-018",
+          "AC-019",
+          "AC-020",
+          "AC-021"
+        ],
+        "label": "Approval Workflow",
+        "rationale": "These ACs define the multi-stage approval process and the roles involved.",
+        "tags": []
+      },
+      {
+        "group_id": "G04",
+        "ac_ids": [
+          "AC-016",
+          "AC-017",
+          "AC-007"
+        ],
+        "label": "Rejection Handling",
+        "rationale": "These ACs manage the rejection process and the reasons for rejection.",
+        "tags": []
+      },
+      {
+        "group_id": "G05",
+        "ac_ids": [
+          "AC-024",
+          "AC-026",
+          "AC-027",
+          "AC-028",
+          "AC-029",
+          "AC-030",
+          "AC-031"
+        ],
+        "label": "Data Integrity and Security",
+        "rationale": "These ACs ensure that data is validated and protected against common vulnerabilities.",
+        "tags": []
+      },
+      {
+        "group_id": "G06",
+        "ac_ids": [
+          "AC-032",
+          "AC-033",
+          "AC-034",
+          "AC-035",
+          "AC-036"
+        ],
+        "label": "Notification and Logging",
+        "rationale": "These ACs handle notifications and maintain logs for auditing purposes.",
+        "tags": [
+          "log_audit"
+        ]
+      },
+      {
+        "group_id": "G07",
+        "ac_ids": [
+          "AC-037",
+          "AC-038",
+          "AC-039",
+          "AC-040",
+          "AC-041",
+          "AC-042",
+          "AC-043",
+          "AC-044",
+          "AC-045",
+          "AC-046"
+        ],
+        "label": "API Management",
+        "rationale": "These ACs define the requirements for the API, including compliance and error handling.",
+        "tags": []
+      },
+      {
+        "group_id": "G08",
+        "ac_ids": [
+          "AC-047",
+          "AC-048",
+          "AC-022",
+          "AC-025"
+        ],
+        "label": "User Permissions and Restrictions",
+        "rationale": "These ACs ensure that users can only view applications they are permitted to see.",
+        "tags": []
+      }
+    ],
+    "meta": {
+      "self_check": {
+        "n_acs": 48,
+        "groups_count": 8,
+        "group_sizes": [
+          4,
+          7,
+          8,
+          3,
+          7,
+          5,
+          10,
+          4
+        ],
+        "max_ac_per_group": 10,
+        "min_group_size": 3,
+        "missing_ids": [],
+        "duplicate_ids": [],
+        "unknown_ids": [],
+        "orphan_groups": [],
+        "log_split_ok": true,
+        "relaxations_applied": []
+      },
+      "fallback": false,
+      "repairs_used": 1,
+      "warnings": [],
+      "policy": {
+        "max_ac_per_group": 10,
+        "target_groups": [
+          8,
+          12
+        ],
+        "max_groups": 15,
+        "min_group_size": 3,
+        "log_split": true
+      },
+      "policy_used": {
+        "max_ac_per_group": 10,
+        "target_groups_min": 8,
+        "target_groups_max": 12,
+        "max_groups": 15,
+        "min_group_size": 3
+      }
+    }
+  },
+  "group_results": [
+    {
+      "group_id": "G01",
+      "label": "Authentication and Authorization",
+      "ac_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-003",
+        "AC-014"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement user authentication for approval workflow",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-001"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that only authenticated users can access the approval workflow.\nChanges: Implement authentication checks in the approval workflow endpoint.\nAcceptance checks: Verify that unauthenticated users receive an access denied response."
+        },
+        {
+          "title": "Restrict application registration to authorized roles",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-002"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Limit application registration to users with the appropriate role.\nChanges: Add role checks in the application registration logic.\nAcceptance checks: Ensure that users without the required role cannot register applications."
+        },
+        {
+          "title": "Implement approval authority checks",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-003"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that only users with approval authority can perform approval operations.\nChanges: Integrate role validation in the approval operation logic.\nAcceptance checks: Confirm that users without approval authority cannot execute approval actions."
+        },
+        {
+          "title": "Enforce designated approver restrictions",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-014"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Restrict approval operations to designated approvers only.\nChanges: Implement checks to validate the approver's identity before allowing approval actions.\nAcceptance checks: Verify that only designated approvers can perform approval operations."
+        }
+      ]
+    },
+    {
+      "group_id": "G02",
+      "label": "Application Management",
+      "ac_ids": [
+        "AC-004",
+        "AC-005",
+        "AC-006",
+        "AC-008",
+        "AC-009",
+        "AC-010",
+        "AC-023"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement Unique Application ID Generation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-004"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that each application has a unique identifier.\nChanges: Create a function to generate and assign unique IDs to applications.\nAcceptance checks: Verify that IDs are unique and sequential."
+        },
+        {
+          "title": "Create Application Type Selection Options",
+          "category": "Task",
+          "subcategory": "[Code][FE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-005"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow users to select application types from predefined options.\nChanges: Implement a dropdown menu for application types in the UI.\nAcceptance checks: Ensure all predefined options are available and selectable."
+        },
+        {
+          "title": "Link User ID to Applications",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-006"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that each application is linked to the applicant's User ID.\nChanges: Modify the application model to include User ID.\nAcceptance checks: Verify that User ID is correctly associated with each application."
+        },
+        {
+          "title": "Implement Application Status Management",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-008"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Manage the status of applications throughout their lifecycle.\nChanges: Create a status field in the application model and implement status transitions.\nAcceptance checks: Ensure applications can have statuses of Draft, Submitted, Approved, Rejected, and Cancelled."
+        },
+        {
+          "title": "Restrict Editing of Draft Applications",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-009"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow editing only for applications in Draft status.\nChanges: Implement logic to restrict editing based on application status.\nAcceptance checks: Verify that only Draft applications can be edited."
+        },
+        {
+          "title": "Prevent Editing of Submitted Applications",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-010"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that submitted applications cannot be edited.\nChanges: Implement restrictions on editing for applications that are submitted.\nAcceptance checks: Verify that submitted applications are uneditable except during return/remand."
+        },
+        {
+          "title": "Validate Mandatory Items Before Submission",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-023"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure all mandatory items are present before submission.\nChanges: Implement validation checks for mandatory fields.\nAcceptance checks: Verify that submission is blocked if mandatory items are missing."
+        }
+      ]
+    },
+    {
+      "group_id": "G03",
+      "label": "Approval Workflow",
+      "ac_ids": [
+        "AC-011",
+        "AC-012",
+        "AC-013",
+        "AC-015",
+        "AC-018",
+        "AC-019",
+        "AC-020",
+        "AC-021"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement multi-stage approval flow configuration",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-011"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Enable configuration of multi-stage approval flows.\nChanges: Create backend logic to define and manage approval stages.\nAcceptance checks: Verify that multiple stages can be configured and saved."
+        },
+        {
+          "title": "Set approval roles for each stage",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-012"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow setting of approval roles for each stage.\nChanges: Implement functionality to assign roles/groups to approval stages.\nAcceptance checks: Ensure roles can be assigned and retrieved correctly."
+        },
+        {
+          "title": "Enforce approval order in workflow",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-013"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure approval order is maintained.\nChanges: Add checks to prevent proceeding to the next stage if the previous one is unapproved.\nAcceptance checks: Test scenarios where stages cannot proceed without prior approvals."
+        },
+        {
+          "title": "Store approver ID and timestamp",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-015"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Capture approver's ID and approval timestamp.\nChanges: Update database schema to include approver ID and timestamp fields.\nAcceptance checks: Verify data is stored correctly upon approval."
+        },
+        {
+          "title": "Notify applicants of application returns",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-018"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Notify applicants when their application is rejected.\nChanges: Implement notification system for rejected applications.\nAcceptance checks: Ensure notifications are sent correctly upon rejection."
+        },
+        {
+          "title": "Implement return to draft status setting",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-019"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow applications to return to 'Draft' status after remand.\nChanges: Add logic to change application status to 'Draft'.\nAcceptance checks: Test that applications can be returned to draft correctly."
+        },
+        {
+          "title": "Maintain full approval history",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-020"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure full approval history is maintained.\nChanges: Design database tables to store approval history.\nAcceptance checks: Verify that all approval actions are logged correctly."
+        },
+        {
+          "title": "Log approval history details",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-021"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Include detailed information in approval history.\nChanges: Update logging mechanism to capture stage, operation type, user, timestamp, and comments.\nAcceptance checks: Ensure all details are logged accurately."
+        }
+      ]
+    },
+    {
+      "group_id": "G04",
+      "label": "Rejection Handling",
+      "ac_ids": [
+        "AC-016",
+        "AC-017",
+        "AC-007"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement mandatory rejection reason validation",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-016"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that a reason for rejection is provided when an application is rejected.\nChanges: Add validation logic to check the rejection reason length.\nAcceptance checks: Test cases to verify that rejection cannot proceed without a valid reason."
+        },
+        {
+          "title": "Sanitize rejection reasons to prevent XSS",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-017"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Protect the application from XSS attacks via rejection reasons.\nChanges: Implement sanitization logic for rejection reason input.\nAcceptance checks: Verify that all rejection reasons are sanitized before being stored."
+        },
+        {
+          "title": "Record application date and time on rejection",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-007"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Automatically log the date and time when an application is rejected.\nChanges: Modify the rejection process to include timestamp recording.\nAcceptance checks: Ensure that the timestamp is correctly recorded in the database upon rejection."
+        },
+        {
+          "title": "Unit tests for rejection handling features",
+          "category": "Task",
+          "subcategory": "[Test]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-016",
+            "AC-017"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Validate the functionality of rejection handling features through automated tests.\nChanges: Create unit tests for validation and sanitization logic.\nAcceptance checks: Ensure all tests pass and cover edge cases."
+        }
+      ]
+    },
+    {
+      "group_id": "G05",
+      "label": "Data Integrity and Security",
+      "ac_ids": [
+        "AC-024",
+        "AC-026",
+        "AC-027",
+        "AC-028",
+        "AC-029",
+        "AC-030",
+        "AC-031"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement Numeric Format Checks for Monetary Applications",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-024"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that all monetary applications have valid numeric formats.\nChanges: Add validation logic to the application processing module.\nAcceptance checks: Verify that invalid formats are rejected."
+        },
+        {
+          "title": "Integrate Parameterized Queries for Database Access",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-026"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Prevent SQL injection vulnerabilities in database access.\nChanges: Refactor existing queries to use parameterized queries or ORM.\nAcceptance checks: Conduct security testing to ensure no SQL injection is possible."
+        },
+        {
+          "title": "Sanitize Input Values to Prevent XSS",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-027"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure all input values are sanitized to prevent XSS attacks.\nChanges: Implement input sanitization in the application processing logic.\nAcceptance checks: Test with various input scenarios to confirm sanitization."
+        },
+        {
+          "title": "Wrap Approval Operations in Database Transactions",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-028"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that approval operations are atomic and consistent.\nChanges: Implement transaction management around approval operations.\nAcceptance checks: Verify that operations are committed or rolled back correctly."
+        },
+        {
+          "title": "Implement Rollback Mechanism for Approval Exceptions",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-029"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that any exceptions during approval processing trigger a rollback.\nChanges: Add exception handling logic to the approval transaction.\nAcceptance checks: Test scenarios where exceptions occur to confirm rollback."
+        },
+        {
+          "title": "Detect Concurrent Approval Conflicts",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-030"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Prevent concurrent approvals from conflicting on the same application.\nChanges: Implement optimistic locking in the approval process.\nAcceptance checks: Test concurrent approval attempts to ensure conflicts are detected."
+        },
+        {
+          "title": "Handle Version Mismatch in Approval Operations",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-031"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure approval operations fail if there is a version mismatch.\nChanges: Implement version checking logic in the approval process.\nAcceptance checks: Test with version mismatches to confirm failures."
+        }
+      ]
+    },
+    {
+      "group_id": "G06",
+      "label": "Notification and Logging",
+      "ac_ids": [
+        "AC-032",
+        "AC-033",
+        "AC-034",
+        "AC-035",
+        "AC-036"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement event notification system for approval completion",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-032"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To enable event notifications to related systems upon approval completion.\nChanges: Develop a notification service that triggers events after an approval is finalized.\nAcceptance checks: Verify that notifications are sent to the correct systems upon approval."
+        },
+        {
+          "title": "Set up asynchronous queue for notification processing",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-033"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To ensure notifications are processed efficiently.\nChanges: Implement an asynchronous queue to handle notification processing.\nAcceptance checks: Test that notifications are queued and processed without delays."
+        },
+        {
+          "title": "Create audit log storage mechanism",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-034"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To store application and approval operation logs securely.\nChanges: Design and implement a database schema for audit logs.\nAcceptance checks: Ensure logs are stored correctly and can be retrieved."
+        },
+        {
+          "title": "Define audit log structure and fields",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-035"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To standardize the information captured in audit logs.\nChanges: Specify the fields user_id, operation type, application ID, IP, User-Agent, and timestamp in the log structure.\nAcceptance checks: Validate that all fields are captured in the logs."
+        },
+        {
+          "title": "Implement tamper-evident storage for audit logs",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-036"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To ensure audit logs are stored in a tamper-evident manner.\nChanges: Integrate tamper-evident storage solutions for audit logs.\nAcceptance checks: Test that logs cannot be altered without detection."
+        },
+        {
+          "title": "Integrate notification system with audit logging",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-032",
+            "AC-034"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: To link notifications with audit logs for traceability.\nChanges: Modify the notification service to log events in the audit log upon sending notifications.\nAcceptance checks: Verify that each notification sent is logged correctly."
+        }
+      ]
+    },
+    {
+      "group_id": "G07",
+      "label": "API Management",
+      "ac_ids": [
+        "AC-037",
+        "AC-038",
+        "AC-039",
+        "AC-040",
+        "AC-041",
+        "AC-042",
+        "AC-043",
+        "AC-044",
+        "AC-045",
+        "AC-046"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement API Validation Logic",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-037"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure API operations validate inputs as per UI standards.\nChanges: Add validation middleware for API endpoints.\nAcceptance checks: Test cases for validation errors."
+        },
+        {
+          "title": "Ensure REST Compliance for API",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-038"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Make sure the API adheres to REST principles.\nChanges: Review and refactor API endpoints.\nAcceptance checks: Verify compliance with REST guidelines."
+        },
+        {
+          "title": "Implement API Versioning Strategy",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-039"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Manage API versions effectively.\nChanges: Introduce versioning in API routes.\nAcceptance checks: Test versioning with multiple API versions."
+        },
+        {
+          "title": "Set Up Rate Limiting for API Endpoints",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-040"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Protect API from abuse through rate limiting.\nChanges: Implement rate limiting middleware.\nAcceptance checks: Validate rate limiting behavior under load."
+        },
+        {
+          "title": "Implement HTTP Status Code Handling",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-041"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Return appropriate HTTP status codes for errors.\nChanges: Update error handling logic in API.\nAcceptance checks: Test various invalid request scenarios."
+        },
+        {
+          "title": "Sanitize Error Responses",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-042"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure internal exceptions are not exposed in API responses.\nChanges: Modify error response structure.\nAcceptance checks: Verify error responses do not leak sensitive information."
+        },
+        {
+          "title": "Standardize API Response Format to JSON",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-043"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure all API responses are in JSON format.\nChanges: Refactor response handling logic.\nAcceptance checks: Test API responses for JSON format."
+        },
+        {
+          "title": "Unify Character Encoding to UTF-8",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-044"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure all API responses use UTF-8 encoding.\nChanges: Update response headers and content.\nAcceptance checks: Validate encoding in API responses."
+        },
+        {
+          "title": "Implement ISO-8601 Date and Time Handling",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-045"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Handle dates and times in ISO-8601 format.\nChanges: Update date/time serialization in API.\nAcceptance checks: Test date/time formats in API responses."
+        },
+        {
+          "title": "Configure Time Zone Handling in API",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Low",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-046"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure time zones follow system configuration.\nChanges: Implement time zone logic in API.\nAcceptance checks: Validate time zone handling in API responses."
+        }
+      ]
+    },
+    {
+      "group_id": "G08",
+      "label": "User Permissions and Restrictions",
+      "ac_ids": [
+        "AC-047",
+        "AC-048",
+        "AC-022",
+        "AC-025"
+      ],
+      "validate": {
+        "pass": true,
+        "issues": [],
+        "repairs_used": 0
+      },
+      "tasks": [
+        {
+          "title": "Implement User Permissions for Approval List",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-047"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that the approval list screen displays data based on user permissions.\nChanges: Modify the backend logic to filter approval list data according to user roles and permissions.\nAcceptance checks: Verify that users only see applications they are permitted to view."
+        },
+        {
+          "title": "Add Viewing Restrictions for Interdepartmental Applications",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 4,
+          "ac_ids": [
+            "AC-048"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Implement viewing restrictions for applications from other departments.\nChanges: Update the application retrieval logic to enforce viewing restrictions based on department.\nAcceptance checks: Confirm that users cannot view applications from departments they do not belong to."
+        },
+        {
+          "title": "Support Variable Fields in Application Content",
+          "category": "Task",
+          "subcategory": "[Code][DB]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-022"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Enable application content to support variable fields using a JSON structure.\nChanges: Modify the database schema and application logic to handle JSON formatted fields.\nAcceptance checks: Validate that applications can be created and retrieved with variable fields."
+        },
+        {
+          "title": "Implement Automatic Approval Stage Insertion",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "High",
+          "estimate_hours": 3,
+          "ac_ids": [
+            "AC-025"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Allow for automatic insertion of additional approval stages if a monetary limit is exceeded.\nChanges: Add logic to check monetary limits and insert approval stages accordingly.\nAcceptance checks: Test scenarios where monetary limits trigger additional approval stages."
+        },
+        {
+          "title": "Integrate User Permissions with Approval List Screen",
+          "category": "Task",
+          "subcategory": "[Code][BE]",
+          "status": "Todo",
+          "priority": "Medium",
+          "estimate_hours": 2,
+          "ac_ids": [
+            "AC-047",
+            "AC-048"
+          ],
+          "related_task_titles": [],
+          "description": "Goal: Ensure that user permissions and viewing restrictions are integrated into the approval list screen.\nChanges: Combine the logic for user permissions and viewing restrictions in the approval list endpoint.\nAcceptance checks: Verify that the approval list reflects both user permissions and interdepartmental viewing restrictions."
+        }
+      ]
+    }
+  ],
+  "trace": {
+    "missing_ac_ids": [],
+    "mode": "attach",
+    "changed": false
+  },
+  "meta": {
+    "generated_at": "2026-02-04 14:29:02",
+    "model": "gpt-4o-mini",
+    "score": 50,
+    "max_tasks_per_ac": 3,
+    "max_ac_per_group": 10,
+    "target_groups": [
+      8,
+      12
+    ],
+    "max_groups": 15,
+    "min_group_size": 3,
+    "max_ac_per_task": 2,
+    "max_repairs": 2,
+    "workers": 4,
+    "ac_count_selected": 48,
+    "group_count": 8,
+    "total_tasks": 51,
+    "fallback": false,
+    "fallback_reason": ""
+  }
+}
