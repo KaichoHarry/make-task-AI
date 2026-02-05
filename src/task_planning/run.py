@@ -3,40 +3,63 @@ from __future__ import annotations
 
 import argparse
 import json
-import sqlite3
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Tuple
 
-from .pipeline import run_pipeline
+from .grouping.cluster_agent import cluster_acs
+from .grouped_taskgen.taskgen_agent import generate_tasks_for_group
+
+# ✅ new: failsafe
+from .failsafe_taskgen import ac_map_to_min_tasks
+
+# ✅ new: traceability
+from .traceability import enforce_ac_traceability
 
 
-def _load_json(path: str):
+def _load_json(path: str) -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        obj = json.load(f)
+
+    if isinstance(obj, list) and obj and isinstance(obj[0], dict):
+        return obj[0]
+    if isinstance(obj, dict):
+        return obj
+    raise RuntimeError("Input JSON must be object or [object].")
 
 
-def extract_acs(input_obj) -> list[str]:
-    x = input_obj[0] if isinstance(input_obj, list) and input_obj else input_obj
-    if not isinstance(x, dict):
-        return []
+def extract_story_and_acs(input_obj: Dict[str, Any]) -> Tuple[Dict[str, Any], List[str]]:
+    story = {
+        "domain": input_obj.get("domain", ""),
+        "persona": input_obj.get("persona", ""),
+        "action": input_obj.get("action", ""),
+        "reason": input_obj.get("reason", ""),
+    }
 
-    if isinstance(x.get("acceptance_criteria"), list):
-        return [str(s).strip() for s in x["acceptance_criteria"] if str(s).strip()]
+    acs: List[str] = []
+    if isinstance(input_obj.get("acceptance_criteria"), list):
+        for s in input_obj["acceptance_criteria"]:
+            t = str(s).strip()
+            if t:
+                acs.append(t)
 
-    if isinstance(x.get("items"), list):
-        out: list[str] = []
-        for it in x["items"]:
+    if not acs and isinstance(input_obj.get("items"), list):
+        for it in input_obj["items"]:
             if isinstance(it, dict) and it.get("ac_text"):
-                s = str(it["ac_text"]).strip()
-                if s:
-                    out.append(s)
-        return out
+                t = str(it["ac_text"]).strip()
+                if t:
+                    acs.append(t)
 
-    return []
+    return story, acs
+
+
+def build_ac_map(acs: List[str], *, ac_prefix: str = "AC") -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for i, text in enumerate(acs, start=1):
+        out[f"{ac_prefix}-{i:03d}"] = text
+    return out
 
 
 def max_tasks_from_score(score: int) -> int:
-    # 0–40 → 5, 41–70 → 3, 71–90 → 2
     if score <= 40:
         return 5
     if score <= 70:
@@ -44,226 +67,319 @@ def max_tasks_from_score(score: int) -> int:
     return 2
 
 
-# -------------------------
-# SQLite helpers
-# -------------------------
-def _db_connect(db_path: str) -> sqlite3.Connection:
-    conn = sqlite3.connect(db_path)
-    conn.execute("PRAGMA journal_mode=WAL;")
-    conn.execute("PRAGMA synchronous=NORMAL;")
-    return conn
+def _select_range(all_acs: List[str], *, start: int, limit: int) -> List[str]:
+    total = len(all_acs)
+    start = max(1, int(start))
+    start0 = start - 1
+    if start0 >= total:
+        raise RuntimeError(f"--start is out of range. start={start} but total_acs={total}")
+
+    if limit and int(limit) > 0:
+        end0 = min(total, start0 + int(limit))
+    else:
+        end0 = total
+
+    selected = all_acs[start0:end0]
+    if not selected:
+        raise RuntimeError("No ACs selected. Check --start/--limit range.")
+    return selected
 
 
-def _db_init(conn: sqlite3.Connection) -> None:
-    conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS ac_results (
-          ac_index INTEGER PRIMARY KEY,
-          ac_text TEXT NOT NULL,
-          ok INTEGER NOT NULL,
-          error TEXT,
-          item_json TEXT NOT NULL,
-          updated_at TEXT NOT NULL
-        );
-        """
+def _auto_tune_grouping_policy(
+    n_acs: int,
+    *,
+    max_ac_per_group: int,
+    target_groups_min: int,
+    target_groups_max: int,
+    max_groups: int,
+    min_group_size: int,
+) -> Dict[str, int]:
+    max_ac_per_group = max(1, int(max_ac_per_group))
+    min_group_size = max(2, int(min_group_size))
+
+    feasible_max_groups = max(1, n_acs // min_group_size)
+    max_groups = min(int(max_groups), feasible_max_groups)
+
+    tmin = int(target_groups_min)
+    tmax = int(target_groups_max)
+    if tmin > max_groups:
+        tmin = max(1, max_groups - 2)
+    if tmax > max_groups:
+        tmax = max_groups
+    if tmin > tmax:
+        tmin = max(1, tmax)
+
+    return {
+        "max_ac_per_group": max_ac_per_group,
+        "target_groups_min": tmin,
+        "target_groups_max": tmax,
+        "max_groups": max_groups,
+        "min_group_size": min_group_size,
+    }
+
+
+def _make_failsafe_output(
+    *,
+    story: Dict[str, Any],
+    ac_map: Dict[str, str],
+    tuned_policy: Dict[str, int],
+    output_path: str,
+    model: str,
+) -> Dict[str, Any]:
+    tasks = ac_map_to_min_tasks(ac_map)
+
+    groups = [
+        {
+            "group_id": "G00",
+            "label": "Failsafe: AC-to-Task",
+            "tags": ["failsafe"],
+            "rationale": "Fallback mode: convert each AC into one task without LLM task generation.",
+            "ac_ids": list(ac_map.keys()),
+        }
+    ]
+
+    grouping = {
+        "groups": groups,
+        "meta": {
+            "fallback": True,
+            "reason": "failsafe_taskgen_used",
+            "policy_used": tuned_policy,
+        },
+    }
+
+    group_results = [
+        {
+            "group_id": "G00",
+            "tasks": tasks,
+            "meta": {"mode": "failsafe"},
+        }
+    ]
+
+    # ✅ traceability (failsafe too)
+    trace = enforce_ac_traceability(
+        ac_map=ac_map,
+        grouping=grouping,
+        group_results=group_results,
+        mode="attach",
     )
-    conn.commit()
 
+    out = {
+        "story": story,
+        "ac_map": ac_map,
+        "grouping": grouping,
+        "group_results": group_results,
+        "trace": trace,
+        "meta": {
+            "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "model": model,
+            "ac_count_selected": len(ac_map),
+            "group_count": 1,
+            "total_tasks": len(tasks),
+            "fallback": True,
+            "fallback_reason": "failsafe_taskgen_used",
+        },
+    }
 
-def _db_has(conn: sqlite3.Connection, ac_index: int) -> bool:
-    cur = conn.execute("SELECT 1 FROM ac_results WHERE ac_index=? LIMIT 1", (ac_index,))
-    return cur.fetchone() is not None
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
 
-
-def _db_upsert(conn: sqlite3.Connection, item: Dict[str, Any]) -> None:
-    ac_index = int(item.get("ac_index", 0))
-    ac_text = str(item.get("ac_text", ""))
-    ok = 1 if (item.get("validate", {}) or {}).get("pass") else 0
-    error = item.get("error")
-    item_json = json.dumps(item, ensure_ascii=False)
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    conn.execute(
-        """
-        INSERT INTO ac_results (ac_index, ac_text, ok, error, item_json, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?)
-        ON CONFLICT(ac_index) DO UPDATE SET
-          ac_text=excluded.ac_text,
-          ok=excluded.ok,
-          error=excluded.error,
-          item_json=excluded.item_json,
-          updated_at=excluded.updated_at
-        """,
-        (ac_index, ac_text, ok, error, item_json, now),
-    )
-
-
-def _db_load_range(conn: sqlite3.Connection, start: int, end: int) -> List[Dict[str, Any]]:
-    cur = conn.execute(
-        """
-        SELECT item_json FROM ac_results
-        WHERE ac_index BETWEEN ? AND ?
-        ORDER BY ac_index ASC
-        """,
-        (start, end),
-    )
-    out: List[Dict[str, Any]] = []
-    for (item_json,) in cur.fetchall():
-        try:
-            out.append(json.loads(item_json))
-        except Exception:
-            continue
+    print(f"[OK] wrote: {output_path} acs={len(ac_map)} groups=1 total_tasks={len(tasks)} fallback=True")
     return out
 
 
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("-i", "--input", default="tests/fixtures/login_us001.json")
-    p.add_argument("-o", "--output", default="out.json")
-    p.add_argument("--model", default="gpt-4o-mini")
-    p.add_argument("--max-repairs", type=int, default=1)
+    p.add_argument("-o", "--output", default="out_grouped.json")
 
-    p.add_argument("--start", type=int, default=1, help="Start AC index (1-based)")
-    p.add_argument("--limit", type=int, default=0)
+    p.add_argument("--model", default="gpt-4o-mini")
     p.add_argument("--score", type=int, default=50)
 
-    # ✅ バッチサイズ（5件ずつ）
-    p.add_argument("--batch-size", type=int, default=5)
+    p.add_argument("--start", type=int, default=1)
+    p.add_argument("--limit", type=int, default=0)
 
-    # ✅ DB保存先
-    p.add_argument("--db", default="", help="Path to sqlite file. If set, save per-AC results here.")
+    p.add_argument("--max-ac-per-group", type=int, default=10)
+    p.add_argument("--target-groups-min", type=int, default=8)
+    p.add_argument("--target-groups-max", type=int, default=12)
+    p.add_argument("--max-groups", type=int, default=15)
+    p.add_argument("--min-group-size", type=int, default=3)
 
-    # ✅ 途中再開
-    p.add_argument("--resume", action="store_true")
+    p.add_argument("--max-ac-per-task", type=int, default=2)
+    p.add_argument("--max-repairs", type=int, default=2)
+
+    # ✅ new: 並列数
+    p.add_argument("--workers", type=int, default=4)
 
     args = p.parse_args()
 
-    input_json = _load_json(args.input)
-    all_acs = extract_acs(input_json)
+    input_obj = _load_json(args.input)
+    story, all_acs = extract_story_and_acs(input_obj)
     if not all_acs:
-        raise RuntimeError("No acceptance_criteria found. Input must contain key: acceptance_criteria (list[str]).")
+        raise RuntimeError("No acceptance_criteria found in input.")
 
-    total = len(all_acs)
+    selected_acs = _select_range(all_acs, start=args.start, limit=args.limit)
+    ac_map = build_ac_map(selected_acs, ac_prefix="AC")
 
-    start = max(1, int(args.start))
-    start0 = start - 1
-    if start0 >= total:
-        raise RuntimeError(f"--start is out of range. start={start} but total_acs={total}")
-
-    if args.limit and int(args.limit) > 0:
-        end0 = min(total, start0 + int(args.limit))
-    else:
-        end0 = total
-
-    selected_acs = all_acs[start0:end0]
-    if not selected_acs:
-        raise RuntimeError("No ACs selected. Check --start/--limit range.")
-
-    end_ac = start + len(selected_acs) - 1
-
-    score = int(args.score)
-    max_tasks_per_ac = max_tasks_from_score(score)
-    batch_size = max(1, int(args.batch_size))
-
-    conn: Optional[sqlite3.Connection] = None
-    if args.db:
-        conn = _db_connect(args.db)
-        _db_init(conn)
+    tuned = _auto_tune_grouping_policy(
+        n_acs=len(ac_map),
+        max_ac_per_group=args.max_ac_per_group,
+        target_groups_min=args.target_groups_min,
+        target_groups_max=args.target_groups_max,
+        max_groups=args.max_groups,
+        min_group_size=args.min_group_size,
+    )
 
     # -------------------------
-    # Run in batches
+    # 1) grouping
     # -------------------------
-    saved = 0
-    skipped = 0
-
-    for batch_offset in range(0, len(selected_acs), batch_size):
-        batch_acs = selected_acs[batch_offset : batch_offset + batch_size]
-        batch_start_ac_index = start + batch_offset
-        original_batch_end = batch_start_ac_index + len(batch_acs) - 1
-
-        # resume: 既存は飛ばす（AC単位）
-        if conn and args.resume:
-            filtered: List[str] = []
-            filtered_indices: List[int] = []
-
-            for i, ac_text in enumerate(batch_acs):
-                ac_index = batch_start_ac_index + i
-                if _db_has(conn, ac_index):
-                    skipped += 1
-                    continue
-                filtered.append(ac_text)
-                filtered_indices.append(ac_index)
-
-            # 全部スキップなら次へ（ログ出す）
-            if not filtered:
-                print(f"[BATCH] range={batch_start_ac_index}-{original_batch_end} size={len(batch_acs)} -> skip(all in DB)")
-                continue
-
-            batch_acs = filtered
-            batch_start_ac_index = filtered_indices[0]
-
-        # 実行直前ログ（実際に回す範囲）
-        actual_batch_end = batch_start_ac_index + len(batch_acs) - 1
-        print(f"[BATCH] range={batch_start_ac_index}-{actual_batch_end} size={len(batch_acs)}")
-
-        # 実行
-        result = run_pipeline(
+    try:
+        grouping = cluster_acs(
             model=args.model,
-            acceptance_criteria=batch_acs,
-            max_tasks_per_ac=max_tasks_per_ac,
+            story=story,
+            ac_map=ac_map,
+            max_ac_per_group=tuned["max_ac_per_group"],
+            target_groups_min=tuned["target_groups_min"],
+            target_groups_max=tuned["target_groups_max"],
+            max_groups=tuned["max_groups"],
+            min_group_size=tuned["min_group_size"],
             max_repairs=int(args.max_repairs),
-            start_ac_index=batch_start_ac_index,
+        )
+    except Exception:
+        return _make_failsafe_output(
+            story=story,
+            ac_map=ac_map,
+            tuned_policy=tuned,
+            output_path=args.output,
+            model=args.model,
         )
 
-        # DB保存
-        if conn:
-            for item in result.get("items", []):
-                _db_upsert(conn, item)
-                saved += 1
-            conn.commit()
-
-    # -------------------------
-    # Final output
-    # -------------------------
-    if conn:
-        items = _db_load_range(conn, start, end_ac)
-        result_out = {"items": items}
-        conn.close()
-        db_path = args.db
-    else:
-        result_out = run_pipeline(
+    if not isinstance(grouping, dict):
+        return _make_failsafe_output(
+            story=story,
+            ac_map=ac_map,
+            tuned_policy=tuned,
+            output_path=args.output,
             model=args.model,
-            acceptance_criteria=selected_acs,
-            max_tasks_per_ac=max_tasks_per_ac,
-            max_repairs=int(args.max_repairs),
-            start_ac_index=start,
         )
-        db_path = ""
 
-    result_out["meta"] = {
-        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "model": args.model,
-        "max_repairs": int(args.max_repairs),
-        "start": start,
-        "limit": int(args.limit),
-        "score": score,
-        "max_tasks_per_ac": int(max_tasks_per_ac),
-        "batch_size": int(batch_size),
-        "ac_count_selected": len(selected_acs),
-        "ac_count_total": total,
-        "range": f"{start}-{end_ac}",
-        "db": db_path,
-        "saved": saved,
-        "skipped": skipped,
+    grouping.setdefault("meta", {})
+    grouping["meta"].setdefault("policy_used", tuned)
+    groups = grouping.get("groups", [])
+    if not isinstance(groups, list) or not groups:
+        return _make_failsafe_output(
+            story=story,
+            ac_map=ac_map,
+            tuned_policy=tuned,
+            output_path=args.output,
+            model=args.model,
+        )
+
+    if bool((grouping.get("meta") or {}).get("fallback")):
+        return _make_failsafe_output(
+            story=story,
+            ac_map=ac_map,
+            tuned_policy=tuned,
+            output_path=args.output,
+            model=args.model,
+        )
+
+    # -------------------------
+    # 2) taskgen per group (PARALLEL)
+    # -------------------------
+    import concurrent.futures
+
+    max_tasks_per_ac = max_tasks_from_score(int(args.score))
+    workers = max(1, int(args.workers))
+
+    def _taskgen_one_group(g: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            return generate_tasks_for_group(
+                model=args.model,
+                story=story,
+                group=g,
+                ac_map=ac_map,
+                max_ac_per_task=int(args.max_ac_per_task),
+                max_tasks_per_ac=int(max_tasks_per_ac),
+                max_repairs=int(args.max_repairs),
+            )
+        except Exception as e:
+            g_ac_ids = g.get("ac_ids") or []
+            if not isinstance(g_ac_ids, list):
+                g_ac_ids = []
+            sub_ac_map = {aid: ac_map[aid] for aid in g_ac_ids if aid in ac_map}
+            tasks = ac_map_to_min_tasks(sub_ac_map)
+
+            return {
+                "group_id": g.get("group_id", "G??"),
+                "tasks": tasks,
+                "meta": {
+                    "mode": "failsafe_group",
+                    "error": f"{type(e).__name__}: {e}",
+                },
+            }
+
+    indexed_groups = [(i, g) for i, g in enumerate(groups) if isinstance(g, dict)]
+    results_by_index: Dict[int, Dict[str, Any]] = {}
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+        future_map = {ex.submit(_taskgen_one_group, g): i for i, g in indexed_groups}
+        for fut in concurrent.futures.as_completed(future_map):
+            i = future_map[fut]
+            results_by_index[i] = fut.result()
+
+    group_results: List[Dict[str, Any]] = []
+    total_tasks = 0
+    for i, _g in indexed_groups:
+        gr = results_by_index.get(i) or {"group_id": "G??", "tasks": [], "meta": {"mode": "empty"}}
+        group_results.append(gr)
+        tasks = gr.get("tasks", [])
+        if isinstance(tasks, list):
+            total_tasks += len(tasks)
+
+    # ✅ traceability (NEW)
+    trace = enforce_ac_traceability(
+        ac_map=ac_map,
+        grouping=grouping,
+        group_results=group_results,
+        mode="attach",
+    )
+
+    # -------------------------
+    # 3) output
+    # -------------------------
+    out: Dict[str, Any] = {
+        "story": story,
+        "ac_map": ac_map,
+        "grouping": grouping,
+        "group_results": group_results,
+        "trace": trace,  # ✅ NEW
+        "meta": {
+            "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "model": args.model,
+            "score": int(args.score),
+            "max_tasks_per_ac": int(max_tasks_per_ac),
+            "max_ac_per_group": int(tuned["max_ac_per_group"]),
+            "target_groups": [int(tuned["target_groups_min"]), int(tuned["target_groups_max"])],
+            "max_groups": int(tuned["max_groups"]),
+            "min_group_size": int(tuned["min_group_size"]),
+            "max_ac_per_task": int(args.max_ac_per_task),
+            "max_repairs": int(args.max_repairs),
+            "workers": int(workers),
+            "ac_count_selected": len(selected_acs),
+            "group_count": len(groups),
+            "total_tasks": int(total_tasks),
+            "fallback": False,
+            "fallback_reason": "",
+        },
     }
 
     with open(args.output, "w", encoding="utf-8") as f:
-        json.dump(result_out, f, ensure_ascii=False, indent=2)
+        json.dump(out, f, ensure_ascii=False, indent=2)
 
     print(
-        f"[OK] wrote: {args.output} range={start}-{end_ac} "
-        f"score={score} max_tasks_per_ac={max_tasks_per_ac} "
-        f"batch_size={batch_size} db={db_path or '(none)'} saved={saved} skipped={skipped}"
+        f"[OK] wrote: {args.output} "
+        f"acs={len(selected_acs)} groups={len(groups)} total_tasks={total_tasks} "
+        f"fallback={out['meta']['fallback']} workers={workers}"
     )
 
 
