@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
-from .grouping.cluster_agent import cluster_acs
+from src.task_planning.grouping.cluster_agent import cluster_acs
 from .grouped_taskgen.taskgen_agent import generate_tasks_for_group
 
 # ✅ new: failsafe
