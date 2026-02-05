@@ -1,0 +1,265 @@
+{
+  "setting": {
+    "target_score": 85,
+    "max_iterations": 5
+  },
+  "input_us_ac": {
+    "user_story": {
+      "domain": "Hệ thống quản lý công việc nội bộ：Tạo và theo dõi task",
+      "persona": "Là nhân viên trong công ty",
+      "action": "tôi muốn tạo và theo dõi các task công việc của mình",
+      "reason": "để tôi có thể quản lý tiến độ và hoàn thành công việc đúng hạn"
+    },
+    "acceptance_criteria": {
+      "acceptance_criteria": [
+        "Người dùng phải đăng nhập thì mới có thể tạo và xem task",
+        "Người dùng có thể tạo task mới với tiêu đề và mô tả",
+        "Mỗi task phải có trạng thái (Chưa làm / Đang làm / Hoàn thành)",
+        "Người dùng có thể chỉnh sửa nội dung task của mình",
+        "Người dùng có thể xóa task do mình tạo",
+        "Task có thể được gán ngày hết hạn (deadline)",
+        "Danh sách task có thể được sắp xếp theo deadline hoặc trạng thái",
+        "Người dùng chỉ có thể xem và chỉnh sửa task của chính mình",
+        "Khi không có task nào, hệ thống hiển thị thông báo “Không có task”",
+        "Thay đổi trạng thái task phải được lưu ngay lập tức và phản ánh trên màn hình"
+      ]
+    }
+  },
+  "loops": [
+    {
+      "classifier_score": 40,
+      "issue_detection_list": [
+        "Cần làm rõ vai trò và đặc điểm cụ thể của 'nhân viên trong công ty' trong User Story.",
+        "Cần xác định cách thức lưu trữ trạng thái task và cách thông báo cho người dùng khi không có task.",
+        "Cần thông tin về cách xử lý lỗi khi người dùng không thể tạo hoặc chỉnh sửa task.",
+        "Thiếu định dạng rõ ràng cho các trường dữ liệu như tiêu đề, mô tả, trạng thái và ngày hết hạn.",
+        "Cần xác định các trạng thái lỗi và hành vi của hệ thống khi không tìm thấy task.",
+        "Cần thông tin về cách tích hợp với các hệ thống bên ngoài và các trạng thái chuyển tiếp.",
+        "Cần làm rõ dữ liệu nào sẽ thay đổi khi người dùng 'chỉnh sửa' hoặc 'xóa' task.",
+        "Cần xác định phương thức xác thực cụ thể cho việc đăng nhập.",
+        "Cần quy định rõ ràng về quyền truy cập cho các task.",
+        "Thiếu yêu cầu về mã hóa dữ liệu và xử lý thông tin cá nhân (PII).",
+        "Cần đề cập đến việc bảo vệ chống lại các cuộc tấn công phổ biến như brute force hay đầu vào không hợp lệ.",
+        "Thiếu giới hạn ký tự cho tiêu đề và mô tả task.",
+        "Cần thông tin về số lần thử lại khi tạo task thất bại.",
+        "Cần nêu rõ các kết quả mong đợi cho từng hành động, ví dụ như thông báo lỗi khi không đăng nhập.",
+        "Thiếu các trường hợp kiểm thử âm (negative test cases), ví dụ như hành động xóa task không tồn tại.",
+        "Cần xác định rõ điểm bắt đầu và kết thúc của luồng người dùng.",
+        "Cần chỉ định các thông điệp hệ thống (thành công/lỗi/cảnh báo) và các kích hoạt của chúng.",
+        "Cần làm rõ logic chuyển hướng cho người dùng sau khi thực hiện hành động.",
+        "Thiếu thông tin về cách người dùng được thông báo về tiến trình hoặc thay đổi trạng thái."
+      ],
+      "suggestion_us_ac": {
+        "user_story": {
+          "domain": "Hệ thống quản lý công việc nội bộ: Tạo và theo dõi task",
+          "persona": "Nhân viên trong công ty có vai trò quản lý dự án",
+          "action": "tạo và theo dõi các task công việc của mình",
+          "reason": "để quản lý tiến độ và hoàn thành công việc đúng hạn"
+        },
+        "acceptance_criteria": {
+          "acceptance_criteria": [
+            "Người dùng phải đăng nhập thành công với tên đăng nhập và mật khẩu hợp lệ trước khi có thể tạo và xem task.",
+            "Người dùng có thể tạo task mới với tối thiểu 5 ký tự cho tiêu đề và 10 ký tự cho mô tả, và thông tin này phải được lưu trữ trong cơ sở dữ liệu.",
+            "Mỗi task phải có trạng thái được xác định rõ ràng là (Chưa làm / Đang làm / Hoàn thành) và được lưu trữ trong cơ sở dữ liệu.",
+            "Người dùng có thể chỉnh sửa nội dung task của mình, bao gồm tiêu đề và mô tả, và các thay đổi phải được lưu ngay lập tức.",
+            "Người dùng có thể xóa task do mình tạo và phải có thông báo xác nhận trước khi xóa.",
+            "Task có thể được gán ngày hết hạn (deadline) và ngày này phải được lưu trữ dưới định dạng ngày tháng hợp lệ.",
+            "Danh sách task có thể được sắp xếp theo deadline hoặc trạng thái một cách rõ ràng và chính xác.",
+            "Người dùng chỉ có thể xem và chỉnh sửa task của chính mình, không thể truy cập vào task của người khác.",
+            "Khi không có task nào, hệ thống hiển thị thông báo “Không có task” trên giao diện người dùng.",
+            "Thay đổi trạng thái task phải được lưu ngay lập tức và phản ánh trên màn hình mà không cần tải lại trang.",
+            "Nếu người dùng cố gắng tạo hoặc chỉnh sửa task khi chưa đăng nhập, hệ thống sẽ hiển thị thông báo lỗi rõ ràng yêu cầu đăng nhập.",
+            "Hệ thống phải xử lý lỗi khi không thể tạo hoặc chỉnh sửa task và thông báo cho người dùng về lý do cụ thể.",
+            "Các thông điệp hệ thống về thành công, lỗi và cảnh báo phải rõ ràng và dễ hiểu cho người dùng.",
+            "Hệ thống phải có biện pháp bảo vệ chống lại các cuộc tấn công như brute force và phải mã hóa thông tin cá nhân (PII).",
+            "Người dùng được thông báo về tiến trình hoặc thay đổi trạng thái thông qua thông báo trên giao diện người dùng."
+          ]
+        }
+      }
+    },
+    {
+      "classifier_score": 61,
+      "issue_detection_list": [
+        "Cần làm rõ cách thức người dùng tương tác với hệ thống trong từng bước.",
+        "Cần xác định rõ định dạng cho các trường dữ liệu như tên đăng nhập, mật khẩu, và ngày tháng.",
+        "Cần xác định rõ các trạng thái lỗi và hành vi của hệ thống khi gặp lỗi, bao gồm mã lỗi cụ thể cho các tình huống khác nhau.",
+        "Cần cung cấp thông tin về cách thức tích hợp với các hệ thống bên ngoài hoặc các trạng thái chuyển tiếp.",
+        "Cần định nghĩa rõ phương pháp xác thực và các quy tắc ủy quyền.",
+        "Cần làm rõ cách thức mã hóa thông tin cá nhân (PII) và biện pháp bảo vệ chống lại các cuộc tấn công như brute force.",
+        "Cần xác định rõ giá trị biên cho các trường như ngày tháng, đặc biệt là định dạng và giới hạn cho ngày hết hạn.",
+        "Cần cụ thể hóa các thông báo lỗi để người dùng hiểu rõ lý do thao tác không thành công.",
+        "Cần có các trường hợp kiểm tra âm cho các tình huống không thể tạo hoặc chỉnh sửa task và các tình huống bảo mật như tấn công brute force.",
+        "Cần làm rõ điểm bắt đầu và kết thúc của luồng người dùng, từ khi đăng nhập đến khi tạo và theo dõi task.",
+        "Cần chỉ định rõ các thông điệp hệ thống (thành công/lỗi/cảnh báo) và các kích hoạt của chúng, đặc biệt trong trường hợp lỗi.",
+        "Cần làm rõ logic chuyển hướng sau khi người dùng tạo task thành công.",
+        "Cần làm rõ cách người dùng được thông báo về tiến trình hoặc thay đổi trạng thái."
+      ],
+      "suggestion_us_ac": {
+        "user_story": {
+          "domain": "Hệ thống quản lý công việc nội bộ: Tạo và theo dõi task",
+          "persona": "Nhân viên trong công ty có vai trò quản lý dự án",
+          "action": "tạo và theo dõi các task công việc của mình",
+          "reason": "để quản lý tiến độ và hoàn thành công việc đúng hạn"
+        },
+        "acceptance_criteria": {
+          "acceptance_criteria": [
+            "Người dùng phải đăng nhập thành công với tên đăng nhập (tối đa 30 ký tự, không chứa ký tự đặc biệt) và mật khẩu (tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt) hợp lệ trước khi có thể tạo và xem task.",
+            "Người dùng có thể tạo task mới với tối thiểu 5 ký tự cho tiêu đề và 10 ký tự cho mô tả. Thông tin này phải được lưu trữ trong cơ sở dữ liệu và có thể truy xuất lại sau khi tạo.",
+            "Mỗi task phải có trạng thái được xác định rõ ràng là (Chưa làm / Đang làm / Hoàn thành) và được lưu trữ trong cơ sở dữ liệu với giá trị mặc định là 'Chưa làm'.",
+            "Người dùng có thể chỉnh sửa nội dung task của mình, bao gồm tiêu đề và mô tả, và các thay đổi phải được lưu ngay lập tức vào cơ sở dữ liệu.",
+            "Người dùng có thể xóa task do mình tạo và phải có thông báo xác nhận với thông điệp 'Bạn có chắc chắn muốn xóa task này?' trước khi xóa.",
+            "Task có thể được gán ngày hết hạn (deadline) và ngày này phải được lưu trữ dưới định dạng ngày tháng hợp lệ (DD/MM/YYYY).",
+            "Danh sách task có thể được sắp xếp theo deadline hoặc trạng thái một cách rõ ràng và chính xác, và có thể lọc theo trạng thái.",
+            "Người dùng chỉ có thể xem và chỉnh sửa task của chính mình, không thể truy cập vào task của người khác, với thông báo lỗi 'Bạn không có quyền truy cập vào task này' nếu cố gắng truy cập.",
+            "Khi không có task nào, hệ thống hiển thị thông báo 'Không có task' trên giao diện người dùng.",
+            "Thay đổi trạng thái task phải được lưu ngay lập tức và phản ánh trên màn hình mà không cần tải lại trang, với thông báo 'Trạng thái đã được cập nhật' hiển thị cho người dùng.",
+            "Nếu người dùng cố gắng tạo hoặc chỉnh sửa task khi chưa đăng nhập, hệ thống sẽ hiển thị thông báo lỗi 'Vui lòng đăng nhập để tiếp tục' và không cho phép thao tác.",
+            "Hệ thống phải xử lý lỗi khi không thể tạo hoặc chỉnh sửa task và thông báo cho người dùng về lý do cụ thể với mã lỗi tương ứng (ví dụ: 400 cho yêu cầu không hợp lệ).",
+            "Các thông điệp hệ thống về thành công, lỗi và cảnh báo phải rõ ràng và dễ hiểu cho người dùng, ví dụ: 'Task đã được tạo thành công' hoặc 'Có lỗi xảy ra, vui lòng thử lại'.",
+            "Hệ thống phải có biện pháp bảo vệ chống lại các cuộc tấn công như brute force bằng cách giới hạn số lần đăng nhập sai (tối đa 5 lần) và phải mã hóa thông tin cá nhân (PII) bằng thuật toán AES-256.",
+            "Người dùng được thông báo về tiến trình hoặc thay đổi trạng thái thông qua thông báo trên giao diện người dùng, ví dụ: 'Task của bạn đã được cập nhật thành công'."
+          ]
+        }
+      }
+    },
+    {
+      "classifier_score": 61,
+      "issue_detection_list": [
+        "Cần làm rõ cách người dùng sẽ được thông báo về các thay đổi trạng thái task.",
+        "Thiếu thông tin về cách hệ thống sẽ xử lý các lỗi không thể tạo hoặc chỉnh sửa task.",
+        "Không có thông tin chi tiết về cách mã hóa thông tin cá nhân (PII) sẽ được thực hiện.",
+        "Cần xác định định dạng của các trường dữ liệu như UUID cho task.",
+        "Thiếu thông tin về cách xử lý các trạng thái lỗi cụ thể như 404, 409.",
+        "Không có thông tin về cách thức tích hợp với các hệ thống bên ngoài hoặc các trạng thái chuyển tiếp.",
+        "Cần làm rõ hơn về các thay đổi dữ liệu khi 'lưu' hoặc 'cập nhật'.",
+        "Thiếu thông tin rõ ràng về cách thức xử lý quyền truy cập cho các vai trò khác nhau.",
+        "Cần đề cập đến các biện pháp bảo vệ khác như chống lại tấn công SQL injection hoặc XSS.",
+        "Cần làm rõ hơn về các mã lỗi cụ thể và cách xử lý khi không thể tạo hoặc chỉnh sửa task.",
+        "Thiếu thông tin về các trường hợp kiểm tra âm (negative test cases) cho các hành động như xóa task hoặc tạo task khi không có quyền.",
+        "Cần xác định rõ điểm bắt đầu và kết thúc của luồng người dùng.",
+        "Thiếu thông tin rõ ràng về các tình huống cụ thể mà thông báo thành công, lỗi và cảnh báo sẽ được kích hoạt.",
+        "Logic chuyển hướng (người dùng sẽ đi đâu tiếp theo) không được nêu rõ.",
+        "Cần làm rõ cách thức thông báo về tiến trình hoặc thay đổi trạng thái sẽ diễn ra."
+      ],
+      "suggestion_us_ac": {
+        "user_story": {
+          "domain": "Hệ thống quản lý công việc nội bộ: Tạo và theo dõi task",
+          "persona": "Nhân viên trong công ty có vai trò quản lý dự án",
+          "action": "tạo và theo dõi các task công việc của mình",
+          "reason": "để quản lý tiến độ và hoàn thành công việc đúng hạn"
+        },
+        "acceptance_criteria": {
+          "acceptance_criteria": [
+            "Người dùng phải đăng nhập thành công với tên đăng nhập (tối đa 30 ký tự, không chứa ký tự đặc biệt) và mật khẩu (tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt) hợp lệ trước khi có thể tạo và xem task.",
+            "Người dùng có thể tạo task mới với tiêu đề tối thiểu 5 ký tự và mô tả tối thiểu 10 ký tự. Thông tin task bao gồm UUID, tiêu đề, mô tả, trạng thái, ngày hết hạn sẽ được lưu trữ trong cơ sở dữ liệu và có thể truy xuất lại sau khi tạo.",
+            "Mỗi task phải có trạng thái được xác định rõ ràng là (Chưa làm / Đang làm / Hoàn thành) và được lưu trữ trong cơ sở dữ liệu với giá trị mặc định là 'Chưa làm'.",
+            "Người dùng có thể chỉnh sửa nội dung task của mình, bao gồm tiêu đề và mô tả, và các thay đổi phải được lưu ngay lập tức vào cơ sở dữ liệu với thông báo 'Task đã được cập nhật thành công'.",
+            "Người dùng có thể xóa task do mình tạo và phải có thông báo xác nhận với thông điệp 'Bạn có chắc chắn muốn xóa task này?' trước khi xóa. Nếu xóa thành công, hiển thị thông báo 'Task đã được xóa thành công'.",
+            "Task có thể được gán ngày hết hạn (deadline) và ngày này phải được lưu trữ dưới định dạng ngày tháng hợp lệ (DD/MM/YYYY).",
+            "Danh sách task có thể được sắp xếp theo deadline hoặc trạng thái một cách rõ ràng và chính xác, và có thể lọc theo trạng thái.",
+            "Người dùng chỉ có thể xem và chỉnh sửa task của chính mình, không thể truy cập vào task của người khác. Nếu cố gắng truy cập task của người khác, hiển thị thông báo lỗi 'Bạn không có quyền truy cập vào task này'.",
+            "Khi không có task nào, hệ thống hiển thị thông báo 'Không có task' trên giao diện người dùng.",
+            "Thay đổi trạng thái task phải được lưu ngay lập tức và phản ánh trên màn hình mà không cần tải lại trang, với thông báo 'Trạng thái đã được cập nhật' hiển thị cho người dùng.",
+            "Nếu người dùng cố gắng tạo hoặc chỉnh sửa task khi chưa đăng nhập, hệ thống sẽ hiển thị thông báo lỗi 'Vui lòng đăng nhập để tiếp tục' và không cho phép thao tác.",
+            "Hệ thống phải xử lý lỗi khi không thể tạo hoặc chỉnh sửa task và thông báo cho người dùng về lý do cụ thể với mã lỗi tương ứng (ví dụ: 400 cho yêu cầu không hợp lệ, 404 cho không tìm thấy, 409 cho xung đột).",
+            "Các thông điệp hệ thống về thành công, lỗi và cảnh báo phải rõ ràng và dễ hiểu cho người dùng, ví dụ: 'Task đã được tạo thành công' hoặc 'Có lỗi xảy ra, vui lòng thử lại'.",
+            "Hệ thống phải có biện pháp bảo vệ chống lại các cuộc tấn công như brute force bằng cách giới hạn số lần đăng nhập sai (tối đa 5 lần) và phải mã hóa thông tin cá nhân (PII) bằng thuật toán AES-256.",
+            "Người dùng được thông báo về tiến trình hoặc thay đổi trạng thái thông qua thông báo trên giao diện người dùng, ví dụ: 'Task của bạn đã được cập nhật thành công'.",
+            "Hệ thống phải bảo vệ chống lại các cuộc tấn công SQL injection và XSS bằng cách kiểm tra và lọc đầu vào từ người dùng."
+          ]
+        }
+      }
+    },
+    {
+      "classifier_score": 70,
+      "issue_detection_list": [
+        "Không có thông tin về cách người dùng sẽ truy cập vào danh sách task (giao diện người dùng cụ thể ra sao).",
+        "Cần xác định rõ hơn về cách thức thông báo lỗi sẽ được hiển thị cho người dùng (ví dụ: thông báo lỗi có thể hiển thị ở đâu trên giao diện).",
+        "Cần làm rõ hơn về cách thức bảo mật thông tin cá nhân (PII) và các biện pháp bảo vệ khác.",
+        "Định dạng của UUID không được chỉ định rõ ràng.",
+        "Không có thông tin chi tiết về cách xử lý các trạng thái lỗi cụ thể (ví dụ: 404, 409) trong trường hợp nào.",
+        "Không có thông tin rõ ràng về cách thức tích hợp với các hệ thống bên ngoài hoặc các trạng thái chuyển tiếp.",
+        "Cần làm rõ hơn về dữ liệu cụ thể nào sẽ thay đổi khi 'lưu' hoặc 'cập nhật'.",
+        "Không có yêu cầu cụ thể nào về việc xử lý thông tin nhạy cảm khác ngoài PII.",
+        "Không có thông tin rõ ràng về cách thức lưu trữ và bảo vệ dữ liệu trong cơ sở dữ liệu.",
+        "Cần làm rõ hơn về cách thức xử lý lỗi khi không thể tạo hoặc chỉnh sửa task.",
+        "Các thông điệp hệ thống cần được xác định rõ ràng hơn về ngữ cảnh sử dụng.",
+        "Các trường hợp kiểm tra âm (negative test cases) không được đề cập rõ ràng, ví dụ như các tình huống khi người dùng nhập thông tin không hợp lệ.",
+        "Điểm bắt đầu và kết thúc của luồng người dùng chưa được xác định rõ ràng.",
+        "Cần làm rõ hơn về cách thức hiển thị và vị trí hiển thị của thông báo lỗi cụ thể khi không thể tạo hoặc chỉnh sửa task.",
+        "Logic chuyển hướng (người dùng sẽ đi đâu tiếp theo sau khi thực hiện một hành động) không được nêu rõ.",
+        "Cách người dùng được thông báo về tiến trình hoặc thay đổi trạng thái cần được cụ thể hóa hơn."
+      ],
+      "suggestion_us_ac": {
+        "user_story": {
+          "domain": "Hệ thống quản lý công việc nội bộ: Tạo và theo dõi task",
+          "persona": "Nhân viên trong công ty có vai trò quản lý dự án",
+          "action": "tạo và theo dõi các task công việc của mình",
+          "reason": "để quản lý tiến độ và hoàn thành công việc đúng hạn"
+        },
+        "acceptance_criteria": {
+          "acceptance_criteria": [
+            "Người dùng phải đăng nhập thành công với tên đăng nhập (tối đa 30 ký tự, không chứa ký tự đặc biệt) và mật khẩu (tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt) hợp lệ trước khi có thể tạo và xem task.",
+            "Người dùng có thể tạo task mới với tiêu đề tối thiểu 5 ký tự và mô tả tối thiểu 10 ký tự. Thông tin task bao gồm UUID (theo định dạng chuẩn UUID), tiêu đề, mô tả, trạng thái, ngày hết hạn sẽ được lưu trữ trong cơ sở dữ liệu và có thể truy xuất lại sau khi tạo.",
+            "Mỗi task phải có trạng thái được xác định rõ ràng là (Chưa làm / Đang làm / Hoàn thành) và được lưu trữ trong cơ sở dữ liệu với giá trị mặc định là 'Chưa làm'.",
+            "Người dùng có thể chỉnh sửa nội dung task của mình, bao gồm tiêu đề và mô tả, và các thay đổi phải được lưu ngay lập tức vào cơ sở dữ liệu với thông báo 'Task đã được cập nhật thành công' hiển thị ở vị trí thông báo trên giao diện người dùng.",
+            "Người dùng có thể xóa task do mình tạo và phải có thông báo xác nhận với thông điệp 'Bạn có chắc chắn muốn xóa task này?' trước khi xóa. Nếu xóa thành công, hiển thị thông báo 'Task đã được xóa thành công' ở vị trí thông báo trên giao diện người dùng.",
+            "Task có thể được gán ngày hết hạn (deadline) và ngày này phải được lưu trữ dưới định dạng ngày tháng hợp lệ (DD/MM/YYYY).",
+            "Danh sách task có thể được sắp xếp theo deadline hoặc trạng thái một cách rõ ràng và chính xác, và có thể lọc theo trạng thái.",
+            "Người dùng chỉ có thể xem và chỉnh sửa task của chính mình, không thể truy cập vào task của người khác. Nếu cố gắng truy cập task của người khác, hiển thị thông báo lỗi 'Bạn không có quyền truy cập vào task này' ở vị trí thông báo trên giao diện người dùng.",
+            "Khi không có task nào, hệ thống hiển thị thông báo 'Không có task' trên giao diện người dùng.",
+            "Thay đổi trạng thái task phải được lưu ngay lập tức và phản ánh trên màn hình mà không cần tải lại trang, với thông báo 'Trạng thái đã được cập nhật' hiển thị cho người dùng ở vị trí thông báo trên giao diện người dùng.",
+            "Nếu người dùng cố gắng tạo hoặc chỉnh sửa task khi chưa đăng nhập, hệ thống sẽ hiển thị thông báo lỗi 'Vui lòng đăng nhập để tiếp tục' và không cho phép thao tác, thông báo sẽ được hiển thị ở vị trí thông báo trên giao diện người dùng.",
+            "Hệ thống phải xử lý lỗi khi không thể tạo hoặc chỉnh sửa task và thông báo cho người dùng về lý do cụ thể với mã lỗi tương ứng (ví dụ: 400 cho yêu cầu không hợp lệ, 404 cho không tìm thấy, 409 cho xung đột) ở vị trí thông báo trên giao diện người dùng.",
+            "Các thông điệp hệ thống về thành công, lỗi và cảnh báo phải rõ ràng và dễ hiểu cho người dùng, ví dụ: 'Task đã được tạo thành công' hoặc 'Có lỗi xảy ra, vui lòng thử lại', và hiển thị ở vị trí thông báo trên giao diện người dùng.",
+            "Hệ thống phải có biện pháp bảo vệ chống lại các cuộc tấn công như brute force bằng cách giới hạn số lần đăng nhập sai (tối đa 5 lần) và phải mã hóa thông tin cá nhân (PII) bằng thuật toán AES-256.",
+            "Người dùng được thông báo về tiến trình hoặc thay đổi trạng thái thông qua thông báo trên giao diện người dùng, ví dụ: 'Task của bạn đã được cập nhật thành công', thông báo sẽ được hiển thị ở vị trí thông báo trên giao diện người dùng.",
+            "Hệ thống phải bảo vệ chống lại các cuộc tấn công SQL injection và XSS bằng cách kiểm tra và lọc đầu vào từ người dùng."
+          ]
+        }
+      }
+    },
+    {
+      "classifier_score": 70,
+      "issue_detection_list": [
+        "Cần làm rõ cách thức xử lý thông báo lỗi trong trường hợp có lỗi hệ thống.",
+        "Thiếu thông tin rõ ràng về cách thức lưu trữ và truy xuất dữ liệu từ cơ sở dữ liệu.",
+        "Cần định nghĩa rõ ràng các mã lỗi cụ thể cho từng tình huống.",
+        "Cần thêm chi tiết về cách thức hiển thị thông báo lỗi khi không thể tạo hoặc chỉnh sửa task.",
+        "Thiếu thông tin về cách xử lý các trường hợp nhập liệu không hợp lệ cho tiêu đề và mô tả task.",
+        "Cần xác định rõ điểm bắt đầu và kết thúc của luồng người dùng.",
+        "Cần làm rõ cách thức hiển thị và ngữ cảnh sử dụng cho các thông báo lỗi cụ thể liên quan đến mã lỗi (400, 404, 409).",
+        "Thiếu thông tin về logic chuyển hướng sau khi người dùng thực hiện một hành động.",
+        "Cần thông tin cụ thể về cách người dùng sẽ được thông báo về các thay đổi trong các tình huống khác nhau."
+      ],
+      "suggestion_us_ac": {
+        "user_story": {
+          "domain": "Hệ thống quản lý công việc nội bộ: Tạo và theo dõi task",
+          "persona": "Nhân viên trong công ty có vai trò quản lý dự án",
+          "action": "tạo và theo dõi các task công việc của mình",
+          "reason": "để quản lý tiến độ và hoàn thành công việc đúng hạn"
+        },
+        "acceptance_criteria": {
+          "acceptance_criteria": [
+            "Người dùng phải đăng nhập thành công với tên đăng nhập (tối đa 30 ký tự, không chứa ký tự đặc biệt) và mật khẩu (tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt) hợp lệ trước khi có thể tạo và xem task.",
+            "Người dùng có thể tạo task mới với tiêu đề tối thiểu 5 ký tự và mô tả tối thiểu 10 ký tự. Thông tin task bao gồm UUID (theo định dạng chuẩn UUID), tiêu đề, mô tả, trạng thái và ngày hết hạn sẽ được lưu trữ trong cơ sở dữ liệu và có thể truy xuất lại sau khi tạo.",
+            "Mỗi task phải có trạng thái được xác định rõ ràng là (Chưa làm / Đang làm / Hoàn thành) và được lưu trữ trong cơ sở dữ liệu với giá trị mặc định là 'Chưa làm'.",
+            "Người dùng có thể chỉnh sửa nội dung task của mình, bao gồm tiêu đề và mô tả, và các thay đổi phải được lưu ngay lập tức vào cơ sở dữ liệu. Thông báo 'Task đã được cập nhật thành công' sẽ hiển thị ở vị trí thông báo trên giao diện người dùng sau khi cập nhật thành công.",
+            "Người dùng có thể xóa task do mình tạo và phải có thông báo xác nhận với thông điệp 'Bạn có chắc chắn muốn xóa task này?' trước khi xóa. Nếu xóa thành công, hiển thị thông báo 'Task đã được xóa thành công' ở vị trí thông báo trên giao diện người dùng.",
+            "Task có thể được gán ngày hết hạn (deadline) và ngày này phải được lưu trữ dưới định dạng ngày tháng hợp lệ (DD/MM/YYYY).",
+            "Danh sách task có thể được sắp xếp theo deadline hoặc trạng thái một cách rõ ràng và chính xác, và có thể lọc theo trạng thái.",
+            "Người dùng chỉ có thể xem và chỉnh sửa task của chính mình, không thể truy cập vào task của người khác. Nếu cố gắng truy cập task của người khác, hiển thị thông báo lỗi 'Bạn không có quyền truy cập vào task này' ở vị trí thông báo trên giao diện người dùng.",
+            "Khi không có task nào, hệ thống hiển thị thông báo 'Không có task' trên giao diện người dùng.",
+            "Thay đổi trạng thái task phải được lưu ngay lập tức và phản ánh trên màn hình mà không cần tải lại trang, với thông báo 'Trạng thái đã được cập nhật' hiển thị cho người dùng ở vị trí thông báo trên giao diện người dùng.",
+            "Nếu người dùng cố gắng tạo hoặc chỉnh sửa task khi chưa đăng nhập, hệ thống sẽ hiển thị thông báo lỗi 'Vui lòng đăng nhập để tiếp tục' và không cho phép thao tác, thông báo sẽ được hiển thị ở vị trí thông báo trên giao diện người dùng.",
+            "Hệ thống phải xử lý lỗi khi không thể tạo hoặc chỉnh sửa task và thông báo cho người dùng về lý do cụ thể với mã lỗi tương ứng (ví dụ: 400 cho yêu cầu không hợp lệ, 404 cho không tìm thấy, 409 cho xung đột) ở vị trí thông báo trên giao diện người dùng.",
+            "Các thông điệp hệ thống về thành công, lỗi và cảnh báo phải rõ ràng và dễ hiểu cho người dùng, ví dụ: 'Task đã được tạo thành công' hoặc 'Có lỗi xảy ra, vui lòng thử lại', và hiển thị ở vị trí thông báo trên giao diện người dùng.",
+            "Hệ thống phải có biện pháp bảo vệ chống lại các cuộc tấn công như brute force bằng cách giới hạn số lần đăng nhập sai (tối đa 5 lần) và phải mã hóa thông tin cá nhân (PII) bằng thuật toán AES-256.",
+            "Người dùng được thông báo về tiến trình hoặc thay đổi trạng thái thông qua thông báo trên giao diện người dùng, ví dụ: 'Task của bạn đã được cập nhật thành công', thông báo sẽ được hiển thị ở vị trí thông báo trên giao diện người dùng.",
+            "Hệ thống phải bảo vệ chống lại các cuộc tấn công SQL injection và XSS bằng cách kiểm tra và lọc đầu vào từ người dùng."
+          ]
+        }
+      }
+    }
+  ]
+}
