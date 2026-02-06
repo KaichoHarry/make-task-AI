@@ -38,8 +38,8 @@ class RefinementState(TypedDict):
 # 設定
 # =========================
 logger = WorkflowLogger()
-TARGET_SCORE = 85  # 5人のプロが納得する基準なので少し高めに設定
-MAX_ITERATIONS = 5
+TARGET_SCORE = 75  # 5人のプロが納得する基準なので少し高めに設定
+MAX_ITERATIONS = 3
 
 # =========================
 # Node 関数定義
@@ -87,6 +87,19 @@ def suggestion_node(state: RefinementState) -> RefinementState:
         us_ac=state["us_ac"],
         issues=IssueResponse(issues=state["issues"]),
     )
+
+    # --- ここから追加：新しい内容をターミナルに表示 ---
+    print("\n✨ [Refined Result]")
+    us = refined_obj.user_story
+    print(f"  [User Story]")
+    print(f"    - Persona: {us.persona}")
+    print(f"    - Action:  {us.action}")
+    print(f"    - Reason:  {us.reason}")
+    
+    print(f"  [Acceptance Criteria]")
+    for i, ac in enumerate(refined_obj.acceptance_criteria.acceptance_criteria, 1):
+        print(f"    {i}. {ac}")
+    # --- ここまで追加 ---
     
     # ロガーにこのターンの記録を保存
     logger.add_loop_log(
