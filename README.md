@@ -14,15 +14,35 @@ AIエージェント（マルチエージェント）を活用し、曖昧なユ
 - **その他**: (例: 実行環境や使用しているライブラリなど)
 
 ## 🚀 環境構築 (Installation & Setup)
-ローカル環境で動かすための手順を記載します。
+
 ```bash
-# リポジトリのクローン
-git clone [https://github.com/KaichoHarry/make-task-AI.git](https://github.com/KaichoHarry/make-task-AI.git)
+git clone https://github.com/KaichoHarry/make-task-AI.git
 cd make-task-AI
 
-# 依存関係のインストール
-pip install -r requirements.txt # または poetry / pipenv など
+pip install -r requirements.txt
 
 # 環境変数の設定
 cp .env.example .env
-# .envファイル内に必要なAPIキーなどを記述してください。
+# .env の OPENAI_API_KEY を自分のキーに書き換える
+```
+
+## ▶️ 使い方
+
+### APIサーバー
+```bash
+uvicorn src.main:app --reload --port 8000
+# GET  /health
+# POST /refine  … US/ACの洗練
+# POST /tasks   … タスク生成（{"tasks": [...], "meta": {...}} を返す）
+```
+
+### Docker
+```bash
+docker compose up --build   # http://localhost:8001
+```
+
+### CLI
+```bash
+python -m src.task_planning.run -i tests/fixtures/login_us001.json -o out.json
+python debug_task.py   # 動作確認用
+```

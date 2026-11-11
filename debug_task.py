@@ -1,46 +1,44 @@
+"""
+動作確認用スクリプト。
+
+使い方:
+    python debug_task.py                                  # login_us001 で実行
+    python debug_task.py tests/fixtures/login_us005.json  # 入力JSONを指定
+
+task_planning のCLI（src/task_planning/run.py）をそのまま呼び、
+結果を output_test.json に保存して概要を表示します。
+"""
 import json
-import os
-from dotenv import load_dotenv  # <--- 追加！
+import sys
+
+from dotenv import load_dotenv
+
 load_dotenv()
-from src.task_planning.generator import generate_tasks
 
-def main():
-    # 1. 画像にあるテストデータを読み込む
-    file_path = "tests/fixtures/login_us001.json"
-    
-    print(f"📂 {file_path} を読み込んでいます...")
-    
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            
-        # 【重要】generatorは「リスト(配列)」を受け取る仕様なので、
-        # 単体のオブジェクト({})ならリスト([])で包みます
-        if isinstance(data, dict):
-            input_data = [data]
-        else:
-            input_data = data
+from src.task_planning import run as task_run  # noqa: E402
 
-        print("🤖 AIにタスク生成を依頼中... (20〜30秒かかります)")
-        
-        # 2. あなたが作ったAI機能を呼び出す
-        result = generate_tasks(input_data)
-        
-        # 3. 結果をきれいに表示する
-        # model_dump_json(indent=2) で見やすいJSON文字列にしてくれます
-        print("\n🎉 生成成功！以下のタスクが作成されました:\n")
-        print(result.model_dump_json(indent=2))
+OUTPUT_PATH = "output_test.json"
 
-        # ファイルにも保存してみる（確認用）
-        with open("output_test.json", "w", encoding="utf-8") as f:
-            f.write(result.model_dump_json(indent=2))
-        print("\n💾 output_test.json にも保存しました")
 
-    except FileNotFoundError:
-        print(f"❌ ファイルが見つかりません: {file_path}")
-        print("パスが正しいか確認してください")
-    except Exception as e:
-        print(f"❌ エラーが発生しました: {e}")
+def main() -> None:
+    in_path = sys.argv[1] if len(sys.argv) > 1 else "tests/fixtures/login_us001.json"
+    print(f"📂 {in_path} を読み込んでいます...")
+    print("🤖 AIにタスク生成を依頼中... (数十秒〜数分かかります)")
+
+    sys.argv = ["run", "-i", in_path, "-o", OUTPUT_PATH]
+    task_run.main()
+
+    with open(OUTPUT_PATH, encoding="utf-8") as f:
+        out = json.load(f)
+
+    meta = out.get("meta", {})
+    print("\n🎉 生成完了")
+    print(f"  ACs={meta.get('ac_count_selected')} groups={meta.get('group_count')} "
+          f"tasks={meta.get('total_tasks')} fallback={meta.get('fallback')}")
+    if meta.get("fallback"):
+        print("  ⚠ フォールバック動作です（LLM呼び出しに失敗している可能性）。上の [WARN] を確認してください。")
+    print(f"💾 {OUTPUT_PATH} に保存しました")
+
 
 if __name__ == "__main__":
     main()
