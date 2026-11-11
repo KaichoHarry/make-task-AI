@@ -10,7 +10,7 @@ class AcceptanceCriteria(BaseModel):
     acceptance_criteria: List[str] = Field(
         ...,
         description="受入要件のリスト（すべて自然言語の文字列）",
-        min_items=1
+        min_length=1
     )
 
 

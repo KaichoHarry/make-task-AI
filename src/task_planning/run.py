@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
@@ -244,7 +245,8 @@ def main():
             min_group_size=tuned["min_group_size"],
             max_repairs=int(args.max_repairs),
         )
-    except Exception:
+    except Exception as e:
+        print(f"[WARN] grouping failed -> failsafe: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
         return _make_failsafe_output(
             story=story,
             ac_map=ac_map,
@@ -275,6 +277,7 @@ def main():
         )
 
     if bool((grouping.get("meta") or {}).get("fallback")):
+        print(f"[WARN] grouping fell back -> failsafe: {(grouping.get('meta') or {}).get('reason')}", file=sys.stderr, flush=True)
         return _make_failsafe_output(
             story=story,
             ac_map=ac_map,
@@ -303,6 +306,7 @@ def main():
                 max_repairs=int(args.max_repairs),
             )
         except Exception as e:
+            print(f"[WARN] taskgen failed for {g.get('group_id')} -> failsafe: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
             g_ac_ids = g.get("ac_ids") or []
             if not isinstance(g_ac_ids, list):
                 g_ac_ids = []

@@ -2,9 +2,19 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional, Any, Dict
 import os
+import sys
 import json
 import subprocess
 import tempfile
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+# .env を最初に読む（OPENAI_API_KEY が子プロセス task_planning にも引き継がれる）
+load_dotenv()
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+TASKS_TIMEOUT_SEC = int(os.getenv("TASKS_TIMEOUT_SEC", "600"))
 
 # story_refinement 側の型
 from src.story_refinement.services.schemas.user_story import UserStory
@@ -12,6 +22,7 @@ from src.story_refinement.services.schemas.acceptance_criteria import Acceptance
 from src.story_refinement.services.schemas.us_ac_response import UserStoryAcceptanceCriteria
 
 # workflow 本体（あなたが作ったやつ）
+import src.story_refinement.workflow as refinement_workflow_module
 from src.story_refinement.workflow import build_refinement_workflow, TARGET_SCORE, MAX_ITERATIONS
 from src.story_refinement.output_log import WorkflowLogger
 
@@ -62,6 +73,32 @@ def to_flat_dict(usac: UserStoryAcceptanceCriteria) -> Dict[str, Any]:
     }
 
 
+def _to_tasks_response(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    task_planning.run の出力は
+      {"story", "ac_map", "grouping", "group_results": [{group_id, tasks}], "trace", "meta"}
+    であり、トップレベルに "tasks" は存在しない。
+    API仕様 {"tasks": [...], "meta": {...}} に合わせて group_results を平坦化する。
+    """
+    tasks: List[Dict[str, Any]] = []
+    for gr in data.get("group_results") or []:
+        if not isinstance(gr, dict):
+            continue
+        group_id = gr.get("group_id")
+        for t in gr.get("tasks") or []:
+            if isinstance(t, dict):
+                tasks.append({**t, "group_id": group_id})
+
+    meta = dict(data.get("meta") or {})
+    meta["trace"] = data.get("trace")
+    meta["group_modes"] = [
+        {"group_id": gr.get("group_id"), **(gr.get("meta") or {})}
+        for gr in (data.get("group_results") or [])
+        if isinstance(gr, dict) and gr.get("meta")
+    ]
+    return {"tasks": tasks, "meta": meta}
+
+
 # -------------------------
 # Endpoints
 # -------------------------
@@ -82,6 +119,10 @@ def refine(payload: FlatUSAC):
 
     initial_us_ac = to_nested_usac(payload)
     logger.set_initial_input(initial_us_ac)
+
+    # workflow.py の suggestion_node はモジュール内の `logger` に記録する。
+    # ここで差し替えないと、API側loggerのloopsが常に空のままログ保存されてしまう。
+    refinement_workflow_module.logger = logger
 
     initial_state = {
         "us_ac": initial_us_ac,
@@ -140,10 +181,9 @@ def generate_tasks(payload: FlatUSAC):
         fd, out_path = tempfile.mkstemp(suffix=".json")
         os.close(fd)
 
-        # task_planning 実行
-        # もし export-mode 等が必要ならここに引数追加できる
+        # task_planning 実行（sys.executable = 今動いているPython / cwd = プロジェクト直下）
         cmd = [
-            "python3",
+            sys.executable,
             "-u",
             "-m",
             "src.task_planning.run",
@@ -153,7 +193,19 @@ def generate_tasks(payload: FlatUSAC):
             out_path,
         ]
 
-        p = subprocess.run(cmd, capture_output=True, text=True)
+        try:
+            p = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                cwd=str(PROJECT_ROOT),
+                timeout=TASKS_TIMEOUT_SEC,
+            )
+        except subprocess.TimeoutExpired:
+            raise HTTPException(
+                status_code=504,
+                detail=f"task_planning timed out after {TASKS_TIMEOUT_SEC}s",
+            )
 
         if p.returncode != 0:
             raise HTTPException(
@@ -165,12 +217,10 @@ def generate_tasks(payload: FlatUSAC):
                 },
             )
 
-        # 結果JSONを読み込み
-        data = json.load(open(out_path, encoding="utf-8"))
+        with open(out_path, encoding="utf-8") as f:
+            data = json.load(f)
 
-        # data が {"tasks": [...], "meta": {...}} 前提
-        # meta が無ければ None になるだけ
-        return data
+        return _to_tasks_response(data)
 
     except HTTPException:
         raise
